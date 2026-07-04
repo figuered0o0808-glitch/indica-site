@@ -131,15 +131,6 @@
     applyLang(navLang.indexOf('pt') === 0 ? 'pt' : 'en');
   }
 
-  /* ---------- Motions (carinhas): fallback estático ---------- */
-  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduceMotion) document.body.classList.add('no-motion');
-  document.querySelectorAll('video').forEach(function (v) {
-    v.addEventListener('error', function () { document.body.classList.add('no-motion'); });
-    var src = v.querySelector('source');
-    if (src) src.addEventListener('error', function () { document.body.classList.add('no-motion'); });
-  });
-
   /* ---------- Nav: shadow on scroll ---------- */
   var nav = document.getElementById('nav');
   function onScroll() { nav.classList.toggle('scrolled', window.scrollY > 30); }
@@ -204,12 +195,6 @@
     spyLinks.forEach(function (a, i) { a.classList.toggle('active', i === current); });
     checkReveals();
     checkCounters();
-    // garante o loop da carinha rodando quando visível
-    var cm = document.querySelector('.contato__motion');
-    if (cm && cm.paused && !document.body.classList.contains('no-motion')) {
-      var r = cm.getBoundingClientRect();
-      if (r.top < window.innerHeight && r.bottom > 0) { var p = cm.play(); if (p && p.catch) p.catch(function(){}); }
-    }
   }
   window.addEventListener('scroll', onScrollFx, { passive: true });
   window.addEventListener('resize', onScrollFx, { passive: true });

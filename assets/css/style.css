@@ -81,9 +81,6 @@ b{font-weight:600}
 .hero__inner{max-width:var(--max);margin:0 auto;width:100%;position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;flex:1;justify-content:center}
 .hero .dots{margin-bottom:46px;animation:heroIn .9s var(--ease) both}
 .hero__logo{height:clamp(58px,10vw,128px);width:auto;margin:0 0 44px;animation:heroIn .9s var(--ease) .12s both}
-.contato__motion{width:132px;height:auto;display:block;margin:0 auto 24px;filter:invert(1);mix-blend-mode:screen}
-body.no-motion .contato__motion{display:none}
-body:not(.no-motion) .contato .dots{display:none}
 .hero__lead{animation:heroIn .9s var(--ease) .24s both}
 .hero__actions{animation:heroIn .9s var(--ease) .36s both}
 @keyframes heroIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
