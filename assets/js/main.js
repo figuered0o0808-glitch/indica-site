@@ -26,7 +26,7 @@
     'team.grp.direcao': 'Leadership', 'team.grp.projetos': 'Projects',
     'team.grp.campanhas': 'Campaigns', 'team.grp.av': 'Audiovisual',
     'role.direcao': 'Leadership', 'role.coord': 'Project Coordinator', 'role.assistproj': 'Project Assistant',
-    'role.assistcamp': 'Campaign Assistant', 'role.coordcamp': 'Campaign Coordinator', 'role.av': 'Audiovisual',
+    'role.assistcamp': 'Campaign Assistant', 'role.coordcamp': 'Campaign Coordinator', 'role.assistav': 'Audiovisual Assistant',
     'role.coordav': 'Audiovisual Coordinator',
     'team.jorge': 'Audiovisual producer focused on coordinating, producing and editing content for digital mobilization and social-impact projects. Law student at UFRJ, researching the realization of the right to education.',
     'team.luiza': 'Digital mobilizer for social impact, she is a lawyer (UFRJ) and a researcher in Human Rights and Biopolitics.',
