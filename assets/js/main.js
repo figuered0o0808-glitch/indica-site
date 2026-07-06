@@ -27,6 +27,8 @@
     'team.grp.campanhas': 'Campaigns', 'team.grp.av': 'Audiovisual',
     'role.direcao': 'Leadership', 'role.coord': 'Project Coordinator', 'role.assistproj': 'Project Assistant',
     'role.assistcamp': 'Campaign Assistant', 'role.coordcamp': 'Campaign Coordinator', 'role.av': 'Audiovisual',
+    'role.coordav': 'Audiovisual Coordinator',
+    'team.jorge': 'Audiovisual producer focused on coordinating, producing and editing content for digital mobilization and social-impact projects. Law student at UFRJ, researching the realization of the right to education.',
     'team.luiza': 'Digital mobilizer for social impact, she is a lawyer (UFRJ) and a researcher in Human Rights and Biopolitics.',
     'team.artur': 'Public manager (IPPUR/UFRJ) and political strategist. Executive secretary of Núcleo Ypykuéra and founding partner of INDICA.',
     'team.lauanny': 'Political strategist with over 5 years in communication management. Law student at UFRJ, researching public policy and government relations.',
