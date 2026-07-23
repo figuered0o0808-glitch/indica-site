@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Jost:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=15">
+<link rel="stylesheet" href="assets/css/style.css?v=16">
 </head>
 <body>
 
@@ -33,9 +33,10 @@
     </a>
     <nav class="nav__links" aria-label="Navegação principal">
       <a href="#atuacao" data-i18n="nav.work">Atuação</a>
+      <a href="#servicos" data-i18n="nav.services">Serviços</a>
       <a href="#rede" data-i18n="nav.network">Rede</a>
-      <a href="#publicacoes" data-i18n="nav.pubs">Publicações</a>
       <a href="#producoes" data-i18n="nav.productions">Produções</a>
+      <a href="#publicacoes" data-i18n="nav.pubs">Publicações</a>
       <a href="#sobre" data-i18n="nav.about">Quem somos</a>
       <a href="#contato" class="nav__cta" data-i18n="nav.cta">Fale com a gente</a>
     </nav>
@@ -89,6 +90,11 @@
         executamos para clientes e parceiros.
       </p>
     </header>
+    <div class="tabs reveal" role="tablist">
+      <button class="tab" type="button" data-tab="democracia" data-i18n="eixo.democracia.title">Democracia</button>
+      <button class="tab" type="button" data-tab="ciencia" data-i18n="eixo.ciencia.title">Ciência</button>
+      <button class="tab" type="button" data-tab="meio" data-i18n="eixo.meio.title">Meio Ambiente</button>
+    </div>
   </div>
 </section>
 
@@ -253,27 +259,19 @@
   </div>
 </section>
 
-<!-- ================= CENÁRIO / DADOS ================= -->
-<section class="section section--alt" id="cenario">
+<!-- ================= SERVIÇOS ================= -->
+<section class="section section--alt" id="servicos">
   <div class="container">
     <header class="sec-head reveal">
-      <span class="kicker" data-i18n="scene.kicker">Por que influência importa</span>
-      <h2 class="display" data-i18n="scene.h2">O Brasil decide<br>nas <span class="b">redes</span>.</h2>
-      <p class="sec-lead" data-i18n="scene.lead">
-        As plataformas digitais se consolidaram como principal porta de entrada para notícias e
-        conteúdos de interesse público. A confiança depositada nos criadores evidencia o potencial
-        estratégico do marketing de influência.
-      </p>
+      <span class="kicker" data-i18n="serv.kicker">Nossos serviços</span>
+      <h2 class="display" data-i18n="serv.h2">Comunicação integrada,<br>ponta a <span class="b">ponta</span>.</h2>
     </header>
-    <div class="stats-editorial">
-      <div class="se reveal"><span class="se__n t--green">72%</span><p data-i18n="scene.s1">dos brasileiros acessam notícias diariamente por plataformas digitais.</p></div>
-      <div class="se reveal"><span class="se__n t--blue">39%</span><p data-i18n="scene.s2">usam as redes sociais como principal fonte de informação política.</p></div>
-      <div class="se reveal"><span class="se__n t--pink">150M</span><p data-i18n="scene.s3">de brasileiros estão presentes nas redes sociais.</p></div>
-      <div class="se reveal"><span class="se__n t--blue">79%</span><p data-i18n="scene.s4">utilizam o WhatsApp com frequência no dia a dia.</p></div>
-      <div class="se reveal"><span class="se__n t--green">83%</span><p data-i18n="scene.s5">acreditam que as redes influenciam a opinião pública.</p></div>
-      <div class="se reveal"><span class="se__n t--pink">65%</span><p data-i18n="scene.s6">já realizaram compras após recomendações nas redes.</p></div>
+    <div class="services">
+      <article class="service reveal"><span class="service__no">01</span><h3 data-i18n="serv.1.t">Produção Audiovisual</h3><p data-i18n="serv.1.d">Conteúdos autorais e sob demanda: vídeos institucionais, séries documentais, podcasts e peças para redes e plataformas.</p></article>
+      <article class="service reveal"><span class="service__no">02</span><h3 data-i18n="serv.2.t">Gestão Estratégica de Redes</h3><p data-i18n="serv.2.d">Posicionamento, calendário de conteúdo e gestão de comunidade orientados a dados e ao objetivo de cada cliente.</p></article>
+      <article class="service reveal"><span class="service__no">03</span><h3 data-i18n="serv.3.t">Campanhas de Mobilização</h3><p data-i18n="serv.3.d">Da definição de objetivos à curadoria de influenciadores e à mensuração — campanhas que convertem alcance em ação.</p></article>
+      <article class="service reveal"><span class="service__no">04</span><h3 data-i18n="serv.4.t">Infraestrutura e Equipe</h3><p data-i18n="serv.4.d">Estúdio próprio e time multidisciplinar — roteiro, captação, edição, design e estratégia — com execução completa.</p></article>
     </div>
-    <p class="source reveal" data-i18n="scene.source">Fonte: pesquisa Quaest/2025 e Relatório de Influenciadores Digitais Influence.me/2026.</p>
   </div>
 </section>
 
@@ -283,20 +281,41 @@
     <header class="sec-head reveal">
       <span class="kicker" data-i18n="net.kicker">Rede de comunicadores</span>
       <h2 class="display" data-i18n="net.h2">+200 influenciadores.<br>Um <span class="b">propósito</span>.</h2>
-      <p class="sec-lead" data-i18n="net.lead">Nosso portfólio de comunicadores soma mais de 80 milhões de seguidores,
-      organizados em hubs temáticos. Já atuamos em mais de 10 países — e nossa rede
-      alcança todos os continentes.</p>
+      <p class="sec-lead" data-i18n="net.lead">O Brasil decide nas redes — e nosso portfólio de comunicadores soma mais de
+      80 milhões de seguidores, organizados em hubs temáticos. Já atuamos em mais de
+      10 países, e nossa rede alcança todos os continentes.</p>
     </header>
 
     <div class="hubs">
       <div class="hub reveal"><span class="hub__n t--blue">80M+</span><p data-i18n="net.hub1">seguidores somados na nossa rede de comunicadores.</p></div>
       <div class="hub reveal"><span class="hub__n t--green">+10</span><p data-i18n="net.hub2">países onde já executamos campanhas.</p></div>
+      <div class="hub reveal"><span class="hub__n t--pink">83%</span><p data-i18n="net.hub3">dos brasileiros acreditam que as redes influenciam a opinião pública.</p></div>
+      <div class="hub reveal"><span class="hub__n t--blue">65%</span><p data-i18n="net.hub4">já realizaram compras após recomendações nas redes.</p></div>
+    </div>
+    <p class="source reveal" data-i18n="net.source">Fonte: pesquisa Quaest/2025 e Relatório de Influenciadores Digitais Influence.me/2026.</p>
+  </div>
+</section>
+
+<!-- ================= PRODUÇÕES ================= -->
+<section class="section section--alt" id="producoes">
+  <div class="container">
+    <header class="sec-head reveal">
+      <span class="kicker" data-i18n="prod.kicker">Produções audiovisuais</span>
+      <h2 class="display" data-i18n="prod.h2">Produções completas,<br>do roteiro ao <span class="b">corte</span>.</h2>
+      <p class="sec-lead" data-i18n="prod.lead">Desenvolvemos podcasts e videocasts — próprios e para parceiros — em formatos
+      que aproximam temas contemporâneos de novas audiências.</p>
+    </header>
+    <div class="shows">
+      <article class="show reveal"><span class="show__bar bar--green"></span><h3>PPG</h3><p class="show__sub">Proibido Pisar na Grama</p><p data-i18n="show.ppg">Videocast sobre meio ambiente, num formato de conversa que aproxima o público de temas ambientais.</p></article>
+      <article class="show reveal"><span class="show__bar bar--blue"></span><h3>Almô</h3><p class="show__sub">Podcast</p><p data-i18n="show.almo">Videocast dedicado a reflexões sobre arte e filosofia, com abordagem sensível e estética autoral.</p></article>
+      <article class="show reveal"><span class="show__bar bar--pink"></span><h3>Alma Boêmia</h3><p class="show__sub">Podcast</p><p data-i18n="show.alma">Cultura popular e tradições boêmias, explorando suas expressões artísticas e sociais.</p></article>
+      <article class="show reveal"><span class="show__bar bar--blue"></span><h3>Ypykuéra</h3><p class="show__sub">Caminhos do Progressismo</p><p data-i18n="show.ypykuera">Videocast sobre política e democracia, reunindo lideranças e especialistas do campo progressista.</p></article>
     </div>
   </div>
 </section>
 
 <!-- ================= PUBLICAÇÕES ================= -->
-<section class="section section--alt" id="publicacoes">
+<section class="section" id="publicacoes">
   <div class="container">
     <header class="sec-head reveal">
       <span class="kicker" data-i18n="pubs.kicker">Nossas publicações</span>
@@ -326,42 +345,8 @@
   </div>
 </section>
 
-<!-- ================= PRODUÇÕES ================= -->
-<section class="section" id="producoes">
-  <div class="container">
-    <header class="sec-head reveal">
-      <span class="kicker" data-i18n="prod.kicker">Produções audiovisuais</span>
-      <h2 class="display" data-i18n="prod.h2">Produções completas,<br>do roteiro ao <span class="b">corte</span>.</h2>
-      <p class="sec-lead" data-i18n="prod.lead">Desenvolvemos podcasts e videocasts — próprios e para parceiros — em formatos
-      que aproximam temas contemporâneos de novas audiências.</p>
-    </header>
-    <div class="shows">
-      <article class="show reveal"><span class="show__bar bar--green"></span><h3>PPG</h3><p class="show__sub">Proibido Pisar na Grama</p><p data-i18n="show.ppg">Videocast sobre meio ambiente, num formato de conversa que aproxima o público de temas ambientais.</p></article>
-      <article class="show reveal"><span class="show__bar bar--blue"></span><h3>Almô</h3><p class="show__sub">Podcast</p><p data-i18n="show.almo">Videocast dedicado a reflexões sobre arte e filosofia, com abordagem sensível e estética autoral.</p></article>
-      <article class="show reveal"><span class="show__bar bar--pink"></span><h3>Alma Boêmia</h3><p class="show__sub">Podcast</p><p data-i18n="show.alma">Cultura popular e tradições boêmias, explorando suas expressões artísticas e sociais.</p></article>
-      <article class="show reveal"><span class="show__bar bar--blue"></span><h3>Ypykuéra</h3><p class="show__sub">Caminhos do Progressismo</p><p data-i18n="show.ypykuera">Videocast sobre política e democracia, reunindo lideranças e especialistas do campo progressista.</p></article>
-    </div>
-  </div>
-</section>
-
-<!-- ================= SERVIÇOS ================= -->
-<section class="section section--alt" id="servicos">
-  <div class="container">
-    <header class="sec-head reveal">
-      <span class="kicker" data-i18n="serv.kicker">Nossos serviços</span>
-      <h2 class="display" data-i18n="serv.h2">Comunicação integrada,<br>ponta a <span class="b">ponta</span>.</h2>
-    </header>
-    <div class="services">
-      <article class="service reveal"><span class="service__no">01</span><h3 data-i18n="serv.1.t">Produção Audiovisual</h3><p data-i18n="serv.1.d">Conteúdos autorais e sob demanda: vídeos institucionais, séries documentais, podcasts e peças para redes e plataformas.</p></article>
-      <article class="service reveal"><span class="service__no">02</span><h3 data-i18n="serv.2.t">Gestão Estratégica de Redes</h3><p data-i18n="serv.2.d">Posicionamento, calendário de conteúdo e gestão de comunidade orientados a dados e ao objetivo de cada cliente.</p></article>
-      <article class="service reveal"><span class="service__no">03</span><h3 data-i18n="serv.3.t">Campanhas de Mobilização</h3><p data-i18n="serv.3.d">Da definição de objetivos à curadoria de influenciadores e à mensuração — campanhas que convertem alcance em ação.</p></article>
-      <article class="service reveal"><span class="service__no">04</span><h3 data-i18n="serv.4.t">Infraestrutura e Equipe</h3><p data-i18n="serv.4.d">Estúdio próprio e time multidisciplinar — roteiro, captação, edição, design e estratégia — com execução completa.</p></article>
-    </div>
-  </div>
-</section>
-
 <!-- ================= PARCEIROS ================= -->
-<section class="section" id="parceiros">
+<section class="section section--alt" id="parceiros">
   <div class="container">
     <header class="sec-head reveal">
       <span class="kicker" data-i18n="part.kicker">Parceiros</span>
@@ -385,7 +370,7 @@
 </section>
 
 <!-- ================= SOBRE / EQUIPE ================= -->
-<section class="section section--alt" id="sobre">
+<section class="section" id="sobre">
   <div class="container">
     <header class="sec-head reveal">
       <span class="kicker" data-i18n="about.kicker">Quem somos</span>
@@ -433,6 +418,8 @@
       </figure>
     </div>
 
+    <button class="btn btn--ghost team-toggle" id="teamToggle" type="button" aria-expanded="false" aria-controls="teamMore">Conhecer a equipe completa +</button>
+    <div class="team-more" id="teamMore" hidden>
     <h4 class="team__label reveal" data-i18n="team.grp.projetos">Projetos</h4>
     <div class="team">
       <figure class="team__card reveal">
@@ -500,6 +487,7 @@
         </figcaption>
       </figure>
     </div>
+    </div>
   </div>
 </section>
 
@@ -544,6 +532,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=15"></script>
+<script src="assets/js/main.js?v=16"></script>
 </body>
 </html>

@@ -128,14 +128,30 @@ b{font-weight:600}
 .team__role{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .team__card figcaption p{font-size:13px;color:var(--muted);line-height:1.55;flex:1;margin-top:3px}
 
+/* ============ EQUIPE RETRÁTIL ============ */
+.team-toggle{margin:30px auto 0;display:flex}
+.team-more{margin-top:52px}
+.team-more[hidden]{display:none}
+
 /* ============ STATS EDITORIAL ============ */
 .stats-editorial{display:grid;grid-template-columns:repeat(3,1fr);gap:54px 40px}
 .se{border-top:1px solid var(--line);padding-top:24px}
 .se__n{font-family:'Jost',sans-serif;font-size:clamp(2.8rem,5.4vw,4rem);font-weight:300;line-height:1;display:block;margin-bottom:14px}
 .se p{color:var(--muted);font-size:15px;max-width:28ch}
 
+/* ============ TABS DOS EIXOS ============ */
+.tabs{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+.tab{padding:12px 26px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--muted);
+  font-family:'Inter',sans-serif;font-weight:600;font-size:15px;cursor:pointer;transition:.25s var(--ease)}
+.tab[data-tab="democracia"]{--c:var(--blue);--grad:var(--grad-blue)}
+.tab[data-tab="ciencia"]{--c:var(--green);--grad:var(--grad-green)}
+.tab[data-tab="meio"]{--c:var(--pink);--grad:var(--grad-pink)}
+.tab:hover{color:var(--ink);border-color:var(--c)}
+.tab.active{background-image:var(--grad);color:#000;border-color:transparent;font-weight:700}
+
 /* ============ EIXO CHAPTERS ============ */
-.eixo{position:relative;padding:clamp(70px,9vw,120px) 0;overflow:hidden;border-top:1px solid var(--line)}
+.eixo{position:relative;padding:clamp(56px,7vw,90px) 0;overflow:hidden;display:none}
+.eixo.tab-active{display:block}
 .eixo[data-eixo="democracia"]{--c:var(--blue);--grad:var(--grad-blue)}
 .eixo[data-eixo="ciencia"]{--c:var(--green);--grad:var(--grad-green)}
 .eixo[data-eixo="meio"]{--c:var(--pink);--grad:var(--grad-pink)}
@@ -185,7 +201,7 @@ b{font-weight:600}
 .service p{color:var(--muted);font-size:15px;max-width:46ch}
 
 /* ============ REDE ============ */
-.hubs{display:grid;grid-template-columns:repeat(3,1fr);gap:54px 40px}
+.hubs{display:grid;grid-template-columns:repeat(4,1fr);gap:44px 32px}
 .hub{border-top:1px solid var(--line);padding-top:24px}
 .hub__n{font-family:'Jost',sans-serif;font-size:clamp(2.8rem,5.4vw,4rem);font-weight:300;line-height:1;display:block;margin-bottom:14px}
 .hub p{color:var(--muted);font-size:15px;max-width:30ch}
@@ -195,6 +211,7 @@ b{font-weight:600}
 .partner{background:var(--bg-alt);display:flex;align-items:center;justify-content:center;padding:42px 26px;min-height:148px;transition:background .3s}
 .partner img{max-height:64px;max-width:170px;width:auto;height:auto;opacity:.7;transition:opacity .3s var(--ease),transform .3s var(--ease)}
 .partner:hover{background:#11151a}
+.section--alt .partner{background:#0d0f14}
 .partner:hover img{opacity:1;transform:scale(1.05)}
 
 /* ============ CONTATO ============ */
@@ -262,7 +279,7 @@ body.modal-open{overflow:hidden}
 @media(max-width:980px){
   .team,.shows{grid-template-columns:repeat(2,1fr)}
   .stats-editorial{grid-template-columns:repeat(2,1fr)}
-  .hubs{grid-template-columns:1fr}
+  .hubs{grid-template-columns:repeat(2,1fr)}
   .partners{grid-template-columns:repeat(3,1fr)}
   .pubs{grid-template-columns:1fr}
   .eixo__grid{grid-template-columns:1fr;gap:36px}
@@ -281,7 +298,7 @@ body.modal-open{overflow:hidden}
   .eixo__cases{grid-template-columns:1fr}
 }
 @media(max-width:560px){
-  .team,.shows,.stats-editorial{grid-template-columns:1fr}
+  .team,.shows,.stats-editorial,.hubs{grid-template-columns:1fr}
   .partners{grid-template-columns:repeat(2,1fr)}
   .container{padding:0 22px}
   .hero{padding:118px 22px 0}

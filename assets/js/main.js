@@ -5,7 +5,7 @@
   /* ---------- i18n (EN dictionary; PT lives in the HTML) ---------- */
   var EN = {
     'nav.about': 'About', 'nav.work': 'Our work', 'nav.productions': 'Productions',
-    'nav.pubs': 'Publications', 'nav.network': 'Network', 'nav.cta': 'Get in touch',
+    'nav.pubs': 'Publications', 'nav.network': 'Network', 'nav.services': 'Services', 'nav.cta': 'Get in touch',
     'pubs.kicker': 'Our publications',
     'pubs.h2': "INDICA also<br>generates <span class='b'>knowledge</span>.",
     'pubs.lead': 'Beyond campaigns and productions, we publish articles and reports on the influence ecosystem, communication and public opinion.',
@@ -37,16 +37,6 @@
     'team.cristal': "Biologist and master's student in Geosciences at UERJ, working on climate change and smart cities, with a focus on urban climatology and climate justice.",
     'team.milena': 'Law student at UNIRIO researching environmental licensing. Works as a campaign assistant in digital communication.',
     'team.matheus': 'Video editor, motion designer and graphic designer, specialized in audiovisual production and visual communication for digital media.',
-    'scene.kicker': 'Why influence matters',
-    'scene.h2': "Brazil decides<br>on <span class='b'>social media</span>.",
-    'scene.lead': 'Digital platforms have become the main gateway to news and content of public interest. The trust placed in creators reveals the strategic potential of influence marketing.',
-    'scene.s1': 'of Brazilians access news daily through digital platforms.',
-    'scene.s2': 'use social media as their main source of political information.',
-    'scene.s3': 'Brazilians are present on social media.',
-    'scene.s4': 'use WhatsApp frequently in their daily lives.',
-    'scene.s5': 'believe social media influences public opinion.',
-    'scene.s6': 'have made purchases after recommendations on social media.',
-    'scene.source': 'Source: Quaest/2025 survey and the Influence.me/2026 Digital Influencers Report.',
     'work.kicker': 'Our work',
     'work.h2': "Three pillars,<br>one <span class='b'>strategy</span>.",
     'work.lead': 'We structure our work around three fronts of public impact. Each pillar has its own language, communicators and identity. Explore, in each one, campaigns we have executed for clients and partners.',
@@ -86,9 +76,12 @@
     'serv.4.d': 'Our own studio and a multidisciplinary team — script, filming, editing, design and strategy — with full execution.',
     'net.kicker': 'Network of communicators',
     'net.h2': "+200 influencers.<br>One <span class='b'>purpose</span>.",
-    'net.lead': 'Our roster of communicators adds up to more than 80 million followers, organized into thematic hubs. We have worked in more than 10 countries — and our network reaches every continent.',
+    'net.lead': 'Brazil decides on social media — and our roster of communicators adds up to more than 80 million followers, organized into thematic hubs. We have worked in more than 10 countries, and our network reaches every continent.',
     'net.hub1': 'combined followers across our network of communicators.',
     'net.hub2': 'countries where we have run campaigns.',
+    'net.hub3': 'of Brazilians believe social media influences public opinion.',
+    'net.hub4': 'have made purchases after recommendations on social media.',
+    'net.source': 'Source: Quaest/2025 survey and the Influence.me/2026 Digital Influencers Report.',
     'part.kicker': 'Partners',
     'part.h2': "Who walks<br>with <span class='b'>us</span>.",
     'contact.h2': "Got a cause to set<br>in <span class='b'>motion</span>?",
@@ -116,6 +109,7 @@
       s.classList.toggle('on', s.getAttribute('data-l') === lang);
     });
     try { localStorage.setItem('indica_lang', lang); } catch (e) {}
+    if (typeof teamToggleText === 'function') { try { teamToggleText(); } catch (e) {} }
   }
 
   if (langBtn) {
@@ -132,6 +126,47 @@
     var navLang = (navigator.language || 'pt').toLowerCase();
     applyLang(navLang.indexOf('pt') === 0 ? 'pt' : 'en');
   }
+
+  /* ---------- Abas dos eixos ---------- */
+  var tabBtns = document.querySelectorAll('.tab');
+  var eixoSecs = document.querySelectorAll('.eixo');
+  function setTab(name) {
+    tabBtns.forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-tab') === name); });
+    eixoSecs.forEach(function (e) {
+      var on = e.getAttribute('data-eixo') === name;
+      e.classList.toggle('tab-active', on);
+      if (on) e.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+    });
+  }
+  tabBtns.forEach(function (t) {
+    t.addEventListener('click', function () { setTab(t.getAttribute('data-tab')); });
+  });
+  if (tabBtns.length) setTab('democracia');
+
+  /* ---------- Equipe retrátil ---------- */
+  var teamToggle = document.getElementById('teamToggle');
+  var teamMore = document.getElementById('teamMore');
+  function teamToggleText() {
+    if (!teamToggle) return;
+    var exp = teamMore && !teamMore.hasAttribute('hidden');
+    teamToggle.textContent = (currentLang === 'en')
+      ? (exp ? 'Collapse team −' : 'Meet the full team +')
+      : (exp ? 'Recolher equipe −' : 'Conhecer a equipe completa +');
+  }
+  if (teamToggle && teamMore) {
+    teamToggle.addEventListener('click', function () {
+      var willShow = teamMore.hasAttribute('hidden');
+      if (willShow) {
+        teamMore.removeAttribute('hidden');
+        teamMore.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+      } else {
+        teamMore.setAttribute('hidden', '');
+      }
+      teamToggle.setAttribute('aria-expanded', willShow ? 'true' : 'false');
+      teamToggleText();
+    });
+  }
+  teamToggleText();
 
   /* ---------- Nav: shadow on scroll ---------- */
   var nav = document.getElementById('nav');
