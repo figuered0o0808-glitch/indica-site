@@ -142,6 +142,7 @@
   var tabBtns = document.querySelectorAll('.tab');
   var eixoSecs = document.querySelectorAll('.eixo');
   function setTab(name) {
+    document.body.setAttribute('data-eixo', name);
     tabBtns.forEach(function (t) {
       var on = t.getAttribute('data-tab') === name;
       t.classList.toggle('active', on);

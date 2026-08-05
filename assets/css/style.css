@@ -129,6 +129,16 @@ b{font-weight:600}
 .team__role{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .team__card figcaption p{font-size:13px;color:var(--muted);line-height:1.55;flex:1;margin-top:3px}
 
+/* ============ TABS DOS EIXOS ============ */
+.tabs{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.tab{padding:13px 28px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--muted);
+  font-family:'Inter',sans-serif;font-weight:600;font-size:15px;cursor:pointer;transition:.25s var(--ease)}
+.tab[data-tab="democracia"]{--c:var(--blue);--grad:var(--grad-blue)}
+.tab[data-tab="ciencia"]{--c:var(--green);--grad:var(--grad-green)}
+.tab[data-tab="meio"]{--c:var(--pink);--grad:var(--grad-pink)}
+.tab:hover{color:var(--ink);border-color:var(--c);transform:translateY(-2px)}
+.tab.active{background-image:var(--grad);color:#000;border-color:transparent;font-weight:700}
+
 /* ============ EIXO CHAPTERS ============ */
 .eixo{position:relative;padding:clamp(56px,7vw,90px) 0;overflow:hidden;display:none}
 .eixo.tab-active{display:block}
@@ -241,6 +251,45 @@ b{font-weight:600}
 .modal__logo{display:none;max-height:52px;max-width:280px;width:auto;height:auto;margin-bottom:22px}
 .modal__logo.is-visible{display:block}
 body.modal-open{overflow:hidden}
+
+
+/* ============ ROLAGEM CRIATIVA ============ */
+/* 1. o hero se afasta: logo encolhe e desfoca conforme sai de cena */
+@supports (animation-timeline: view()) {
+  .hero__inner{animation:heroLeave linear both;animation-timeline:view();animation-range:exit 0% exit 90%}
+  @keyframes heroLeave{to{opacity:0;transform:translateY(-40px) scale(.9);filter:blur(6px)}}
+
+  /* 2. cada bloco entra subindo e "ganha foco" */
+  .team__card,.ecase,.service,.show,.pub,.hub,.creator{
+    animation:blocoEntra linear both;animation-timeline:view();animation-range:entry 0% entry 42%}
+  @keyframes blocoEntra{from{opacity:0;transform:translateY(46px) scale(.96)}to{opacity:1;transform:none}}
+
+  /* 3. os títulos de seção deslizam e revelam */
+  .sec-head .display{animation:tituloEntra linear both;animation-timeline:view();animation-range:entry 5% entry 55%}
+  @keyframes tituloEntra{from{opacity:0;transform:translateY(38px);letter-spacing:.04em}to{opacity:1;transform:none;letter-spacing:-.015em}}
+
+  /* 4. parallax: a logo do eixo flutua mais devagar que o texto */
+  .eixo__side{animation:flutua linear both;animation-timeline:view();animation-range:entry 0% exit 100%}
+  @keyframes flutua{from{transform:translateY(56px)}to{transform:translateY(-56px)}}
+
+  /* 5. os números do hero contam presença ao entrar */
+  .hero__stats-row>div{animation:blocoEntra linear both;animation-timeline:view();animation-range:entry 10% entry 60%}
+}
+
+/* 6. a página inteira ganha a cor do eixo ativo (troca suave ao mudar de aba) */
+body{transition:background-color .8s var(--ease)}
+body[data-eixo="democracia"]{background-color:#00060f}
+body[data-eixo="ciencia"]{background-color:#030a02}
+body[data-eixo="meio"]{background-color:#0d0009}
+
+/* 7. brilho que segue o eixo ativo atrás do conteúdo */
+.eixo.tab-active::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(60% 50% at 18% 30%,var(--c),transparent 70%);opacity:.07}
+
+@media(prefers-reduced-motion:reduce){
+  .hero__inner,.team__card,.ecase,.service,.show,.pub,.hub,.creator,.sec-head .display,.eixo__side,.hero__stats-row>div{animation:none!important}
+  body{transition:none}
+}
 
 /* ============ REVEAL ============ */
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
