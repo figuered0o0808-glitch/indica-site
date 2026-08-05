@@ -53,6 +53,7 @@
     'case.influenciencia': "With Rio's Municipal Department of Science and Technology — over 10 million views.",
     'case.regulamentaai': 'Campaign for AI regulation in Brazil: 8 million organic views and 20k+ signatures.',
     'case.comite': 'An alliance of researchers and communicators defending science and qualified debate.',
+    'case.350org': 'A campaign with digital creators on Instagram and TikTok: over 1 million views across both phases.',
     'case.secma': 'A video series on environment and climate that reached over 4 million people.',
     'case.pulitzer': 'Climate awareness: in-person event with 200+ people and 3.5 million views.',
     'case.oeco': 'Adapting environmental reporting to the native format of social media: 3 million views.',
