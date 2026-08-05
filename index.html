@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Jost:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="canonical" href="https://agenciaindica.com/">
-<link rel="stylesheet" href="assets/css/style.css?v=23">
+<link rel="stylesheet" href="assets/css/style.css?v=24">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization",
 "name":"INDICA","alternateName":"Agência INDICA",
@@ -51,6 +51,7 @@
     <nav class="nav__links" aria-label="Navegação principal">
       <a href="#atuacao" data-i18n="nav.work">Atuação</a>
       <a href="#servicos" data-i18n="nav.services">Serviços</a>
+      <a href="#metodo" data-i18n="nav.method">Método</a>
       <a href="#rede" data-i18n="nav.network">Rede</a>
       <a href="#producoes" data-i18n="nav.productions">Produções</a>
       <a href="#publicacoes" data-i18n="nav.pubs">Publicações</a>
@@ -108,9 +109,9 @@
       </p>
     </header>
     <div class="tabs reveal" role="tablist">
-      <button class="tab" type="button" data-tab="democracia" data-i18n="eixo.democracia.title">Democracia</button>
-      <button class="tab" type="button" data-tab="ciencia" data-i18n="eixo.ciencia.title">Ciência</button>
-      <button class="tab" type="button" data-tab="meio" data-i18n="eixo.meio.title">Meio Ambiente</button>
+      <button class="tab" type="button" role="tab" aria-selected="true" data-tab="democracia" data-i18n="eixo.democracia.title">Democracia</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-tab="ciencia" data-i18n="eixo.ciencia.title">Ciência</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-tab="meio" data-i18n="eixo.meio.title">Meio Ambiente</button>
     </div>
   </div>
 </section>
@@ -247,11 +248,9 @@
         <article class="ecase reveal" tabindex="0" role="button"
           data-label="Meio Ambiente" data-label-en="Environment"
           data-metric="1Mi+" data-metric-en="1M+" data-metriclabel="visualizações nas duas fases" data-metriclabel-en="views across both phases"
-          data-logo="assets/img/campaigns/350org.png"
           data-title="350.org · É da sua conta"
-          data-more="Campanha da 350.org Brasil executada pela INDICA em duas fases, com ativação de criadores digitais no Instagram e no TikTok. Somadas, as duas fases ultrapassaram 1 milhão de visualizações. Só a fase 2 reuniu 13 criadores em 19 dias: 593 mil visualizações, 67 mil interações e 12 mil compartilhamentos, com taxa de engajamento de 11,3%."
-          data-more-en="A 350.org Brasil campaign run by INDICA across two phases, activating digital creators on Instagram and TikTok. Together, the two phases surpassed 1 million views. Phase 2 alone brought together 13 creators over 19 days: 593,000 views, 67,000 interactions and 12,000 shares, with an 11.3% engagement rate.">
-          <img class="ecase__logo" src="assets/img/campaigns/350org.png" alt="350.org" loading="lazy">
+          data-more="Campanha da 350.org Brasil executada pela INDICA em duas fases, com ativação de criadores digitais no Instagram e no TikTok. Somadas, as duas fases ultrapassaram 1 milhão de visualizações, com forte índice de compartilhamento — o indicador mais próximo de adesão real à mensagem."
+          data-more-en="A 350.org Brasil campaign run by INDICA across two phases, activating digital creators on Instagram and TikTok. Together, the two phases surpassed 1 million views, with a strong share rate — the metric closest to genuine adherence to the message.">
           <h3>350.org · É da sua conta</h3><span class="ecase__n" data-en="1M+">1Mi+</span>
           <p data-i18n="case.350org">Campanha com criadores digitais no Instagram e TikTok: mais de 1 milhão de visualizações somando as duas fases.</p>
           <span class="ecase__more" data-i18n="ui.more">Ver detalhes →</span>
@@ -302,7 +301,7 @@
 </section>
 
 <!-- ================= SERVIÇOS ================= -->
-<section class="section section--alt" id="servicos">
+<section class="section" id="servicos">
   <div class="container">
     <header class="sec-head reveal">
       <span class="kicker" data-i18n="serv.kicker">Nossos serviços</span>
@@ -314,6 +313,24 @@
       <article class="service reveal"><span class="service__no">03</span><h3 data-i18n="serv.3.t">Campanhas de Mobilização</h3><p data-i18n="serv.3.d">Da definição de objetivos à curadoria de influenciadores e à mensuração — campanhas que convertem alcance em ação.</p></article>
       <article class="service reveal"><span class="service__no">04</span><h3 data-i18n="serv.4.t">Infraestrutura e Equipe</h3><p data-i18n="serv.4.d">Estúdio próprio e time multidisciplinar — roteiro, captação, edição, design e estratégia — com execução completa.</p></article>
     </div>
+  </div>
+</section>
+
+<!-- ================= MÉTODO ================= -->
+<section class="section section--alt" id="metodo">
+  <div class="container">
+    <header class="sec-head reveal">
+      <span class="kicker" data-i18n="met.kicker">Como trabalhamos</span>
+      <h2 class="display" data-i18n="met.h2">Da curadoria à<br><span class="b">mensuração</span>.</h2>
+      <p class="sec-lead" data-i18n="met.lead">Toda campanha segue o mesmo método — o que muda é a causa. É assim que
+      alcance vira resultado auditável, e não estimativa.</p>
+    </header>
+    <ol class="steps">
+      <li class="step reveal"><span class="step__n">01</span><h3 data-i18n="met.1.t">Curadoria</h3><p data-i18n="met.1.d">Seleção e negociação dos criadores certos para a causa, o público e o orçamento — não os maiores, os mais adequados.</p></li>
+      <li class="step reveal"><span class="step__n">02</span><h3 data-i18n="met.2.t">Mensagem</h3><p data-i18n="met.2.d">Briefing, alinhamento de narrativa e aprovação de roteiros, preservando a voz de cada criador.</p></li>
+      <li class="step reveal"><span class="step__n">03</span><h3 data-i18n="met.3.t">Distribuição</h3><p data-i18n="met.3.d">Calendário coordenado entre criadores e plataformas, com link rastreado individual para atribuir cada resultado.</p></li>
+      <li class="step reveal"><span class="step__n">04</span><h3 data-i18n="met.4.t">Mensuração</h3><p data-i18n="met.4.d">Acompanhamento de métricas e relatório consolidado: alcance, engajamento, propagação e custo por resultado.</p></li>
+    </ol>
   </div>
 </section>
 
@@ -394,20 +411,32 @@
       <span class="kicker" data-i18n="part.kicker">Parceiros</span>
       <h2 class="display" data-i18n="part.h2">Quem caminha<br>com a <span class="b">gente</span>.</h2>
     </header>
-    <div class="partners">
-      <div class="partner reveal"><img src="assets/img/partners/cop30.png" alt="COP30 Brasil" loading="lazy"></div>
-      <div class="partner reveal"><img src="assets/img/partners/pulitzer.png" alt="Pulitzer Center" loading="lazy"></div>
-      <div class="partner reveal"><img src="assets/img/partners/rio-meioambiente.png" alt="Prefeitura do Rio — Meio Ambiente e Clima" loading="lazy"></div>
-      <div class="partner reveal"><img src="assets/img/partners/plus350.png" alt="350.org" loading="lazy"></div>
-      <div class="partner reveal"><img src="assets/img/partners/gscc.png" alt="Global Strategic Communications Council" loading="lazy"></div>
-      <div class="partner reveal"><img src="assets/img/partners/oeco.png" alt="(o)eco" loading="lazy"></div>
-      <div class="partner reveal"><img src="assets/img/partners/rio-ciencia.png" alt="Prefeitura do Rio — Ciência e Tecnologia" loading="lazy"></div>
-      <div class="partner reveal"><img src="assets/img/partners/nucleo-ypykuera.png" alt="Núcleo Ypykuéra" loading="lazy"></div>
-      <div class="partner reveal"><img src="assets/img/partners/cieds.png" alt="CIEDS" loading="lazy"></div>
-      <div class="partner reveal"><img src="assets/img/partners/amana.png" alt="Amana Cine" loading="lazy"></div>
-      <div class="partner reveal"><img src="assets/img/partners/uniperiferias.png" alt="Uniperiferias" loading="lazy"></div>
-      <div class="partner reveal"><img src="assets/img/partners/reporter-brasil.png" alt="Repórter Brasil" loading="lazy"></div>
-    </div>
+    <div class="marquee"><div class="marquee__track">
+      <div class="partner"><img src="assets/img/partners/cop30.png" alt="COP30 Brasil" loading="lazy"></div>
+      <div class="partner"><img src="assets/img/partners/pulitzer.png" alt="Pulitzer Center" loading="lazy"></div>
+      <div class="partner"><img src="assets/img/partners/rio-meioambiente.png" alt="Prefeitura do Rio — Meio Ambiente e Clima" loading="lazy"></div>
+      <div class="partner"><img src="assets/img/partners/plus350.png" alt="350.org" loading="lazy"></div>
+      <div class="partner"><img src="assets/img/partners/gscc.png" alt="Global Strategic Communications Council" loading="lazy"></div>
+      <div class="partner"><img src="assets/img/partners/oeco.png" alt="(o)eco" loading="lazy"></div>
+      <div class="partner"><img src="assets/img/partners/rio-ciencia.png" alt="Prefeitura do Rio — Ciência e Tecnologia" loading="lazy"></div>
+      <div class="partner"><img src="assets/img/partners/nucleo-ypykuera.png" alt="Núcleo Ypykuéra" loading="lazy"></div>
+      <div class="partner"><img src="assets/img/partners/cieds.png" alt="CIEDS" loading="lazy"></div>
+      <div class="partner"><img src="assets/img/partners/amana.png" alt="Amana Cine" loading="lazy"></div>
+      <div class="partner"><img src="assets/img/partners/uniperiferias.png" alt="Uniperiferias" loading="lazy"></div>
+      <div class="partner"><img src="assets/img/partners/reporter-brasil.png" alt="Repórter Brasil" loading="lazy"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/cop30.png" alt="COP30 Brasil" loading="lazy"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/pulitzer.png" alt="Pulitzer Center" loading="lazy"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/rio-meioambiente.png" alt="Prefeitura do Rio — Meio Ambiente e Clima" loading="lazy"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/plus350.png" alt="350.org" loading="lazy"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/gscc.png" alt="Global Strategic Communications Council" loading="lazy"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/oeco.png" alt="(o)eco" loading="lazy"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/rio-ciencia.png" alt="Prefeitura do Rio — Ciência e Tecnologia" loading="lazy"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/nucleo-ypykuera.png" alt="Núcleo Ypykuéra" loading="lazy"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/cieds.png" alt="CIEDS" loading="lazy"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/amana.png" alt="Amana Cine" loading="lazy"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/uniperiferias.png" alt="Uniperiferias" loading="lazy"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/reporter-brasil.png" alt="Repórter Brasil" loading="lazy"></div>
+    </div></div>
   </div>
 </section>
 
@@ -538,9 +567,35 @@
     <p class="sec-lead sec-lead--center reveal" data-i18n="contact.lead">Conte para a gente o que você quer comunicar. A INDICA desenha a estratégia,
     a produção e a rede de influência — do briefing à mensuração.</p>
     <div class="contato__actions reveal">
-      <a href="mailto:indica.osc@gmail.com" class="btn btn--solid">indica.osc@gmail.com</a>
+      <a href="mailto:indica.osc@gmail.com" class="btn btn--ghost">indica.osc@gmail.com</a>
       <a href="https://www.instagram.com/indica.cc" target="_blank" rel="noopener" class="btn btn--ghost">@indica.cc</a>
     </div>
+    <form class="form reveal" id="contatoForm" action="https://formsubmit.co/indica.osc@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="Novo contato pelo site — agenciaindica.com">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="https://agenciaindica.com/?enviado=1">
+      <input type="text" name="_honey" class="form__honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div class="form__row">
+        <label class="form__field"><span data-i18n="form.nome">Nome</span><input type="text" name="Nome" required></label>
+        <label class="form__field"><span data-i18n="form.email">E-mail</span><input type="email" name="E-mail" required></label>
+      </div>
+      <div class="form__row">
+        <label class="form__field"><span data-i18n="form.org">Organização</span><input type="text" name="Organização"></label>
+        <label class="form__field"><span data-i18n="form.assunto">Assunto</span>
+          <select name="Assunto">
+            <option data-i18n="form.op1">Campanha de mobilização</option>
+            <option data-i18n="form.op2">Produção audiovisual</option>
+            <option data-i18n="form.op3">Gestão de redes</option>
+            <option data-i18n="form.op4">Imprensa / parceria</option>
+            <option data-i18n="form.op5">Outro</option>
+          </select>
+        </label>
+      </div>
+      <label class="form__field"><span data-i18n="form.msg">Conte o que você quer comunicar</span><textarea name="Mensagem" rows="4" required></textarea></label>
+      <button type="submit" class="btn btn--solid form__submit" data-i18n="form.enviar">Enviar mensagem</button>
+    </form>
+    <p class="form__ok" id="formOk" hidden data-i18n="form.ok">Recebemos sua mensagem. Retornamos em breve. ✓</p>
   </div>
 </section>
 
@@ -552,7 +607,7 @@
   <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <button class="modal__close" data-close aria-label="Fechar">×</button>
     <span class="modal__label" id="modalLabel"></span>
-    <img class="modal__logo" id="modalLogo" alt="" src="">
+    <img class="modal__logo" id="modalLogo" alt="" hidden>
 
     <h3 class="modal__title" id="modalTitle"></h3>
     <div class="modal__metric"><span class="modal__n" id="modalMetric"></span><span class="modal__nl" id="modalMetricLabel"></span></div>
@@ -571,6 +626,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=23"></script>
+<script src="assets/js/main.js?v=24"></script>
 </body>
 </html>

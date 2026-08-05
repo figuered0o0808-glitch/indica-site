@@ -76,6 +76,18 @@
     'serv.3.d': 'From goal-setting to influencer curation and measurement — campaigns that turn reach into action.',
     'serv.4.t': 'Infrastructure & Team',
     'serv.4.d': 'Our own studio and a multidisciplinary team — script, filming, editing, design and strategy — with full execution.',
+    'met.kicker': 'How we work', 'met.h2': "From curation to<br><span class='b'>measurement</span>.",
+    'met.lead': 'Every campaign follows the same method — what changes is the cause. That is how reach becomes auditable results, not estimates.',
+    'met.1.t': 'Curation', 'met.1.d': 'Selecting and negotiating the right creators for the cause, the audience and the budget — not the biggest ones, the most fitting ones.',
+    'met.2.t': 'Message', 'met.2.d': "Briefing, narrative alignment and script approval, preserving each creator's own voice.",
+    'met.3.t': 'Distribution', 'met.3.d': 'A coordinated calendar across creators and platforms, with individual tracked links to attribute every result.',
+    'met.4.t': 'Measurement', 'met.4.d': 'Metrics monitoring and a consolidated report: reach, engagement, propagation and cost per result.',
+    'form.nome': 'Name', 'form.email': 'Email', 'form.org': 'Organization', 'form.assunto': 'Subject',
+    'form.op1': 'Mobilization campaign', 'form.op2': 'Audiovisual production', 'form.op3': 'Social media management',
+    'form.op4': 'Press / partnership', 'form.op5': 'Other',
+    'form.msg': 'Tell us what you want to communicate', 'form.enviar': 'Send message',
+    'form.ok': 'We got your message. We will get back to you soon. ✓',
+    'nav.method': 'Method',
     'net.kicker': 'Network of communicators',
     'net.h2': "+200 influencers.<br>One <span class='b'>purpose</span>.",
     'net.lead': 'Brazil decides on social media — and our roster of communicators adds up to more than 80 million followers, organized into thematic hubs. We have worked in more than 10 countries, and our network reaches every continent.',
@@ -137,15 +149,25 @@
   var tabBtns = document.querySelectorAll('.tab');
   var eixoSecs = document.querySelectorAll('.eixo');
   function setTab(name) {
-    tabBtns.forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-tab') === name); });
+    tabBtns.forEach(function (t) {
+      var on = t.getAttribute('data-tab') === name;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
     eixoSecs.forEach(function (e) {
       var on = e.getAttribute('data-eixo') === name;
       e.classList.toggle('tab-active', on);
       if (on) e.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
     });
   }
-  tabBtns.forEach(function (t) {
+  tabBtns.forEach(function (t, i) {
     t.addEventListener('click', function () { setTab(t.getAttribute('data-tab')); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      var n = (i + (e.key === 'ArrowRight' ? 1 : -1) + tabBtns.length) % tabBtns.length;
+      tabBtns[n].focus(); setTab(tabBtns[n].getAttribute('data-tab'));
+    });
   });
   if (tabBtns.length) setTab('democracia');
 
@@ -239,12 +261,14 @@
     function openModal(card) {
       var logo = card.getAttribute('data-logo');
       if (logo) {
+        mLogo.hidden = false;
         mLogo.src = logo;
         mLogo.alt = card.getAttribute('data-title') || '';
         mLogo.classList.add('is-visible');
       } else {
         mLogo.classList.remove('is-visible');
         mLogo.removeAttribute('src');
+        mLogo.hidden = true;
       }
       var eixo = card.closest('.eixo');
       modal.setAttribute('data-eixo', eixo ? eixo.getAttribute('data-eixo') : 'democracia');
@@ -285,6 +309,16 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
     });
+  }
+
+  /* ---------- Confirmação do formulário ---------- */
+  if (location.search.indexOf('enviado=1') !== -1) {
+    var okMsg = document.getElementById('formOk'), frm = document.getElementById('contatoForm');
+    if (okMsg) okMsg.hidden = false;
+    if (frm) frm.hidden = true;
+    var alvo = document.getElementById('contato');
+    if (alvo) setTimeout(function () { alvo.scrollIntoView(); }, 120);
+    if (history.replaceState) history.replaceState(null, '', location.pathname);
   }
 
   /* ---------- Count-up stats ---------- */
