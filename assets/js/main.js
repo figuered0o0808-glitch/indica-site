@@ -48,6 +48,7 @@
     'eixo.meio.title': 'Environment',
     'eixo.meio.desc': 'Environmental and climate communication that connects projects and results to a broad audience. We mobilize audiences around the socio-environmental agenda with our own narrative and aesthetics.',
     'case.antifake': 'Fighting disinformation with far-reaching narrative — over 19 million organic views.',
+    'case.smt': 'A civic mobilization hub for the 2026 elections, with a weekly videocast, a community and a network of influencers.',
     'case.ypykuera': 'A podcast on politics and democracy, gathering experts and leaders from the progressive field.',
     'case.influenciencia': "With Rio's Municipal Department of Science and Technology — over 10 million views.",
     'case.regulamentaai': 'Campaign for AI regulation in Brazil: 8 million organic views and 20k+ signatures.',
