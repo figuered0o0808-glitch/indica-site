@@ -48,7 +48,7 @@
     'eixo.meio.title': 'Environment',
     'eixo.meio.desc': 'Environmental and climate communication that connects projects and results to a broad audience. We mobilize audiences around the socio-environmental agenda with our own narrative and aesthetics.',
     'case.antifake': 'Fighting disinformation with far-reaching narrative — over 19 million organic views.',
-    'case.smt': 'A civic mobilization hub for the 2026 elections, with a weekly videocast, a community and a network of influencers.',
+    'case.smt': "A mobilization hub that broadens people's participation in politics, with a weekly videocast, a community and a network of influencers.",
     'case.ypykuera': 'A podcast on politics and democracy, gathering experts and leaders from the progressive field.',
     'case.influenciencia': "With Rio's Municipal Department of Science and Technology — over 10 million views.",
     'case.regulamentaai': 'Campaign for AI regulation in Brazil: 8 million organic views and 20k+ signatures.',
@@ -103,6 +103,10 @@
       if (lang === 'en') { if (EN[key] != null) el.innerHTML = EN[key]; }
       else { el.innerHTML = ptCache.get(el); }
     });
+    document.querySelectorAll('[data-en]').forEach(function (el) {
+      if (!ptCache.has(el)) ptCache.set(el, el.innerHTML);
+      el.innerHTML = (lang === 'en') ? el.getAttribute('data-en') : ptCache.get(el);
+    });
     currentLang = lang;
     document.documentElement.lang = (lang === 'en') ? 'en' : 'pt-BR';
     document.title = (lang === 'en') ? 'INDICA — Communication with purpose' : 'INDICA — Comunicação com propósito';
@@ -110,7 +114,7 @@
       s.classList.toggle('on', s.getAttribute('data-l') === lang);
     });
     try { localStorage.setItem('indica_lang', lang); } catch (e) {}
-    if (typeof teamToggleText === 'function') { try { teamToggleText(); } catch (e) {} }
+    if (typeof refreshCounters === 'function') { try { refreshCounters(); } catch (e) {} }
   }
 
   if (langBtn) {
@@ -143,31 +147,6 @@
     t.addEventListener('click', function () { setTab(t.getAttribute('data-tab')); });
   });
   if (tabBtns.length) setTab('democracia');
-
-  /* ---------- Equipe retrátil ---------- */
-  var teamToggle = document.getElementById('teamToggle');
-  var teamMore = document.getElementById('teamMore');
-  function teamToggleText() {
-    if (!teamToggle) return;
-    var exp = teamMore && !teamMore.hasAttribute('hidden');
-    teamToggle.textContent = (currentLang === 'en')
-      ? (exp ? 'Collapse team −' : 'Meet the full team +')
-      : (exp ? 'Recolher equipe −' : 'Conhecer a equipe completa +');
-  }
-  if (teamToggle && teamMore) {
-    teamToggle.addEventListener('click', function () {
-      var willShow = teamMore.hasAttribute('hidden');
-      if (willShow) {
-        teamMore.removeAttribute('hidden');
-        teamMore.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
-      } else {
-        teamMore.setAttribute('hidden', '');
-      }
-      teamToggle.setAttribute('aria-expanded', willShow ? 'true' : 'false');
-      teamToggleText();
-    });
-  }
-  teamToggleText();
 
   /* ---------- Nav: shadow on scroll ---------- */
   var nav = document.getElementById('nav');
@@ -311,7 +290,7 @@
   var pendingCounters = [].slice.call(document.querySelectorAll('.stat__num'));
   function animate(el) {
     var target = parseInt(el.getAttribute('data-count'), 10);
-    var suffix = el.getAttribute('data-suffix') || '';
+    var suffix = sfx(el);
     var dur = 1400, start = null;
     function step(ts) {
       if (!start) start = ts;
@@ -321,6 +300,14 @@
       if (p < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
+  }
+  function sfx(el) {
+    return ((currentLang === 'en' ? el.getAttribute('data-suffix-en') : null) || el.getAttribute('data-suffix') || '');
+  }
+  function refreshCounters() {
+    document.querySelectorAll('.stat__num').forEach(function (el) {
+      if (pendingCounters.indexOf(el) === -1) el.textContent = el.getAttribute('data-count') + sfx(el);
+    });
   }
   function checkCounters() {
     if (!pendingCounters.length) return;

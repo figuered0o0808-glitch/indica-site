@@ -128,11 +128,6 @@ b{font-weight:600}
 .team__role{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .team__card figcaption p{font-size:13px;color:var(--muted);line-height:1.55;flex:1;margin-top:3px}
 
-/* ============ EQUIPE RETRÁTIL ============ */
-.team-toggle{margin:30px auto 0;display:flex}
-.team-more{margin-top:52px}
-.team-more[hidden]{display:none}
-
 /* ============ STATS EDITORIAL ============ */
 .stats-editorial{display:grid;grid-template-columns:repeat(3,1fr);gap:54px 40px}
 .se{border-top:1px solid var(--line);padding-top:24px}
@@ -173,11 +168,13 @@ b{font-weight:600}
 .ecase:focus-visible{outline:2px solid var(--c);outline-offset:3px}
 .ecase__more{display:inline-block;margin-top:16px;font-size:13px;font-weight:600;color:var(--c);opacity:0;transform:translateX(-4px);transition:.3s var(--ease)}
 .ecase:hover .ecase__more,.ecase:focus-visible .ecase__more{opacity:1;transform:none}
-.ecase__n{font-family:'Jost',sans-serif;font-size:2.5rem;font-weight:300;line-height:1;display:block;margin-bottom:14px;
+.ecase h3{font-family:'Jost',sans-serif;font-size:1.6rem;font-weight:300;letter-spacing:-.01em;line-height:1.15;margin-bottom:10px}
+.ecase__n{font-family:'Inter',sans-serif;font-size:14px;font-weight:600;letter-spacing:.04em;line-height:1;display:block;margin-bottom:14px;
   background-image:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.ecase__n:empty{display:none}
 .ecase__logo{display:block;height:26px;width:auto;max-width:100%;object-fit:contain;object-position:left;margin-bottom:18px}
 .ecase__logo--tall{height:44px;margin-bottom:16px}
-.ecase h3{font-size:1.06rem;font-weight:600;margin-bottom:8px;font-family:'Inter',sans-serif;letter-spacing:0}
+
 .ecase p{color:var(--muted);font-size:14px}
 
 /* ============ SHOWS ============ */
@@ -247,11 +244,12 @@ b{font-weight:600}
 .modal__close{position:absolute;top:14px;right:20px;background:none;border:0;color:var(--muted);font-size:30px;line-height:1;cursor:pointer;transition:color .2s;padding:6px}
 .modal__close:hover{color:var(--ink)}
 .modal__label{display:inline-block;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--c);margin-bottom:22px}
-.modal__metric{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:18px}
-.modal__n{font-family:'Jost',sans-serif;font-size:clamp(2.6rem,7vw,3.4rem);font-weight:300;line-height:1;
+.modal__metric{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.modal__n{font-family:'Jost',sans-serif;font-size:clamp(1.7rem,4vw,2.2rem);font-weight:300;line-height:1;
   background-image:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
-.modal__nl{font-size:13px;color:var(--muted)}
-.modal__title{font-family:'Jost',sans-serif;font-weight:300;font-size:clamp(1.6rem,4vw,2.1rem);line-height:1.1;margin-bottom:16px}
+.modal__n:empty{display:none}
+.modal__nl{font-size:13.5px;color:var(--muted)}
+.modal__title{font-family:'Jost',sans-serif;font-weight:300;font-size:clamp(1.9rem,4.6vw,2.5rem);line-height:1.1;margin-bottom:14px}
 .modal__desc{color:var(--muted);font-size:15.5px;line-height:1.65}
 .modal__link{display:none;margin-top:28px}
 .modal__link.is-visible{display:inline-flex}
