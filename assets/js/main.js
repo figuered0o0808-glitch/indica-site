@@ -47,6 +47,7 @@
     'eixo.ciencia.desc': 'Translating complex topics into accessible language. We bring society closer to scientific knowledge and strengthen engagement with outreach, research and innovation.',
     'eixo.meio.title': 'Environment',
     'eixo.meio.desc': 'Environmental and climate communication that connects projects and results to a broad audience. We mobilize audiences around the socio-environmental agenda with our own narrative and aesthetics.',
+    'case.reinventar': 'A civil society movement from Rio: 20 proposals for the state and a public pledge to monitor those elected.',
     'case.antifake': 'Fighting disinformation with far-reaching narrative — over 19 million organic views.',
     'case.smt': "A mobilization hub that broadens people's participation in politics, with a weekly videocast, a community and a network of influencers.",
     'case.ypykuera': 'A podcast on politics and democracy, gathering experts and leaders from the progressive field.',
