@@ -49,6 +49,11 @@ b{font-weight:600}
 .dots .d{width:14px;height:14px;border-radius:50%;box-shadow:0 2px 10px rgba(0,0,0,.4)}
 .d--b{background:var(--grad-blue)}.d--g{background:var(--grad-green)}.d--p{background:var(--grad-pink)}
 
+/* ============ PULAR PARA O CONTEÚDO ============ */
+.skip{position:fixed;left:16px;top:-70px;z-index:80;background:#fff;color:#000;font-weight:600;
+  font-size:14px;padding:12px 20px;border-radius:999px;transition:top .25s var(--ease)}
+.skip:focus{top:16px}
+
 /* ============ PROGRESS BAR ============ */
 .progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;pointer-events:none;
   background:linear-gradient(90deg,#2f9bff,#8ace2b,#ff2e9a);
@@ -109,7 +114,7 @@ b{font-weight:600}
 .sec-head--center .kicker{display:inline-block}
 .sec-lead{margin-top:24px;color:var(--muted);font-size:clamp(1rem,1.35vw,1.16rem);max-width:680px}
 .sec-lead--center{margin-left:auto;margin-right:auto}
-.source{margin-top:38px;font-size:13px;color:var(--muted);opacity:.75}
+.source{margin-top:38px;font-size:13px;color:#98a1ad}
 
 /* ============ TEAM ============ */
 .team__label{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500;display:flex;align-items:center;gap:14px;margin:0 0 20px}
@@ -291,7 +296,7 @@ b{font-weight:600}
 .footer__inner{display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
 .footer__logo{height:24px;opacity:.9}
 .footer__tag{font-size:13.5px;color:var(--muted)}
-.footer__copy{font-size:12.5px;color:var(--muted);opacity:.6}
+.footer__copy{font-size:12.5px;color:#98a1ad}
 
 /* ============ MODAL ============ */
 .modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:24px;--c:var(--blue);--grad:var(--grad-blue)}

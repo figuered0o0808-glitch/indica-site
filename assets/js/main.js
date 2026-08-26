@@ -59,7 +59,7 @@
     'case.pulitzer': 'Climate awareness: in-person event with 200+ people and 3.5 million views.',
     'case.oeco': 'Adapting environmental reporting to the native format of social media: 3 million views.',
     'case.cop30': 'A hub of influencers for climate mobilization toward COP30, in Belém.',
-    'ui.more': 'View details →',
+    'ui.more': 'View details →', 'ui.skip': 'Skip to content',
     'prod.kicker': 'Audiovisual productions',
     'prod.h2': "Full productions,<br>from script to <span class='b'>cut</span>.",
     'prod.lead': 'We develop podcasts and videocasts — our own and for partners — in formats that bring contemporary topics closer to new audiences.',
