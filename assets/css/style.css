@@ -163,43 +163,62 @@ b{font-weight:600}
 .service:nth-child(4) .service__no{background-image:linear-gradient(150deg,#62c2ff,#ff2e9a)}
 
 
-/* ============ COMPOSIÇÕES DE BLOCOS EM PARALAXE ============ */
-.section{overflow:hidden}
+/* ============ COMPOSIÇÕES DE BLOCOS EM PARALAXE 3D ============ */
 .section > .container{position:relative;z-index:1}
-.blocos{position:absolute;inset:0;z-index:0;pointer-events:none}
-.bl{position:absolute;display:block;
-  animation:deriva linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
-@keyframes deriva{from{transform:translate3d(0,var(--de,90px),0)}to{transform:translate3d(0,var(--ate,-90px),0)}}
+.blocos{position:absolute;inset:0;z-index:0;pointer-events:none;perspective:1100px}
+.bl{position:absolute;display:block;mix-blend-mode:screen;will-change:transform;
+  animation:deriva3d linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
+@keyframes deriva3d{
+  from{transform:translate3d(0,var(--de,120px),0) rotateX(var(--rx0,0deg)) rotateY(var(--ry0,0deg)) rotate(var(--rz0,0deg))}
+  to{transform:translate3d(0,var(--ate,-120px),0) rotateX(var(--rx1,0deg)) rotateY(var(--ry1,0deg)) rotate(var(--rz1,0deg))}
+}
 
-/* cada bloco tem tamanho, posição, cor e VELOCIDADE próprios */
-.bl--a1{left:2.2%;top:12%;width:88px;height:150px;background-image:var(--grad-blue);--de:130px;--ate:-130px}
-.bl--a2{right:3.5%;top:34%;width:54px;height:54px;background-image:var(--grad-green);--de:50px;--ate:-70px}
-.bl--a3{right:7%;bottom:8%;width:132px;height:74px;background-image:var(--grad-pink);--de:190px;--ate:-60px;opacity:.85}
+/* ---- ATUAÇÃO: torre azul lenta + satélites sobrepostos ---- */
+.bl--a1{left:2.5%;top:10%;width:92px;height:164px;background-image:var(--grad-blue);--de:150px;--ate:-150px;--ry0:-28deg;--ry1:28deg}
+.bl--a2{left:5.5%;top:24%;width:66px;height:66px;background-image:var(--grad-green);--de:60px;--ate:-300px;--rz0:-8deg;--rz1:14deg}
+.bl--a3{left:8.2%;top:21%;width:40px;height:40px;background-image:var(--grad-pink);--de:30px;--ate:-380px;--rz1:180deg}
+.bl--a4{right:3.5%;bottom:12%;width:142px;height:84px;background-image:var(--grad-pink);--de:260px;--ate:-70px;--rx0:55deg;--rx1:-40deg}
+.bl--a5{right:8%;bottom:9%;width:54px;height:54px;background-image:var(--grad-blue);--de:80px;--ate:-220px}
 
-.bl--b1{left:1.5%;top:8%;width:64px;height:64px;background-image:var(--grad-green);--de:60px;--ate:-90px}
-.bl--b2{left:4.5%;bottom:14%;width:104px;height:168px;background-image:var(--grad-blue);--de:210px;--ate:-70px}
-.bl--b3{right:2%;top:20%;width:120px;height:82px;background-image:var(--grad-pink);--de:100px;--ate:-150px;opacity:.9}
-.bl--b4{right:6%;bottom:6%;width:46px;height:46px;background-image:var(--grad-green);--de:40px;--ate:-40px}
+/* ---- SERVIÇOS: pilha esquerda (3 cores sobrepostas) + coluna direita ---- */
+.bl--b1{left:2%;bottom:16%;width:112px;height:184px;background-image:var(--grad-blue);--de:120px;--ate:-120px;--rx0:18deg;--rx1:-18deg}
+.bl--b2{left:6%;bottom:11%;width:72px;height:72px;background-image:var(--grad-green);--de:250px;--ate:-90px;--ry0:0deg;--ry1:180deg}
+.bl--b3{left:4.5%;bottom:29%;width:46px;height:46px;background-image:var(--grad-pink);--de:40px;--ate:-360px}
+.bl--b4{right:2.5%;top:12%;width:132px;height:92px;background-image:var(--grad-pink);--de:200px;--ate:-160px;--rz0:6deg;--rz1:-10deg}
+.bl--b5{right:6.5%;top:20%;width:58px;height:124px;background-image:var(--grad-green);--de:90px;--ate:-260px;--ry0:35deg;--ry1:-35deg}
+.bl--b6{right:4.5%;top:42%;width:40px;height:40px;background-image:var(--grad-blue);--de:20px;--ate:-420px;--rz1:270deg}
 
-.bl--c1{left:3%;top:16%;width:72px;height:128px;background-image:var(--grad-pink);--de:150px;--ate:-110px}
-.bl--c2{right:2.5%;top:40%;width:96px;height:96px;background-image:var(--grad-blue);--de:70px;--ate:-170px}
-.bl--c3{left:8%;bottom:9%;width:44px;height:44px;background-image:var(--grad-green);--de:30px;--ate:-60px}
+/* ---- REDE: portal girando + par sobreposto ---- */
+.bl--c1{left:3%;top:12%;width:82px;height:146px;background-image:var(--grad-pink);--de:180px;--ate:-180px;--ry0:-60deg;--ry1:60deg}
+.bl--c2{right:3%;top:34%;width:104px;height:104px;background-image:var(--grad-blue);--de:70px;--ate:-70px}
+.bl--c3{right:7.5%;top:30%;width:50px;height:50px;background-image:var(--grad-green);--de:280px;--ate:-160px;--rz1:120deg}
+.bl--c4{left:6%;bottom:9%;width:124px;height:72px;background-image:var(--grad-green);--de:220px;--ate:-60px;--rx0:-35deg;--rx1:30deg}
+.bl--c5{left:11.5%;bottom:12%;width:46px;height:46px;background-image:var(--grad-blue);--de:60px;--ate:-320px}
 
-.bl--d1{right:2.5%;top:14%;width:110px;height:180px;background-image:var(--grad-green);--de:180px;--ate:-90px}
-.bl--d2{left:2%;bottom:12%;width:58px;height:58px;background-image:var(--grad-blue);--de:45px;--ate:-95px}
+/* ---- PRODUÇÕES: monolito + companheiros ---- */
+.bl--d1{right:3%;top:11%;width:122px;height:194px;background-image:var(--grad-green);--de:140px;--ate:-140px;--rx0:22deg;--rx1:-22deg}
+.bl--d2{right:8%;top:27%;width:68px;height:68px;background-image:var(--grad-blue);--de:300px;--ate:-100px;--ry1:180deg}
+.bl--d3{left:3%;bottom:15%;width:94px;height:58px;background-image:var(--grad-pink);--de:180px;--ate:-200px;--rz0:-6deg;--rz1:10deg}
+.bl--d4{left:7.5%;bottom:11%;width:42px;height:42px;background-image:var(--grad-green);--de:50px;--ate:-390px;--rz1:200deg}
 
-.bl--e1{left:2.5%;top:18%;width:126px;height:88px;background-image:var(--grad-blue);--de:120px;--ate:-140px;opacity:.9}
-.bl--e2{right:3%;top:10%;width:52px;height:120px;background-image:var(--grad-pink);--de:160px;--ate:-60px}
-.bl--e3{right:9%;bottom:12%;width:40px;height:40px;background-image:var(--grad-green);--de:35px;--ate:-75px}
+/* ---- PUBLICAÇÕES: dupla sobreposta + lâmina girante ---- */
+.bl--e1{left:2.5%;top:15%;width:134px;height:92px;background-image:var(--grad-blue);--de:110px;--ate:-190px}
+.bl--e2{left:6.5%;top:23%;width:60px;height:60px;background-image:var(--grad-green);--de:320px;--ate:-80px;--rz0:8deg;--rz1:-14deg}
+.bl--e3{right:3%;top:9%;width:56px;height:132px;background-image:var(--grad-pink);--de:170px;--ate:-260px;--ry0:-45deg;--ry1:45deg}
+.bl--e4{right:6.5%;bottom:14%;width:44px;height:44px;background-image:var(--grad-blue);--de:30px;--ate:-360px}
+.bl--e5{right:9.5%;bottom:10%;width:98px;height:62px;background-image:var(--grad-pink);--de:200px;--ate:-90px;--rx0:40deg;--rx1:-25deg}
 
-.bl--f1{left:4%;top:20%;width:80px;height:140px;background-image:var(--grad-blue);--de:170px;--ate:-100px}
-.bl--f2{right:5%;top:30%;width:62px;height:62px;background-image:var(--grad-pink);--de:55px;--ate:-125px}
-.bl--f3{left:12%;bottom:10%;width:100px;height:64px;background-image:var(--grad-green);--de:110px;--ate:-45px;opacity:.85}
+/* ---- CONTATO: constelação final ---- */
+.bl--f1{left:3.5%;top:16%;width:86px;height:154px;background-image:var(--grad-blue);--de:160px;--ate:-160px;--ry0:25deg;--ry1:-25deg}
+.bl--f2{left:7%;top:31%;width:66px;height:66px;background-image:var(--grad-pink);--de:280px;--ate:-120px;--rz1:160deg}
+.bl--f3{right:4.5%;top:24%;width:104px;height:66px;background-image:var(--grad-green);--de:130px;--ate:-240px;--rx0:-30deg;--rx1:35deg}
+.bl--f4{right:9.5%;top:20%;width:46px;height:46px;background-image:var(--grad-blue);--de:50px;--ate:-380px}
+.bl--f5{left:12.5%;bottom:7%;width:42px;height:94px;background-image:var(--grad-pink);--de:210px;--ate:-70px;--ry0:0deg;--ry1:180deg}
 
 /* sem suporte a scroll-timeline: ficam parados, ainda compõem */
 @supports not (animation-timeline: view()){ .bl{animation:none} }
-/* telas menores: composição enxuta p/ não competir com o conteúdo */
-@media(max-width:1100px){ .bl{opacity:.55} .bl--a3,.bl--b3,.bl--b4,.bl--e3,.bl--f3{display:none} }
+/* telas menores: composição enxuta */
+@media(max-width:1100px){ .bl{opacity:.55} .bl--a3,.bl--b3,.bl--b6,.bl--c5,.bl--d4,.bl--e4,.bl--f4,.bl--f5{display:none} }
 @media(max-width:760px){ .blocos{display:none} }
 @media(prefers-reduced-motion:reduce){ .bl{animation:none!important} }
 
