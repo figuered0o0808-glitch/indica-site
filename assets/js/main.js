@@ -75,8 +75,6 @@
     'serv.2.d': "Positioning, content calendar and community management driven by data and each client's goals.",
     'serv.3.t': 'Mobilization Campaigns',
     'serv.3.d': 'From goal-setting to influencer curation and measurement — campaigns that turn reach into action.',
-    'serv.4.t': 'Infrastructure & Team',
-    'serv.4.d': 'Our own studio and a multidisciplinary team — script, filming, editing, design and strategy — with full execution.',
     'form.nome': 'Name', 'form.email': 'Email', 'form.org': 'Organization', 'form.assunto': 'Subject',
     'form.op1': 'Mobilization campaign', 'form.op2': 'Audiovisual production', 'form.op3': 'Social media management',
     'form.op4': 'Press / partnership', 'form.op5': 'Other',

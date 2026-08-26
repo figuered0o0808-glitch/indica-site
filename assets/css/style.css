@@ -184,7 +184,6 @@ b{font-weight:600}
   background-image:linear-gradient(150deg,#62c2ff,#2f6df0)}
 .service:nth-child(2) .service__no{background-image:linear-gradient(150deg,#c2ee5a,#5cbf1f)}
 .service:nth-child(3) .service__no{background-image:linear-gradient(140deg,#8ace2b,#ff2e9a)}
-.service:nth-child(4) .service__no{background-image:linear-gradient(150deg,#62c2ff,#ff2e9a)}
 
 
 /* ============ COMPOSIÇÕES DE PLACAS EM PARALAXE ============ */
@@ -297,7 +296,7 @@ b{font-weight:600}
 .show p{color:var(--muted);font-size:14px}
 
 /* ============ SERVICES ============ */
-.services{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.services{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
 .service{background:var(--bg);padding:46px 40px;transition:.3s}
 .section--alt .service{background:var(--bg-alt)}
 .service:hover{background:#11151a}
