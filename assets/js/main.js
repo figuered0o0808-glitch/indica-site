@@ -235,7 +235,7 @@
   /* ---------- Paralaxe dos blocos (fallback JS quando view() nao roda) ---------- */
   var blJS = [];
   function blSetup() {
-    var todos = document.querySelectorAll('.bl');
+    var todos = document.querySelectorAll('.bl, .cubo');
     if (!todos.length) return;
     var nativa = window.CSS && CSS.supports && CSS.supports('animation-timeline: view()');
     if (nativa) return; // scroll-timeline nativa (Chrome/Edge); Safari/Firefox usam o fallback JS
