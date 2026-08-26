@@ -157,6 +157,47 @@ b{font-weight:600}
 .service:nth-child(3) .service__no{background-image:linear-gradient(140deg,#8ace2b,#ff2e9a)}
 .service:nth-child(4) .service__no{background-image:linear-gradient(150deg,#62c2ff,#ff2e9a)}
 
+
+/* ============ COMPOSIÇÕES DE BLOCOS EM PARALAXE ============ */
+.section{overflow:hidden}
+.section > .container{position:relative;z-index:1}
+.blocos{position:absolute;inset:0;z-index:0;pointer-events:none}
+.bl{position:absolute;display:block;
+  animation:deriva linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
+@keyframes deriva{from{transform:translate3d(0,var(--de,90px),0)}to{transform:translate3d(0,var(--ate,-90px),0)}}
+
+/* cada bloco tem tamanho, posição, cor e VELOCIDADE próprios */
+.bl--a1{left:2.2%;top:12%;width:88px;height:150px;background-image:var(--grad-blue);--de:130px;--ate:-130px}
+.bl--a2{right:3.5%;top:34%;width:54px;height:54px;background-image:var(--grad-green);--de:50px;--ate:-70px}
+.bl--a3{right:7%;bottom:8%;width:132px;height:74px;background-image:var(--grad-pink);--de:190px;--ate:-60px;opacity:.85}
+
+.bl--b1{left:1.5%;top:8%;width:64px;height:64px;background-image:var(--grad-green);--de:60px;--ate:-90px}
+.bl--b2{left:4.5%;bottom:14%;width:104px;height:168px;background-image:var(--grad-blue);--de:210px;--ate:-70px}
+.bl--b3{right:2%;top:20%;width:120px;height:82px;background-image:var(--grad-pink);--de:100px;--ate:-150px;opacity:.9}
+.bl--b4{right:6%;bottom:6%;width:46px;height:46px;background-image:var(--grad-green);--de:40px;--ate:-40px}
+
+.bl--c1{left:3%;top:16%;width:72px;height:128px;background-image:var(--grad-pink);--de:150px;--ate:-110px}
+.bl--c2{right:2.5%;top:40%;width:96px;height:96px;background-image:var(--grad-blue);--de:70px;--ate:-170px}
+.bl--c3{left:8%;bottom:9%;width:44px;height:44px;background-image:var(--grad-green);--de:30px;--ate:-60px}
+
+.bl--d1{right:2.5%;top:14%;width:110px;height:180px;background-image:var(--grad-green);--de:180px;--ate:-90px}
+.bl--d2{left:2%;bottom:12%;width:58px;height:58px;background-image:var(--grad-blue);--de:45px;--ate:-95px}
+
+.bl--e1{left:2.5%;top:18%;width:126px;height:88px;background-image:var(--grad-blue);--de:120px;--ate:-140px;opacity:.9}
+.bl--e2{right:3%;top:10%;width:52px;height:120px;background-image:var(--grad-pink);--de:160px;--ate:-60px}
+.bl--e3{right:9%;bottom:12%;width:40px;height:40px;background-image:var(--grad-green);--de:35px;--ate:-75px}
+
+.bl--f1{left:4%;top:20%;width:80px;height:140px;background-image:var(--grad-blue);--de:170px;--ate:-100px}
+.bl--f2{right:5%;top:30%;width:62px;height:62px;background-image:var(--grad-pink);--de:55px;--ate:-125px}
+.bl--f3{left:12%;bottom:10%;width:100px;height:64px;background-image:var(--grad-green);--de:110px;--ate:-45px;opacity:.85}
+
+/* sem suporte a scroll-timeline: ficam parados, ainda compõem */
+@supports not (animation-timeline: view()){ .bl{animation:none} }
+/* telas menores: composição enxuta p/ não competir com o conteúdo */
+@media(max-width:1100px){ .bl{opacity:.55} .bl--a3,.bl--b3,.bl--b4,.bl--e3,.bl--f3{display:none} }
+@media(max-width:760px){ .blocos{display:none} }
+@media(prefers-reduced-motion:reduce){ .bl{animation:none!important} }
+
 /* ============ TABS DOS EIXOS ============ */
 .tabs{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px}
 .tab{padding:13px 28px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--muted);
