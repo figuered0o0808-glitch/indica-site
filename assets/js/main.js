@@ -235,7 +235,7 @@
   /* ---------- Paralaxe dos blocos (fallback JS quando view() nao roda) ---------- */
   var blJS = [];
   function blSetup() {
-    var todos = document.querySelectorAll('.bl, .cubo');
+    var todos = document.querySelectorAll('.bl');
     if (!todos.length) return;
     var nativa = window.CSS && CSS.supports && CSS.supports('animation-timeline: view()');
     if (nativa) return; // scroll-timeline nativa (Chrome/Edge); Safari/Firefox usam o fallback JS
@@ -243,13 +243,7 @@
       var cs = getComputedStyle(el);
       function px(v, d) { var n = parseFloat(cs.getPropertyValue(v)); return isNaN(n) ? d : n; }
       el.style.animation = 'none';
-      blJS.push({
-        el: el, pai: el.parentElement,
-        de: px('--de', 120), ate: px('--ate', -120),
-        rx0: px('--rx0', 0), rx1: px('--rx1', 0),
-        ry0: px('--ry0', 0), ry1: px('--ry1', 0),
-        rz0: px('--rz0', 0), rz1: px('--rz1', 0)
-      });
+      blJS.push({ el: el, pai: el.parentElement, de: px('--de', 120), ate: px('--ate', -120) });
     });
   }
   var blTick = false;
@@ -262,10 +256,7 @@
       var p = (ih - r.top) / (ih + r.height);       // range "cover": 0 entra, 1 sai
       p = p < 0 ? 0 : p > 1 ? 1 : p;
       var L = function (a, z) { return a + (z - a) * p; };
-      b.el.style.transform = 'translate3d(0,' + L(b.de, b.ate).toFixed(1) + 'px,0)' +
-        ' rotateX(' + L(b.rx0, b.rx1).toFixed(1) + 'deg)' +
-        ' rotateY(' + L(b.ry0, b.ry1).toFixed(1) + 'deg)' +
-        ' rotate(' + L(b.rz0, b.rz1).toFixed(1) + 'deg)';
+      b.el.style.transform = 'translate3d(0,' + L(b.de, b.ate).toFixed(1) + 'px,0)';
     }
   }
   function blOnScroll() {
