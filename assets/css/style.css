@@ -313,7 +313,7 @@ b{font-weight:600}
 /* ============ PARTNERS ============ */
 .partners{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
 .partner{background:var(--bg-alt);display:flex;align-items:center;justify-content:center;padding:42px 26px;min-height:148px;transition:background .3s}
-.partner img{max-height:64px;max-width:170px;width:auto;height:auto;opacity:.7;transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.partner img{max-height:64px;max-width:170px;width:auto;height:auto;opacity:.92;transition:opacity .3s var(--ease),transform .3s var(--ease)}
 .partner:hover{background:#11151a}
 .section--alt .partner{background:#0d0f14}
 .partner:hover img{opacity:1;transform:scale(1.05)}
@@ -417,7 +417,7 @@ body[data-eixo="meio"]{background-color:#0d0009}
 @keyframes slide{to{transform:translateX(-50%)}}
 .marquee:hover .marquee__track{animation-play-state:paused}
 .marquee .partner{background:none;min-height:auto;padding:26px 40px;flex:0 0 auto}
-.marquee .partner img{max-height:52px;max-width:150px;opacity:.62}
+.marquee .partner img{max-height:52px;max-width:150px;opacity:.92}
 .marquee .partner:hover{background:none}
 .marquee .partner:hover img{opacity:1;transform:scale(1.06)}
 
