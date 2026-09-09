@@ -9,10 +9,11 @@
     'pubs.kicker': 'Our publications',
     'pubs.h2': "INDICA also<br>generates <span class='b'>knowledge</span>.",
     'pubs.lead': 'Beyond campaigns and productions, we publish articles and reports on the influence ecosystem, communication and public opinion.',
-    'pubs.a.tag': 'Articles', 'pubs.a.t': 'The influence market',
-    'pubs.a.d': 'Articles on how the digital influence market works, based on data and on the practice of those who operate in it.',
-    'pubs.r.tag': 'Reports', 'pubs.r.t': 'Data and diagnostics',
-    'pubs.r.d': 'Campaign measurement and readings of the influence ecosystem, with our own methodology.',
+    'pubs.a.tag': 'Paper · The influencer economy',
+    'pubs.art.t': 'An economic model for the content market on algorithmic social networks',
+    'pubs.art.d': 'A theory of timing in the dispute for attention: latent demand, active supply and the optimal publication window. It treats attention as a scarce resource and derives the condition that closes the window — when active supply starts growing faster than demand.',
+    'pubs.art.m': 'Francisco Figueiredo · Lauanny Brandão · Pedro Bordinhão · 2026',
+    'pubs.art.cta': 'Read the paper (PDF) ↗',
     'pubs.cta.tag': 'Subscribe', 'pubs.cta.t': 'Want to receive our publications?',
     'pubs.cta.d': 'Get in touch →',
     'hero.lead': "Through the influence market, we stand up for <b class='t--green'>science</b>, <b class='t--blue'>democracy</b> and the <b class='t--pink'>environment</b>. We connect creators, data and narrative to move public opinion around what matters.",
@@ -111,6 +112,14 @@
     document.querySelectorAll('[data-en]').forEach(function (el) {
       if (!ptCache.has(el)) ptCache.set(el, el.innerHTML);
       el.innerHTML = (lang === 'en') ? el.getAttribute('data-en') : ptCache.get(el);
+    });
+    document.querySelectorAll('[data-href-en]').forEach(function (el) {
+      if (!ptCache.has(el)) ptCache.set(el, el.getAttribute('href'));
+      el.setAttribute('href', (lang === 'en') ? el.getAttribute('data-href-en') : ptCache.get(el));
+    });
+    document.querySelectorAll('[data-src-en]').forEach(function (el) {
+      if (!ptCache.has(el)) ptCache.set(el, el.getAttribute('src'));
+      el.setAttribute('src', (lang === 'en') ? el.getAttribute('data-src-en') : ptCache.get(el));
     });
     currentLang = lang;
     document.documentElement.lang = (lang === 'en') ? 'en' : 'pt-BR';
