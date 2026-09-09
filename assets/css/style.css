@@ -438,16 +438,23 @@ body[data-eixo="meio"]{background-color:#0d0009}
 .form__ok{margin-top:22px;font-size:15px;font-weight:600;color:var(--green)}
 
 /* ============ PUBS ============ */
-.pubs{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:20px;align-items:start}
+.pubs{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:34px 26px;align-items:start}
 .pub{display:block;padding:38px 32px 40px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg);transition:.3s var(--ease)}
 .pub:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.24)}
-/* item do feed: só a capa, em quadrado compacto */
-.pub--feat{position:relative;aspect-ratio:1/1;display:grid;place-items:center;padding:16px;overflow:hidden;
-  grid-template-rows:minmax(0,1fr);grid-template-columns:minmax(0,1fr)}
-.pub__cover{width:100%;height:100%;object-fit:contain;transition:transform .45s var(--ease)}
-.pub--feat:hover .pub__cover{transform:scale(1.04)}
-/* título/autoria seguem no código p/ leitores de tela e busca */
-.pub__body{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* item do feed: capa limpa (sem moldura) + legenda embaixo */
+.pub--feat{display:block;padding:0;border:0;background:none;border-radius:0}
+.pub--feat:hover{transform:none;border-color:transparent}
+.pub__cover{display:block;width:100%;height:auto;border-radius:10px;
+  transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
+.pub--feat:hover .pub__cover{transform:translateY(-6px);box-shadow:0 18px 44px rgba(0,0,0,.6)}
+.pub__body{display:block;padding:16px 2px 0}
+.pub--feat .pub__tag{margin-bottom:8px;font-size:11px}
+.pub--feat h3{font-family:'Jost',sans-serif;font-size:1.02rem;font-weight:400;line-height:1.3;margin-bottom:8px}
+.pub--feat p{display:none}
+.pub__meta{display:block;font-size:12.5px;color:#98a1ad}
+.pub__link{display:inline-block;margin-top:10px;font-size:13.5px;font-weight:600;
+  transition:padding-left .28s var(--ease)}
+.pub--feat:hover .pub__link{padding-left:6px}
 .pub--cta{grid-column:span 2;border-style:dashed;border-color:rgba(255,255,255,.2)}
 .pub--cta:hover{border-color:var(--pink);border-style:solid}
 .pub--cta p{color:var(--ink);font-weight:600}
@@ -497,14 +504,23 @@ body[data-eixo="meio"]{background-color:#0d0009}
   /* números do hero em três colunas, sem quebra torta */
   .hero__stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:26px 18px}
   .stat__num{font-size:1.7rem}
-  .stat__label{font-size:9.5px;letter-spacing:.08em;line-height:1.3}
+  .stat__label{font-size:11px;letter-spacing:.06em;line-height:1.25}
   /* abas ocupam a linha inteira, sem sobra de uma sozinha */
-  .tabs{gap:8px}
-  .tab{flex:0 0 auto;padding:12px 18px;font-size:13.5px}
+  .tabs{gap:8px;flex-wrap:nowrap}
+  .tab{flex:1 1 0;min-width:0;padding:13px 6px;font-size:13px;text-align:center}
   /* respiro e leitura */
   .team__role{font-size:11.5px}
   .eixo__title::after{margin-top:18px}
   .modal__panel{padding:38px 24px 32px}
+  .modal__close{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+  .service{padding:32px 24px}
+  .ecase{padding:24px 22px}
+  .show{padding:26px 22px 30px}
+  .pub--cta{padding:30px 24px 32px}
+  /* número do eixo cruzando a borda do bloco, como no desktop */
+  .eixo .eixo__index{margin-top:96px}
+  /* legenda do artigo: título em até 3 linhas p/ os quadros ficarem parelhos */
+  .pub--feat h3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   .form{margin-top:34px}
   .marquee__track{animation-duration:30s}
 }
