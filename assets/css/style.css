@@ -444,7 +444,7 @@ body[data-eixo="meio"]{background-color:#0d0009}
 /* item do feed: capa limpa (sem moldura) + legenda embaixo */
 .pub--feat{display:block;padding:0;border:0;background:none;border-radius:0}
 .pub--feat:hover{transform:none;border-color:transparent}
-.pub__cover{display:block;width:100%;height:auto;border-radius:10px;
+.pub__cover{display:block;width:100%;max-width:260px;height:auto;border-radius:10px;
   transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
 .pub--feat:hover .pub__cover{transform:translateY(-6px);box-shadow:0 18px 44px rgba(0,0,0,.6)}
 .pub__body{display:block;padding:16px 2px 0}
@@ -465,7 +465,6 @@ body[data-eixo="meio"]{background-color:#0d0009}
   .stats-editorial{grid-template-columns:repeat(2,1fr)}
   .hubs{grid-template-columns:repeat(2,1fr)}
   .partners{grid-template-columns:repeat(3,1fr)}
-  .pubs{grid-template-columns:1fr}
   .eixo__grid{grid-template-columns:1fr;gap:36px}
   .eixo__side{position:relative;flex-direction:row;align-items:center;gap:24px;padding-top:0}
   .eixo__side::before{width:104px;height:150px;top:-14px}
