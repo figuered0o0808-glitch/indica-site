@@ -26,7 +26,7 @@
     'team.caio': 'Lawyer and digital communicator, working across geopolitics, economics and the Brazilian State.',
     'team.grp.direcao': 'Leadership', 'team.grp.projetos': 'Projects',
     'team.grp.campanhas': 'Campaigns', 'team.grp.av': 'Audiovisual',
-    'role.direcao': 'Leadership', 'role.coord': 'Project Coordinator', 'role.gestproj': 'Project Manager', 'role.assistproj': 'Project Assistant',
+    'role.direcao': 'Leadership', 'role.coord': 'Project Coordinator', 'role.coordf': 'Project Coordinator', 'role.assistproj': 'Project Assistant',
     'role.assistcamp': 'Campaign Assistant', 'role.coordcamp': 'Campaign Coordinator', 'role.assistav': 'Editor & Motion Designer',
     'role.coordav': 'Audiovisual Producer',
     'team.jorge': 'Audiovisual producer focused on coordinating, producing and editing content for digital mobilization and social-impact projects. Law student at UFRJ, researching the realization of the right to education.',
