@@ -372,7 +372,7 @@ body.modal-open{overflow:hidden}
   @keyframes heroLeave{to{opacity:0;transform:translateY(-40px) scale(.9);filter:blur(6px)}}
 
   /* 2. cada bloco entra subindo e "ganha foco" */
-  .team__card,.ecase,.service,.show,.pub,.hub,.creator{
+  .team__card,.ecase,.service,.show,.pubs__list>li,.pub--cta,.hub,.creator{
     animation:blocoEntra linear both;animation-timeline:view();animation-range:entry 0% entry 42%}
   @keyframes blocoEntra{from{opacity:0;transform:translateY(46px) scale(.96)}to{opacity:1;transform:none}}
 
@@ -399,7 +399,7 @@ body[data-eixo="meio"]{background-color:#0d0009}
   background:radial-gradient(60% 50% at 18% 30%,var(--c),transparent 70%);opacity:.07}
 
 @media(prefers-reduced-motion:reduce){
-  .hero__inner,.team__card,.ecase,.service,.show,.pub,.hub,.creator,.sec-head .display,.eixo__side,.hero__stats-row>div{animation:none!important}
+  .hero__inner,.team__card,.ecase,.service,.show,.pubs__list>li,.pub--cta,.hub,.creator,.sec-head .display,.eixo__side,.hero__stats-row>div{animation:none!important}
   body{transition:none}
 }
 
@@ -438,25 +438,45 @@ body[data-eixo="meio"]{background-color:#0d0009}
 .form__ok{margin-top:22px;font-size:15px;font-weight:600;color:var(--green)}
 
 /* ============ PUBS ============ */
-.pubs{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:34px 26px;align-items:start}
+/* a seção é uma pilha de coleções (série numerada hoje; avulsos amanhã) e o CTA no fim */
+.pubs{display:flex;flex-direction:column;align-items:flex-start;gap:clamp(56px,7vw,88px)}
+.pubs__grp{width:100%}
+/* rótulo de coleção com fio — mesmo desenho do rótulo de grupo da equipe (.team__label) */
+.pubs__label{display:flex;align-items:center;gap:14px;margin:0 0 16px;
+  font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.pubs__label::after{content:"";flex:1;height:1px;background:var(--line)}
+/* cabeçalho de série: rótulo + nome da série em Jost leve (menor que o h2 da seção) */
+.serie__head{margin-bottom:34px}
+.serie__title{margin:0;font-family:'Jost',sans-serif;font-weight:300;line-height:1.15;letter-spacing:-.01em;
+  font-size:clamp(1.3rem,1.9vw,1.55rem)}
+/* grade de itens — a mesma grade de capas já aprovada, agora dentro da coleção */
+.pubs__list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+  gap:34px 26px;align-items:start;counter-reset:serie}
+.pubs__list>li{min-width:0}
+/* número do item na série (01, 02…) fica no <li>, fora do link: não entra no nome acessível do link */
+.serie__item{counter-increment:serie}
+.serie__item::before{content:counter(serie,decimal-leading-zero);display:block;margin-bottom:12px;
+  font-family:'Jost',sans-serif;font-weight:200;font-size:1.35rem;line-height:1;letter-spacing:.02em;color:var(--muted)}
+/* item: capa limpa (sem moldura) + legenda curta embaixo */
 .pub{display:block;padding:38px 32px 40px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg);transition:.3s var(--ease)}
 .pub:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.24)}
-/* item do feed: capa limpa (sem moldura) + legenda embaixo */
 .pub--feat{display:block;padding:0;border:0;background:none;border-radius:0}
 .pub--feat:hover{transform:none;border-color:transparent}
 .pub__cover{display:block;width:100%;max-width:260px;height:auto;border-radius:10px;
   transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
 .pub--feat:hover .pub__cover{transform:translateY(-6px);box-shadow:0 18px 44px rgba(0,0,0,.6)}
 .pub__body{display:block;padding:16px 2px 0}
-.pub--feat .pub__tag{margin-bottom:8px;font-size:11px}
-.pub--feat h3{font-family:'Jost',sans-serif;font-size:1.02rem;font-weight:400;line-height:1.3;margin-bottom:8px}
-.pub--feat p{display:none}
+.pub--feat .pub__tag{display:inline-block;margin-bottom:6px;font-size:11px}
+.pub--feat h4{font-family:'Jost',sans-serif;font-size:1.02rem;font-weight:400;line-height:1.3;margin:0 0 8px}
+.pub--feat p{display:none} /* resumo: fica no HTML p/ busca, não aparece na legenda */
 .pub__meta{display:block;font-size:12.5px;color:#98a1ad}
 .pub__link{display:inline-block;margin-top:10px;font-size:13.5px;font-weight:600;
   transition:padding-left .28s var(--ease)}
 .pub--feat:hover .pub__link{padding-left:6px}
-.pub--cta{grid-column:span 2;border-style:dashed;border-color:rgba(255,255,255,.2)}
+/* CTA: o mesmo cartão tracejado, agora fora da grade (largura própria, alinhado à esquerda) */
+.pub--cta{width:100%;max-width:520px;border-style:dashed;border-color:rgba(255,255,255,.2)}
 .pub--cta:hover{border-color:var(--pink);border-style:solid}
+.pub--cta h3{font-family:'Jost',sans-serif;font-size:1.45rem;font-weight:300;line-height:1.2;margin:10px 0 12px}
 .pub--cta p{color:var(--ink);font-weight:600}
 
 /* ============ RESPONSIVE ============ */
@@ -480,8 +500,10 @@ body[data-eixo="meio"]{background-color:#0d0009}
   .nav.scrolled{background:rgba(0,0,0,.85)}
   .hero__stats-row{gap:34px}
   .services{grid-template-columns:1fr}
-  .pubs{grid-template-columns:repeat(2,1fr)}
-  .pub--cta{grid-column:span 2}
+  .pubs__list{grid-template-columns:repeat(2,1fr);gap:28px 18px}
+  .serie__head{margin-bottom:26px}
+  .serie__item::before{font-size:1.2rem;margin-bottom:10px}
+  .pub--cta{max-width:none}
   .form__row{grid-template-columns:1fr}
   .eixo__cases{grid-template-columns:1fr}
 }
@@ -519,7 +541,7 @@ body[data-eixo="meio"]{background-color:#0d0009}
   /* número do eixo cruzando a borda do bloco, como no desktop */
   .eixo .eixo__index{margin-top:96px}
   /* legenda do artigo: título em até 3 linhas p/ os quadros ficarem parelhos */
-  .pub--feat h3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .pub--feat h4{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
   .form{margin-top:34px}
   .marquee__track{animation-duration:30s}
 }

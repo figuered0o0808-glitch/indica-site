@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Jost:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="canonical" href="https://agenciaindica.com/">
-<link rel="stylesheet" href="assets/css/style.css?v=55">
+<link rel="stylesheet" href="assets/css/style.css?v=56">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization",
 "name":"INDICA","alternateName":"Agência INDICA",
@@ -406,26 +406,56 @@
       </p>
     </header>
     <div class="pubs">
-      <a class="pub pub--feat reveal" href="assets/docs/indica-modelo-economico-redes-sociais-PT.pdf"
-         data-href-en="assets/docs/indica-economic-model-social-networks-EN.pdf" target="_blank" rel="noopener"
-         title="Um modelo econômico para o mercado de conteúdo em redes sociais algorítmicas (PDF)">
-        <img class="pub__cover" src="assets/img/pubs/capa-modelo-economico-pt.png"
-             data-src-en="assets/img/pubs/capa-modelo-economico-en.png"
-             alt="Capa do artigo: Um modelo econômico para o mercado de conteúdo em redes sociais algorítmicas" loading="lazy" width="1310" height="1853">
-        <div class="pub__body">
-          <span class="pub__tag t--blue" data-i18n="pubs.a.tag">Artigo · 2026</span>
-          <h3 data-i18n="pubs.art.t">Um modelo econômico para o mercado de conteúdo em redes sociais algorítmicas</h3>
-          <p data-i18n="pubs.art.d">Uma teoria do timing na disputa por atenção: demanda latente, oferta ativa e a janela ótima de publicação. Trata a atenção como recurso escasso e deriva a condição que fecha a janela — quando a oferta ativa passa a crescer mais rápido que a demanda.</p>
-          <span class="pub__meta" data-i18n="pubs.art.m">Figueiredo · Brandão · Bordinhão</span>
-          <span class="pub__link" data-i18n="pubs.art.cta">Ler o artigo (PDF) ↗</span>
-        </div>
-      </a>
+
+      <!-- Coleção: série "A economia dos influenciadores".
+           <ol> = ordem de leitura (não cronológica). A numeração 01, 02… é gerada por CSS
+           (contador em .serie__item): o próximo artigo entra como mais um <li>, sem editar número. -->
+      <section class="pubs__grp" aria-labelledby="serie-econ">
+        <header class="serie__head reveal">
+          <span class="pubs__label" data-i18n="pubs.serie.label">Série</span>
+          <h3 class="serie__title" id="serie-econ" data-i18n="pubs.econ.t">A economia dos influenciadores</h3>
+        </header>
+        <ol class="pubs__list" role="list">
+          <li class="serie__item reveal">
+            <a class="pub pub--feat" href="assets/docs/indica-economia-influenciadores-introducao-PT.pdf"
+               data-href-en="assets/docs/indica-economia-influenciadores-introducao-EN.pdf" target="_blank" rel="noopener">
+              <img class="pub__cover" src="assets/img/pubs/capa-introducao-pt.png"
+                   data-src-en="assets/img/pubs/capa-introducao-en.png"
+                   alt="" loading="lazy" width="1310" height="1853">
+              <div class="pub__body">
+                <span class="pub__tag t--blue" data-i18n="pubs.intro.tag">Introdução · 2026</span>
+                <h4 data-i18n="pubs.intro.t">O desenho econômico do mercado de influência</h4>
+                <p data-i18n="pubs.intro.d">Introdução à série. Descreve como funciona o mercado de influência — quem são seus participantes, o que cada um entrega e recebe, por onde circulam a atenção e o dinheiro — e explica por que esse mercado merece ser estudado com a teoria econômica. Apresenta os campos que a série cobre.</p>
+                <span class="pub__meta" data-i18n="pubs.intro.m">Francisco Figueiredo · 11&nbsp;págs.</span>
+                <span class="pub__link" data-i18n="pubs.read">Ler o artigo (PDF)&nbsp;↗</span>
+              </div>
+            </a>
+          </li>
+          <li class="serie__item reveal">
+            <a class="pub pub--feat" href="assets/docs/indica-modelo-economico-redes-sociais-PT.pdf"
+               data-href-en="assets/docs/indica-economic-model-social-networks-EN.pdf" target="_blank" rel="noopener">
+              <img class="pub__cover" src="assets/img/pubs/capa-modelo-economico-pt.png"
+                   data-src-en="assets/img/pubs/capa-modelo-economico-en.png"
+                   alt="" loading="lazy" width="1310" height="1853">
+              <div class="pub__body">
+                <span class="pub__tag t--blue" data-i18n="pubs.modelo.tag">Artigo · 2026</span>
+                <h4 data-i18n="pubs.modelo.t">Um modelo econômico para o mercado de conteúdo em redes sociais algorítmicas</h4>
+                <p data-i18n="pubs.modelo.d">Uma teoria do timing na disputa por atenção: demanda latente, oferta ativa e a janela ótima de publicação. Trata a atenção como recurso escasso e deriva a condição que fecha a janela — quando a oferta ativa passa a crescer mais rápido que a demanda.</p>
+                <span class="pub__meta" data-i18n="pubs.modelo.m">Figueiredo · Brandão · Bordinhão · 48&nbsp;págs.</span>
+                <span class="pub__link" data-i18n="pubs.read">Ler o artigo (PDF)&nbsp;↗</span>
+              </div>
+            </a>
+          </li>
+        </ol>
+      </section>
+
       <a class="pub pub--cta reveal" href="#contato">
         <span class="pub__tag t--pink" data-i18n="pubs.cta.tag">Receba</span>
         <h3 data-i18n="pubs.cta.t">Quer receber nossas publicações?</h3>
         <p data-i18n="pubs.cta.d">Fale com a gente →</p>
       </a>
     </div>
+  </div><!-- /.container -->
 </section>
 
 <!-- ================= PARCEIROS ================= -->
@@ -665,6 +695,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=55"></script>
+<script src="assets/js/main.js?v=56"></script>
 </body>
 </html>
