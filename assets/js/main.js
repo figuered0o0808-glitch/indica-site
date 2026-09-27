@@ -103,9 +103,14 @@
     'net.source': 'Source: Quaest/2025 survey and the Influence.me/2026 Digital Influencers Report.',
     'part.kicker': 'Partners',
     'part.h2': "Who walks<br>with <span class='b'>us</span>.",
+    'part.lead': 'Institutions, media outlets and organizations we have worked with on campaigns, productions and research.',
+    'eixos.aria': 'Areas of work',
+    'nav.home.aria': 'INDICA — home', 'nav.aria': 'Main navigation', 'nav.burger.aria': 'Open menu', 'ui.close.aria': 'Close',
+    'eixos.cta.q': 'Have a similar campaign in mind?',
+    'eixos.cta.a': "Let's talk →",
     'contact.h2': "Got a cause to set<br>in <span class='b'>motion</span>?",
     'contact.lead': 'Tell us what you want to communicate. INDICA designs the strategy, the production and the influence network — from briefing to measurement.',
-    'footer.tag': 'Communication with purpose · Democracy · Science · Environment',
+    'footer.tag': 'Democracy · Science · Environment',
     'footer.copy': '© 2026 INDICA. All rights reserved.'
   };
 
@@ -135,7 +140,12 @@
     });
     currentLang = lang;
     document.documentElement.lang = (lang === 'en') ? 'en' : 'pt-BR';
-    document.title = (lang === 'en') ? 'INDICA — Communication with purpose' : 'INDICA — Comunicação com propósito';
+    document.title = (lang === 'en') ? 'INDICA — Communication and influencer marketing agency' : 'INDICA — Agência de comunicação e marketing de influência';
+    document.querySelectorAll('[data-i18n-aria]').forEach(function (el) {
+      if (!ptCache.has(el)) ptCache.set(el, el.getAttribute('aria-label'));
+      var k = el.getAttribute('data-i18n-aria');
+      el.setAttribute('aria-label', (lang === 'en' && EN[k] != null) ? EN[k] : ptCache.get(el));
+    });
     if (langBtn) langBtn.querySelectorAll('[data-l]').forEach(function (s) {
       s.classList.toggle('on', s.getAttribute('data-l') === lang);
     });
@@ -158,32 +168,66 @@
     applyLang(navLang.indexOf('pt') === 0 ? 'pt' : 'en');
   }
 
-  /* ---------- Abas dos eixos ---------- */
-  var tabBtns = document.querySelectorAll('.tab');
-  var eixoSecs = document.querySelectorAll('.eixo');
-  function setTab(name) {
-    document.body.setAttribute('data-eixo', name);
-    tabBtns.forEach(function (t) {
-      var on = t.getAttribute('data-tab') === name;
+  /* ---------- Capítulos dos eixos: índice fixo que acompanha a rolagem ---------- */
+  var tabsBar = document.querySelector('.tabs');
+  var tabLinks = tabsBar ? [].slice.call(tabsBar.querySelectorAll('.tab')) : [];
+  var eixoSecs = [].slice.call(document.querySelectorAll('.eixo'));
+  var rootStyle = document.documentElement.style;
+  var navEl = document.getElementById('nav');
+  function medirBarras() {
+    if (navEl) rootStyle.setProperty('--navh', navEl.offsetHeight + 'px');
+    if (tabsBar) rootStyle.setProperty('--tabsh', tabsBar.offsetHeight + 'px');
+  }
+  medirBarras();
+  window.addEventListener('resize', medirBarras, { passive: true });
+  if (window.ResizeObserver) {
+    var roBarras = new ResizeObserver(medirBarras);
+    if (navEl) roBarras.observe(navEl);
+    if (tabsBar) roBarras.observe(tabsBar);
+  }
+  function spyEixos() {
+    if (!tabsBar) return;
+    var navh = navEl ? navEl.offsetHeight : 0;
+    var topo = tabsBar.getBoundingClientRect().top;
+    tabsBar.classList.toggle('stuck', topo <= navh + 0.5 && window.scrollY > 0);
+    var limite = navh + tabsBar.offsetHeight + 4, atual = -1;
+    for (var i = 0; i < eixoSecs.length; i++) {
+      if (eixoSecs[i].getBoundingClientRect().top <= limite) atual = i;
+    }
+    // depois do último capítulo, nenhum fica aceso
+    var ult = eixoSecs[eixoSecs.length - 1];
+    if (ult && ult.getBoundingClientRect().bottom <= limite) atual = -1;
+    tabLinks.forEach(function (t, i) {
+      var on = i === atual;
       t.classList.toggle('active', on);
-      t.setAttribute('aria-selected', on ? 'true' : 'false');
-    });
-    eixoSecs.forEach(function (e) {
-      var on = e.getAttribute('data-eixo') === name;
-      e.classList.toggle('tab-active', on);
-      if (on) e.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+      if (on) t.setAttribute('aria-current', 'true'); else t.removeAttribute('aria-current');
     });
   }
-  tabBtns.forEach(function (t, i) {
-    t.addEventListener('click', function () { setTab(t.getAttribute('data-tab')); });
-    t.addEventListener('keydown', function (e) {
-      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-      e.preventDefault();
-      var n = (i + (e.key === 'ArrowRight' ? 1 : -1) + tabBtns.length) % tabBtns.length;
-      tabBtns[n].focus(); setTab(tabBtns[n].getAttribute('data-tab'));
+
+  /* ---------- Celular: contador da fileira de campanhas (1 / 5) ---------- */
+  [].forEach.call(document.querySelectorAll('.eixo__cases'), function (trilho) {
+    var cards = trilho.querySelectorAll('.ecase');
+    var rotulo = trilho.parentElement.querySelector('.eixo__caseslabel');
+    if (!rotulo || cards.length < 2) return;
+    var cont = document.createElement('span');
+    cont.className = 'eixo__count';
+    cont.setAttribute('aria-hidden', 'true');
+    rotulo.appendChild(cont);
+    function atualiza() {
+      var passo = cards[1].offsetLeft - cards[0].offsetLeft || 1;
+      var idx = Math.min(cards.length, Math.round(trilho.scrollLeft / passo) + 1);
+      cont.textContent = idx + ' / ' + cards.length;
+    }
+    trilho.addEventListener('scroll', atualiza, { passive: true });
+    trilho.addEventListener('focusin', function (e) {
+      var card = e.target.closest ? e.target.closest('.ecase') : null;
+      if (!card) return;
+      var r = card.getBoundingClientRect(), t = trilho.getBoundingClientRect();
+      if (r.left < t.left || r.right > t.right) trilho.scrollTo({ left: card.offsetLeft - cards[0].offsetLeft, behavior: 'auto' });
     });
+    window.addEventListener('resize', atualiza, { passive: true });
+    atualiza();
   });
-  if (tabBtns.length) setTab('democracia');
 
   /* ---------- Nav: shadow on scroll ---------- */
   var nav = document.getElementById('nav');
@@ -235,18 +279,25 @@
   var spyLinks = [].filter.call(document.querySelectorAll('.nav__links a'), function (a) {
     return a.getAttribute('href').charAt(0) === '#' && a.getAttribute('href') !== '#top';
   });
-  var spyTargets = spyLinks.map(function (a) {
-    return document.querySelector(a.getAttribute('href'));
+  // todas as seções da página, em ordem; cada uma aponta para o link do menu que a representa (ou nenhum)
+  var spySecs = [].slice.call(document.querySelectorAll('main section[id]')).filter(function (s) {
+    return !s.closest('.pubs');
+  }).map(function (s) {
+    var alvo = s.classList.contains('eixo') ? 'atuacao' : s.id;
+    var link = null;
+    spyLinks.forEach(function (a) { if (a.getAttribute('href') === '#' + alvo) link = a; });
+    return { el: s, link: link };
   });
   function onScrollFx() {
     var doc = document.documentElement;
     var max = doc.scrollHeight - window.innerHeight;
     if (progress) progress.style.transform = 'scaleX(' + (max > 0 ? window.scrollY / max : 0) + ')';
-    var current = -1;
-    for (var i = 0; i < spyTargets.length; i++) {
-      if (spyTargets[i] && spyTargets[i].getBoundingClientRect().top <= 120) current = i;
+    var atualLink = null, lim = (navEl ? navEl.offsetHeight : 60) + 60;
+    for (var i = 0; i < spySecs.length; i++) {
+      if (spySecs[i].el.getBoundingClientRect().top <= lim) atualLink = spySecs[i].link;
     }
-    spyLinks.forEach(function (a, i) { a.classList.toggle('active', i === current); });
+    spyLinks.forEach(function (a) { a.classList.toggle('active', a === atualLink); });
+    spyEixos();
     checkReveals();
     checkCounters();
   }

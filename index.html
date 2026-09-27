@@ -22,11 +22,10 @@
 <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Jost:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/jost-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="canonical" href="https://agenciaindica.com/">
-<link rel="stylesheet" href="assets/css/style.css?v=58">
+<link rel="stylesheet" href="assets/css/style.css?v=60">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization",
 "name":"INDICA","alternateName":"Agência INDICA",
@@ -47,10 +46,10 @@
 <!-- ================= NAV ================= -->
 <header class="nav" id="nav">
   <div class="nav__inner">
-    <a href="#top" class="nav__brand" aria-label="INDICA — início">
+    <a href="#top" class="nav__brand" aria-label="INDICA — início" data-i18n-aria="nav.home.aria">
       <img src="assets/img/logo-master.png" alt="INDICA" class="nav__logo" width="3228" height="968">
     </a>
-    <nav class="nav__links" aria-label="Navegação principal">
+    <nav class="nav__links" id="navlinks" aria-label="Navegação principal" data-i18n-aria="nav.aria">
       <a href="#atuacao" data-i18n="nav.work">Atuação</a>
       <a href="#servicos" data-i18n="nav.services">Serviços</a>
       <a href="#rede" data-i18n="nav.network">Rede</a>
@@ -63,7 +62,7 @@
       <button class="lang" id="lang" aria-label="Idioma / Language">
         <span data-l="pt">PT</span><span class="lang__sep">/</span><span data-l="en">EN</span>
       </button>
-      <button class="nav__burger" id="burger" aria-label="Abrir menu" aria-expanded="false">
+      <button class="nav__burger" id="burger" aria-label="Abrir menu" aria-controls="navlinks" aria-expanded="false" data-i18n-aria="nav.burger.aria">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -99,7 +98,6 @@
 
 <!-- ================= ATUAÇÃO (intro) ================= -->
 <section class="section section--intro" id="atuacao">
-  <div class="blocos" aria-hidden="true"><i class="bl sl--a1"></i><i class="bl sl--a2"></i><i class="bl sl--a3"></i><i class="bl sl--a4"></i></div>
 
   
 
@@ -114,17 +112,19 @@
         executamos para clientes e parceiros.
       </p>
     </header>
-    <div class="tabs reveal" role="tablist">
-      <button class="tab" type="button" role="tab" aria-selected="true" data-tab="democracia" data-i18n="eixo.democracia.title">Democracia</button>
-      <button class="tab" type="button" role="tab" aria-selected="false" data-tab="ciencia" data-i18n="eixo.ciencia.title">Ciência</button>
-      <button class="tab" type="button" role="tab" aria-selected="false" data-tab="meio" data-i18n="eixo.meio.title">Meio Ambiente</button>
-    </div>
   </div>
 </section>
 
+<!-- ================= EIXOS: três capítulos sempre visíveis ================= -->
+<div class="eixos">
+  <nav class="tabs" aria-label="Eixos de atuação" data-i18n-aria="eixos.aria">
+    <a class="tab" href="#democracia" data-tab="democracia" data-i18n="eixo.democracia.title">Democracia</a>
+    <a class="tab" href="#ciencia" data-tab="ciencia" data-i18n="eixo.ciencia.title">Ciência</a>
+    <a class="tab" href="#meio-ambiente" data-tab="meio" data-i18n="eixo.meio.title">Meio Ambiente</a>
+  </nav>
+
 <!-- ================= EIXO 01 — DEMOCRACIA ================= -->
-<section class="eixo" data-eixo="democracia">
-  <span class="eixo__aura" aria-hidden="true"></span>
+<section class="eixo" id="democracia" data-eixo="democracia">
   <div class="container eixo__grid">
     <aside class="eixo__side reveal reveal--left">
       <span class="eixo__index">01</span>
@@ -137,7 +137,7 @@
         informações confiáveis e estimulamos a participação cidadã por meio de narrativas
         acessíveis e estrategicamente distribuídas.
       </p>
-      <h4 class="eixo__caseslabel reveal" data-i18n="eixo.caseslabel">Campanhas que executamos</h4>
+      <p class="eixo__caseslabel reveal"><span data-i18n="eixo.caseslabel">Campanhas que executamos</span></p>
       <div class="eixo__cases">
         <article class="ecase reveal" tabindex="0" role="button" aria-haspopup="dialog"
           data-label="Democracia" data-label-en="Democracy"
@@ -161,7 +161,7 @@
           data-more="Movimento da sociedade civil fluminense que reúne 20 propostas concretas para o estado, organizadas em cinco frentes: segurança pública, trabalho e economia, saúde e proteção social, educação e juventude, e moradia, infraestrutura e adaptação climática. Cada proposta traz o instrumento legislativo correspondente e um critério de verificação. Quem assina se compromete a acompanhar a execução ao longo dos quatro anos de mandato. A iniciativa é independente de campanhas eleitorais e não recebe recursos de campanha."
           data-more-en="A civil society movement from Rio de Janeiro bringing together 20 concrete proposals for the state, organized into five fronts: public security, work and the economy, health and social protection, education and youth, and housing, infrastructure and climate adaptation. Each proposal comes with its legislative instrument and a verification criterion. Those who sign commit to monitoring delivery across the four-year term. The initiative is independent from electoral campaigns and accepts no campaign funding.">
           <img class="ecase__logo ecase__logo--tall" src="assets/img/campaigns/reinventar-rio.png" alt="Reinventar o Rio" loading="lazy" width="1200" height="575">
-          <h3>Reinventar o Rio</h3><span class="ecase__n">20 propostas</span>
+          <h3>Reinventar o Rio</h3><span class="ecase__n" data-en="20 proposals">20 propostas</span>
           <p data-i18n="case.reinventar">Movimento da sociedade civil fluminense: 20 propostas para o Rio e um compromisso público de acompanhar quem for eleito.</p>
           <span class="ecase__more" data-i18n="ui.more">Ver detalhes →</span>
         </article>
@@ -204,8 +204,7 @@
 </section>
 
 <!-- ================= EIXO 02 — CIÊNCIA ================= -->
-<section class="eixo" data-eixo="ciencia">
-  <span class="eixo__aura" aria-hidden="true"></span>
+<section class="eixo" id="ciencia" data-eixo="ciencia">
   <div class="container eixo__grid">
     <aside class="eixo__side reveal reveal--left">
       <span class="eixo__index">02</span>
@@ -218,7 +217,7 @@
         conhecimento científico e fortalecemos o engajamento com a divulgação, a pesquisa e a
         inovação.
       </p>
-      <h4 class="eixo__caseslabel reveal" data-i18n="eixo.caseslabel">Campanhas que executamos</h4>
+      <p class="eixo__caseslabel reveal"><span data-i18n="eixo.caseslabel">Campanhas que executamos</span></p>
       <div class="eixo__cases">
         <article class="ecase reveal" tabindex="0" role="button" aria-haspopup="dialog"
           data-label="Ciência" data-label-en="Science"
@@ -262,12 +261,11 @@
 </section>
 
 <!-- ================= EIXO 03 — MEIO AMBIENTE ================= -->
-<section class="eixo" data-eixo="meio">
-  <span class="eixo__aura" aria-hidden="true"></span>
+<section class="eixo" id="meio-ambiente" data-eixo="meio">
   <div class="container eixo__grid">
     <aside class="eixo__side reveal reveal--left">
       <span class="eixo__index">03</span>
-      <div class="eixo__logocard"><img src="assets/img/eixo-meio.png" alt="INDICA Meio Ambiente" width="1080" height="1000"></div>
+      <div class="eixo__logocard"><img src="assets/img/eixo-meio.png" alt="INDICA Meio Ambiente" width="1006" height="440"></div>
     </aside>
     <div class="eixo__body">
       <h2 class="eixo__title reveal" data-i18n="eixo.meio.title">Meio Ambiente</h2>
@@ -275,7 +273,7 @@
         Comunicação ambiental e climática que conecta projetos e resultados a um público amplo.
         Mobilizamos audiências em torno da pauta socioambiental com narrativa e estética próprias.
       </p>
-      <h4 class="eixo__caseslabel reveal" data-i18n="eixo.caseslabel">Campanhas que executamos</h4>
+      <p class="eixo__caseslabel reveal"><span data-i18n="eixo.caseslabel">Campanhas que executamos</span></p>
       <div class="eixo__cases">
         <article class="ecase reveal" tabindex="0" role="button" aria-haspopup="dialog"
           data-label="Meio Ambiente" data-label-en="Environment"
@@ -332,15 +330,59 @@
   </div>
 </section>
 
+  <div class="container eixos__cta reveal">
+    <p><span data-i18n="eixos.cta.q">Tem uma campanha parecida em mente?</span> <a href="#contato" data-i18n="eixos.cta.a">Vamos conversar →</a></p>
+  </div>
+</div>
+
+<!-- ================= PARCEIROS ================= -->
+<section class="section section--alt" id="parceiros">
+  <div class="container">
+    <header class="sec-head reveal">
+      <span class="kicker" data-i18n="part.kicker">Parceiros</span>
+      <h2 class="display" data-i18n="part.h2">Quem caminha<br>com a <span class="b">gente</span>.</h2>
+      <p class="sec-lead" data-i18n="part.lead">Instituições, veículos e organizações com quem realizamos campanhas, produções e pesquisa.</p>
+    </header>
+    <div class="marquee"><div class="marquee__track">
+      <div class="partner"><img src="assets/img/partners/cop30.png" alt="COP30 Brasil" loading="lazy" width="1230" height="913"></div>
+      <div class="partner"><img src="assets/img/partners/pulitzer.png" alt="Pulitzer Center" loading="lazy" width="1204" height="1240"></div>
+      <div class="partner"><img src="assets/img/partners/rio-meioambiente.png" alt="Prefeitura do Rio — Meio Ambiente e Clima" loading="lazy" width="1763" height="310"></div>
+      <div class="partner"><img src="assets/img/partners/plus350.png" alt="350.org" loading="lazy" width="1026" height="567"></div>
+      <div class="partner"><img src="assets/img/partners/gscc.png" alt="Global Strategic Communications Council" loading="lazy" width="1829" height="848"></div>
+      <div class="partner"><img src="assets/img/partners/meliore.png" alt="The Meliore Foundation" loading="lazy" width="1011" height="366"></div>
+      <div class="partner"><img src="assets/img/partners/oeco.png" alt="(o)eco" loading="lazy" width="1437" height="488"></div>
+      <div class="partner"><img src="assets/img/partners/rio-ciencia.png" alt="Prefeitura do Rio — Ciência, Tecnologia e Inovação" loading="lazy" width="1556" height="335"></div>
+      <div class="partner"><img src="assets/img/partners/nucleo-ypykuera.png" alt="Núcleo Ypykuéra" loading="lazy" width="748" height="204"></div>
+      <div class="partner"><img src="assets/img/partners/cieds.png" alt="CIEDS" loading="lazy" width="830" height="424"></div>
+      <div class="partner"><img src="assets/img/partners/amana.png" alt="Amana Cine" loading="lazy" width="353" height="114"></div>
+      <div class="partner"><img src="assets/img/partners/uniperiferias.png" alt="Uniperiferias" loading="lazy" width="294" height="58"></div>
+      <div class="partner"><img src="assets/img/partners/reporter-brasil.png" alt="Repórter Brasil" loading="lazy" width="1695" height="556"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/cop30.png" alt="COP30 Brasil" loading="lazy" width="1230" height="913"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/pulitzer.png" alt="Pulitzer Center" loading="lazy" width="1204" height="1240"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/rio-meioambiente.png" alt="Prefeitura do Rio — Meio Ambiente e Clima" loading="lazy" width="1763" height="310"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/plus350.png" alt="350.org" loading="lazy" width="1026" height="567"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/gscc.png" alt="Global Strategic Communications Council" loading="lazy" width="1829" height="848"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/meliore.png" alt="" loading="lazy" width="1011" height="366"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/oeco.png" alt="(o)eco" loading="lazy" width="1437" height="488"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/rio-ciencia.png" alt="Prefeitura do Rio — Ciência, Tecnologia e Inovação" loading="lazy" width="1556" height="335"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/nucleo-ypykuera.png" alt="Núcleo Ypykuéra" loading="lazy" width="748" height="204"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/cieds.png" alt="CIEDS" loading="lazy" width="830" height="424"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/amana.png" alt="Amana Cine" loading="lazy" width="353" height="114"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/uniperiferias.png" alt="Uniperiferias" loading="lazy" width="294" height="58"></div>
+      <div class="partner" aria-hidden="true"><img src="assets/img/partners/reporter-brasil.png" alt="Repórter Brasil" loading="lazy" width="1695" height="556"></div>
+    </div></div>
+  </div>
+</section>
+
 <!-- ================= SERVIÇOS ================= -->
-<section class="section section--alt" id="servicos">
-  <div class="blocos" aria-hidden="true"><i class="bl sl--b1"></i><i class="bl sl--b2"></i><i class="bl sl--b3"></i><i class="bl sl--b4"></i></div>
+<section class="section" id="servicos">
 
   
 
 
   <div class="container">
     <header class="sec-head reveal">
+      <div class="placas" aria-hidden="true"><i class="bl pl--s1"></i><i class="bl pl--s2"></i></div>
       <span class="kicker" data-i18n="serv.kicker">Nossos serviços</span>
       <h2 class="display" data-i18n="serv.h2">Comunicação integrada,<br>ponta a <span class="b">ponta</span>.</h2>
     </header>
@@ -354,14 +396,14 @@
 
 
 <!-- ================= REDE ================= -->
-<section class="section" id="rede">
-  <div class="blocos" aria-hidden="true"><i class="bl sl--c1"></i><i class="bl sl--c2"></i><i class="bl sl--c3"></i><i class="bl sl--c4"></i></div>
+<section class="section section--alt" id="rede">
 
   
 
 
   <div class="container">
     <header class="sec-head reveal">
+      <div class="placas" aria-hidden="true"><i class="bl pl--r1"></i><i class="bl pl--r2"></i></div>
       <span class="kicker" data-i18n="net.kicker">Rede de comunicadores</span>
       <h2 class="display" data-i18n="net.h2">+200 influenciadores.<br>Um <span class="b">propósito</span>.</h2>
       <p class="sec-lead" data-i18n="net.lead">O Brasil decide nas redes — e nosso portfólio de comunicadores soma mais de
@@ -380,14 +422,14 @@
 </section>
 
 <!-- ================= PRODUÇÕES ================= -->
-<section class="section section--alt" id="producoes">
-  <div class="blocos" aria-hidden="true"><i class="bl sl--d1"></i><i class="bl sl--d2"></i><i class="bl sl--d3"></i><i class="bl sl--d4"></i></div>
+<section class="section" id="producoes">
 
   
 
 
   <div class="container">
     <header class="sec-head reveal">
+      <div class="placas" aria-hidden="true"><i class="bl pl--p1"></i><i class="bl pl--p2"></i></div>
       <span class="kicker" data-i18n="prod.kicker">Produções audiovisuais</span>
       <h2 class="display" data-i18n="prod.h2">Produções completas,<br>do roteiro ao <span class="b">corte</span>.</h2>
       <p class="sec-lead" data-i18n="prod.lead">Desenvolvemos podcasts e videocasts — próprios e para parceiros — em formatos
@@ -403,14 +445,14 @@
 </section>
 
 <!-- ================= PUBLICAÇÕES ================= -->
-<section class="section" id="publicacoes">
-  <div class="blocos" aria-hidden="true"><i class="bl sl--e1"></i><i class="bl sl--e2"></i><i class="bl sl--e3"></i><i class="bl sl--e4"></i></div>
+<section class="section section--alt" id="publicacoes">
 
   
 
 
   <div class="container">
     <header class="sec-head reveal">
+      <div class="placas" aria-hidden="true"><i class="bl pl--u1"></i><i class="bl pl--u2"></i></div>
       <span class="kicker" data-i18n="pubs.kicker">Nossas publicações</span>
       <h2 class="display" data-i18n="pubs.h2">A INDICA também<br>gera <span class="b">conhecimento</span>.</h2>
       <p class="sec-lead" data-i18n="pubs.lead">
@@ -486,48 +528,12 @@
   </div><!-- /.container -->
 </section>
 
-<!-- ================= PARCEIROS ================= -->
-<section class="section section--alt" id="parceiros">
-  <div class="container">
-    <header class="sec-head reveal">
-      <span class="kicker" data-i18n="part.kicker">Parceiros</span>
-      <h2 class="display" data-i18n="part.h2">Quem caminha<br>com a <span class="b">gente</span>.</h2>
-    </header>
-    <div class="marquee"><div class="marquee__track">
-      <div class="partner"><img src="assets/img/partners/cop30.png" alt="COP30 Brasil" loading="lazy" width="1230" height="913"></div>
-      <div class="partner"><img src="assets/img/partners/pulitzer.png" alt="Pulitzer Center" loading="lazy" width="1204" height="1240"></div>
-      <div class="partner"><img src="assets/img/partners/rio-meioambiente.png" alt="Prefeitura do Rio — Meio Ambiente e Clima" loading="lazy" width="1763" height="310"></div>
-      <div class="partner"><img src="assets/img/partners/plus350.png" alt="350.org" loading="lazy" width="1026" height="567"></div>
-      <div class="partner"><img src="assets/img/partners/gscc.png" alt="Global Strategic Communications Council" loading="lazy" width="1829" height="848"></div>
-      <div class="partner"><img src="assets/img/partners/meliore.png" alt="The Meliore Foundation" loading="lazy" width="1011" height="366"></div>
-      <div class="partner"><img src="assets/img/partners/oeco.png" alt="(o)eco" loading="lazy" width="1437" height="488"></div>
-      <div class="partner"><img src="assets/img/partners/rio-ciencia.png" alt="Prefeitura do Rio — Ciência, Tecnologia e Inovação" loading="lazy" width="1556" height="335"></div>
-      <div class="partner"><img src="assets/img/partners/nucleo-ypykuera.png" alt="Núcleo Ypykuéra" loading="lazy" width="748" height="204"></div>
-      <div class="partner"><img src="assets/img/partners/cieds.png" alt="CIEDS" loading="lazy" width="830" height="424"></div>
-      <div class="partner"><img src="assets/img/partners/amana.png" alt="Amana Cine" loading="lazy" width="353" height="114"></div>
-      <div class="partner"><img src="assets/img/partners/uniperiferias.png" alt="Uniperiferias" loading="lazy" width="294" height="58"></div>
-      <div class="partner"><img src="assets/img/partners/reporter-brasil.png" alt="Repórter Brasil" loading="lazy" width="1695" height="556"></div>
-      <div class="partner" aria-hidden="true"><img src="assets/img/partners/cop30.png" alt="COP30 Brasil" loading="lazy" width="1230" height="913"></div>
-      <div class="partner" aria-hidden="true"><img src="assets/img/partners/pulitzer.png" alt="Pulitzer Center" loading="lazy" width="1204" height="1240"></div>
-      <div class="partner" aria-hidden="true"><img src="assets/img/partners/rio-meioambiente.png" alt="Prefeitura do Rio — Meio Ambiente e Clima" loading="lazy" width="1763" height="310"></div>
-      <div class="partner" aria-hidden="true"><img src="assets/img/partners/plus350.png" alt="350.org" loading="lazy" width="1026" height="567"></div>
-      <div class="partner" aria-hidden="true"><img src="assets/img/partners/gscc.png" alt="Global Strategic Communications Council" loading="lazy" width="1829" height="848"></div>
-      <div class="partner" aria-hidden="true"><img src="assets/img/partners/meliore.png" alt="" loading="lazy" width="1011" height="366"></div>
-      <div class="partner" aria-hidden="true"><img src="assets/img/partners/oeco.png" alt="(o)eco" loading="lazy" width="1437" height="488"></div>
-      <div class="partner" aria-hidden="true"><img src="assets/img/partners/rio-ciencia.png" alt="Prefeitura do Rio — Ciência, Tecnologia e Inovação" loading="lazy" width="1556" height="335"></div>
-      <div class="partner" aria-hidden="true"><img src="assets/img/partners/nucleo-ypykuera.png" alt="Núcleo Ypykuéra" loading="lazy" width="748" height="204"></div>
-      <div class="partner" aria-hidden="true"><img src="assets/img/partners/cieds.png" alt="CIEDS" loading="lazy" width="830" height="424"></div>
-      <div class="partner" aria-hidden="true"><img src="assets/img/partners/amana.png" alt="Amana Cine" loading="lazy" width="353" height="114"></div>
-      <div class="partner" aria-hidden="true"><img src="assets/img/partners/uniperiferias.png" alt="Uniperiferias" loading="lazy" width="294" height="58"></div>
-      <div class="partner" aria-hidden="true"><img src="assets/img/partners/reporter-brasil.png" alt="Repórter Brasil" loading="lazy" width="1695" height="556"></div>
-    </div></div>
-  </div>
-</section>
 
 <!-- ================= SOBRE / EQUIPE ================= -->
 <section class="section" id="sobre">
   <div class="container">
     <header class="sec-head reveal">
+      <div class="placas" aria-hidden="true"><i class="bl pl--q1"></i><i class="bl pl--q2"></i></div>
       <span class="kicker" data-i18n="about.kicker">Quem somos</span>
       <h2 class="display" data-i18n="about.h2">Uma agência nascida<br>nas redes, movida por <span class="b">causas</span>.</h2>
       <p class="sec-lead" data-i18n="about.lead">
@@ -537,7 +543,7 @@
         em narrativas que circulam.
       </p>
     </header>
-    <h4 class="team__label reveal" data-i18n="team.grp.direcao">Direção</h4>
+    <h3 class="team__label reveal" data-i18n="team.grp.direcao">Direção</h3>
     <div class="team">
       <figure class="team__card reveal">
         <div class="team__photo"><img src="assets/img/team-francisco.jpg" loading="lazy" width="800" height="600" alt="Francisco Figueiredo"></div>
@@ -573,7 +579,7 @@
       </figure>
     </div>
 
-    <h4 class="team__label reveal" data-i18n="team.grp.projetos">Projetos</h4>
+    <h3 class="team__label reveal" data-i18n="team.grp.projetos">Projetos</h3>
     <div class="team">
       <figure class="team__card reveal">
         <div class="team__photo"><img src="assets/img/team-pedro.jpg" loading="lazy" width="800" height="600" alt="Pedro Bordinhão"></div>
@@ -609,7 +615,7 @@
       </figure>
     </div>
 
-    <h4 class="team__label reveal" data-i18n="team.grp.campanhas">Campanhas</h4>
+    <h3 class="team__label reveal" data-i18n="team.grp.campanhas">Campanhas</h3>
     <div class="team">
       <figure class="team__card reveal">
         <div class="team__photo"><img src="assets/img/team-luiza.jpg" loading="lazy" width="800" height="600" alt="Luiza Zukin"></div>
@@ -629,7 +635,7 @@
       </figure>
     </div>
 
-    <h4 class="team__label reveal" data-i18n="team.grp.av">Audiovisual</h4>
+    <h3 class="team__label reveal" data-i18n="team.grp.av">Audiovisual</h3>
     <div class="team">
       <figure class="team__card reveal">
         <div class="team__photo"><img src="assets/img/team-jorge.jpg" loading="lazy" width="800" height="600" alt="Jorge Frazão"></div>
@@ -653,7 +659,6 @@
 
 <!-- ================= CONTATO ================= -->
 <section class="section section--contato" id="contato">
-  <div class="blocos" aria-hidden="true"><i class="bl sl--f1"></i><i class="bl sl--f2"></i><i class="bl sl--f3"></i><i class="bl sl--f4"></i></div>
 
   
 
@@ -702,7 +707,7 @@
 <div class="modal" id="modal" aria-hidden="true">
   <div class="modal__backdrop" data-close></div>
   <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <button class="modal__close" data-close aria-label="Fechar">×</button>
+    <button class="modal__close" data-close aria-label="Fechar" data-i18n-aria="ui.close.aria">×</button>
     <span class="modal__label" id="modalLabel"></span>
     <img class="modal__logo" id="modalLogo" alt="" hidden>
 
@@ -718,11 +723,11 @@
   <div class="container footer__inner">
     <img src="assets/img/logo-master.png" alt="INDICA" class="footer__logo" width="3228" height="968">
     <div class="dots" aria-hidden="true"><i class="d d--b"></i><i class="d d--g"></i><i class="d d--p"></i></div>
-    <p class="footer__tag" data-i18n="footer.tag">Comunicação com propósito · Democracia · Ciência · Meio Ambiente</p>
+    <p class="footer__tag" data-i18n="footer.tag">Democracia · Ciência · Meio Ambiente</p>
     <p class="footer__copy" data-i18n="footer.copy">© 2026 INDICA. Todos os direitos reservados.</p>
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=58"></script>
+<script src="assets/js/main.js?v=60"></script>
 </body>
 </html>
