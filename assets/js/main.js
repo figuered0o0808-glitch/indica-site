@@ -1,64 +1,467 @@
-/* INDICA — navegação e filtros. Todo o conteúdo continua legível sem JavaScript. */
+/* ============ INDICA — vitrine ============ */
 (function () {
   'use strict';
-  var menu = document.querySelector('.menu-toggle');
-  var nav = document.getElementById('main-nav');
-  function closeMenu() {
-    if (!menu || !nav) return;
-    nav.classList.remove('open');
-    menu.setAttribute('aria-expanded', 'false');
-    menu.setAttribute('aria-label', menu.dataset.open);
+
+  /* ---------- i18n (EN dictionary; PT lives in the HTML) ---------- */
+  var EN = {
+    'nav.about': 'About', 'nav.work': 'Our work', 'nav.productions': 'Productions',
+    'nav.pubs': 'Publications', 'nav.network': 'Network', 'nav.services': 'Services', 'nav.cta': 'Get in touch',
+    'pubs.kicker': 'Our publications',
+    'pubs.h2': "INDICA also<br>generates <span class='b'>knowledge</span>.",
+    'pubs.lead': 'Beyond campaigns and productions, we publish articles and reports on the influence ecosystem, communication and public opinion.',
+    'pubs.serie.label': 'Series',
+    'pubs.econ.t': 'The influencer economy',
+    'pubs.intro.tag': 'Introduction · 2026',
+    'pubs.intro.t': 'The economic design of the influence market',
+    'pubs.intro.d': 'Introduction to the series. It describes how the influence market works — who its participants are, what each one gives and receives, where attention and money flow — and explains why this market deserves to be studied with economic theory. It presents the fields the series covers.',
+    'pubs.intro.m': 'Francisco Figueiredo · 13 pages',
+    'pubs.modelo.tag': 'Paper · 2026',
+    'pubs.modelo.t': 'An economic model for the content market on algorithmic social networks',
+    'pubs.modelo.d': 'A theory of timing in the dispute for attention: latent demand, active supply and the optimal publication window. It treats attention as a scarce resource and derives the condition that closes the window — when active supply starts growing faster than demand.',
+    'pubs.modelo.m': 'Figueiredo · Brandão · Bordinhão · 47 pages',
+    'pubs.preco.tag': 'Paper · 2026',
+    'pubs.preco.t': 'Price formation in the influence market',
+    'pubs.preco.d': "Why the price of sponsored content lies far above its production cost and varies so much across similar creators. Price pays for access to a reputational stock — credibility, affect and legitimacy — and is bargained between a floor, set by the creator's costs and risk, and a ceiling, set by what the advertiser can and wants to pay.",
+    'pubs.preco.m': 'Francisco Figueiredo · 36 pages',
+    'pubs.analises.t': 'Analyses',
+    'pubs.banda.tag': 'Analysis · 2026',
+    'pubs.banda.t': 'Whoever pays the piper calls the tune',
+    'pubs.banda.d': 'An analysis by INDICA in partnership with Entremídias, the Media Literacy Lab of the Journalism program at UFRRJ, on betting advertising, influencers’ discourse and regulation of the influencer market.',
+    'pubs.banda.m': 'Francisco Figueiredo · Cecília Moreyra de Figueiredo · 27 pages',
+    'pubs.banda.read': 'Read the analysis (PDF) ↗',
+    'pubs.read': 'Read the paper (PDF) ↗',
+    'pubs.cta.tag': 'Subscribe', 'pubs.cta.t': 'Want to receive our publications?',
+    'pubs.cta.d': 'Get in touch →',
+    'hero.lead': "Through the influence market, we stand up for <b class='t--green'>science</b>, <b class='t--blue'>democracy</b> and the <b class='t--pink'>environment</b>. We connect creators, data and narrative to move public opinion around what matters.",
+    'hero.cta1': 'Start a project', 'hero.cta2': 'Our work',
+    'stats.views': 'views', 'stats.influencers': 'influencers', 'stats.followers': 'followers in the network',
+    'about.kicker': 'Who we are',
+    'about.h2': "An agency born on social<br>media, driven by <span class='b'>causes</span>.",
+    'about.lead': 'Founded in 2024, INDICA develops communication strategies focused on producing relevant content and engaging different audiences. We combine influence know-how, data analysis and audiovisual production to turn complex issues into narratives that circulate.',
+    'team.francisco': 'Science communicator and digital strategist. An economist (UFRJ), he researches the economics of digital influencers.',
+    'team.caio': 'Lawyer and digital communicator, working across geopolitics, economics and the Brazilian State.',
+    'team.grp.direcao': 'Leadership', 'team.grp.projetos': 'Projects',
+    'team.grp.campanhas': 'Campaigns', 'team.grp.av': 'Audiovisual',
+    'role.direcao': 'Leadership', 'role.coord': 'Project Coordinator', 'role.coordf': 'Project Coordinator', 'role.assistproj': 'Project Assistant',
+    'role.assistcamp': 'Campaign Assistant', 'role.coordcamp': 'Campaign Coordinator', 'role.assistav': 'Editor & Motion Designer',
+    'role.coordav': 'Audiovisual Producer',
+    'team.jorge': 'Audiovisual producer focused on coordinating, producing and editing content for digital mobilization and social-impact projects. Law student at UFRJ, researching the realization of the right to education.',
+    'team.luiza': 'Digital mobilizer for social impact, she is a lawyer (UFRJ) and a researcher in Human Rights and Biopolitics.',
+    'team.artur': 'Public manager (IPPUR/UFRJ) and political strategist. Executive secretary of Núcleo Ypykuéra and founding partner of INDICA.',
+    'team.lauanny': 'Political strategist with over 5 years in communication management. Law student at UFRJ, researching public policy and government relations.',
+    'team.pedro': 'Geographer (UFRJ), researcher, scriptwriter and project manager.',
+    'team.luma': 'Educator (UFF and UMESP) and content creator focused on civic and political education. She leads initiatives that connect learning with community engagement.',
+    'team.gabriel': "Researcher and educator. Biologist (UFRJ) with a master's from UERJ, he studies mechanisms for biodiversity conservation.",
+    'team.cristal': "Biologist and master's student in Geosciences at UERJ, working on climate change and smart cities, with a focus on urban climatology and climate justice.",
+    'team.milena': 'Law student at UNIRIO researching environmental licensing. Works as a campaign assistant in digital communication.',
+    'team.matheus': 'Video editor, motion designer and graphic designer, specialized in audiovisual production and visual communication for digital media.',
+    'work.kicker': 'Our work',
+    'work.h2': "Three pillars,<br>one <span class='b'>strategy</span>.",
+    'work.lead': 'We structure our work around three fronts of public impact. Each pillar has its own language, communicators and identity. Explore, in each one, campaigns we have executed for clients and partners.',
+    'eixo.caseslabel': "Campaigns we've executed",
+    'eixo.democracia.title': 'Democracy',
+    'eixo.democracia.desc': 'Human rights, social justice and the fight against disinformation. We broaden access to reliable information and encourage civic participation through accessible, strategically distributed narratives.',
+    'eixo.ciencia.title': 'Science',
+    'eixo.ciencia.desc': 'Translating complex topics into accessible language. We bring society closer to scientific knowledge and strengthen engagement with outreach, research and innovation.',
+    'eixo.meio.title': 'Environment',
+    'eixo.meio.desc': 'Environmental and climate communication that connects projects and results to a broad audience. We mobilize audiences around the socio-environmental agenda with our own narrative and aesthetics.',
+    'case.mural': 'An independent dashboard of the 2026 election: an average of the polls registered with the Electoral Court, candidate dossiers, and search and social media tracking.',
+    'case.reinventar': 'A civil society movement from Rio: 20 proposals for the state and a public pledge to monitor those elected.',
+    'case.antifake': 'Fighting disinformation with far-reaching narrative — over 19 million organic views.',
+    'case.smt': "A mobilization hub that broadens people's participation in politics, with a weekly videocast, a community and a network of influencers.",
+    'case.ypykuera': 'A podcast on politics and democracy, gathering experts and leaders from the progressive field.',
+    'case.influenciencia': "With Rio's Municipal Department of Science and Technology — over 10 million views.",
+    'case.regulamentaai': 'Campaign for AI regulation in Brazil: 8 million organic views and 20k+ signatures.',
+    'case.comite': 'An alliance of researchers and communicators defending science and qualified debate.',
+    'case.350org': 'An energy campaign with digital creators on Instagram and TikTok, from the electricity bill to the broader debate: over 2 million views.',
+    'case.secma': 'A video series on environment and climate that reached over 4 million people.',
+    'case.pulitzer': 'Climate awareness: in-person event with 200+ people and 3.5 million views.',
+    'case.oeco': 'Adapting environmental reporting to the native format of social media: 3 million views.',
+    'case.cop30': 'A hub of influencers for climate mobilization toward COP30, in Belém.',
+    'ui.more': 'View details →', 'ui.skip': 'Skip to content',
+    'prod.kicker': 'Audiovisual productions',
+    'prod.h2': "Full productions,<br>from script to <span class='b'>cut</span>.",
+    'prod.lead': 'We develop podcasts and videocasts — our own and for partners — in formats that bring contemporary topics closer to new audiences.',
+    'show.ppg': 'A videocast about the environment, in a conversational format that brings the public closer to environmental topics.',
+    'show.almo': 'A videocast dedicated to reflections on art and philosophy, with a sensitive, authorial approach.',
+    'show.alma': 'Popular culture and bohemian traditions, exploring their artistic and social expressions.',
+    'show.ypykuera': 'A videocast on politics and democracy, gathering leaders and experts from the progressive field.',
+    'serv.kicker': 'Our services',
+    'serv.h2': "Integrated communication,<br>end to <span class='b'>end</span>.",
+    'serv.1.t': 'Audiovisual Production',
+    'serv.1.d': 'Original and on-demand content: institutional videos, documentary series, podcasts and pieces for social media and platforms.',
+    'serv.2.t': 'Strategic Social Media Management',
+    'serv.2.d': "Positioning, content calendar and community management driven by data and each client's goals.",
+    'serv.3.t': 'Mobilization Campaigns',
+    'serv.3.d': 'From goal-setting to influencer curation and measurement — campaigns that turn reach into action.',
+    'form.nome': 'Name', 'form.email': 'Email', 'form.org': 'Organization', 'form.assunto': 'Subject',
+    'form.op1': 'Mobilization campaign', 'form.op2': 'Audiovisual production', 'form.op3': 'Social media management',
+    'form.op4': 'Press / partnership', 'form.op5': 'Other',
+    'form.msg': 'Tell us what you want to communicate', 'form.enviar': 'Send message',
+    'form.ok': 'We got your message. We will get back to you soon. ✓',
+    'net.kicker': 'Network of communicators',
+    'net.h2': "+200 influencers.<br>One <span class='b'>purpose</span>.",
+    'net.lead': 'Brazil decides on social media — and our roster of communicators adds up to more than 80 million followers, organized into thematic hubs. We have worked in more than 10 countries, and our network reaches every continent.',
+    'net.hub1': 'combined followers across our network of communicators.',
+    'net.hub2': 'countries where we have run campaigns.',
+    'net.hub3': 'of Brazilians believe social media influences public opinion.',
+    'net.hub4': 'have made purchases after recommendations on social media.',
+    'net.source': 'Source: Quaest/2025 survey and the Influence.me/2026 Digital Influencers Report.',
+    'part.kicker': 'Partners',
+    'part.h2': "Who walks<br>with <span class='b'>us</span>.",
+    'part.lead': 'Institutions, media outlets and organizations we have worked with on campaigns, productions and research.',
+    'eixos.aria': 'Areas of work',
+    'nav.home.aria': 'INDICA — home', 'nav.aria': 'Main navigation', 'nav.burger.aria': 'Open menu', 'ui.close.aria': 'Close',
+    'eixos.cta.q': 'Have a similar campaign in mind?',
+    'eixos.cta.a': "Let's talk →",
+    'contact.h2': "Got a cause to set<br>in <span class='b'>motion</span>?",
+    'contact.lead': 'Tell us what you want to communicate. INDICA designs the strategy, the production and the influence network — from briefing to measurement.',
+    'footer.tag': 'Democracy · Science · Environment',
+    'footer.copy': '© 2026 INDICA. All rights reserved.'
+  };
+
+  var currentLang = 'pt';
+  var ptCache = new Map();
+  var i18nEls = document.querySelectorAll('[data-i18n]');
+  var langBtn = document.getElementById('lang');
+
+  function applyLang(lang) {
+    i18nEls.forEach(function (el) {
+      var key = el.getAttribute('data-i18n');
+      if (!ptCache.has(el)) ptCache.set(el, el.innerHTML);
+      if (lang === 'en') { if (EN[key] != null) el.innerHTML = EN[key]; }
+      else { el.innerHTML = ptCache.get(el); }
+    });
+    document.querySelectorAll('[data-en]').forEach(function (el) {
+      if (!ptCache.has(el)) ptCache.set(el, el.innerHTML);
+      el.innerHTML = (lang === 'en') ? el.getAttribute('data-en') : ptCache.get(el);
+    });
+    document.querySelectorAll('[data-href-en]').forEach(function (el) {
+      if (!ptCache.has(el)) ptCache.set(el, el.getAttribute('href'));
+      el.setAttribute('href', (lang === 'en') ? el.getAttribute('data-href-en') : ptCache.get(el));
+    });
+    document.querySelectorAll('[data-src-en]').forEach(function (el) {
+      if (!ptCache.has(el)) ptCache.set(el, el.getAttribute('src'));
+      el.setAttribute('src', (lang === 'en') ? el.getAttribute('data-src-en') : ptCache.get(el));
+    });
+    currentLang = lang;
+    document.documentElement.lang = (lang === 'en') ? 'en' : 'pt-BR';
+    document.title = (lang === 'en') ? 'INDICA — Communication and influencer marketing agency' : 'INDICA — Agência de comunicação e marketing de influência';
+    document.querySelectorAll('[data-i18n-aria]').forEach(function (el) {
+      if (!ptCache.has(el)) ptCache.set(el, el.getAttribute('aria-label'));
+      var k = el.getAttribute('data-i18n-aria');
+      el.setAttribute('aria-label', (lang === 'en' && EN[k] != null) ? EN[k] : ptCache.get(el));
+    });
+    if (langBtn) langBtn.querySelectorAll('[data-l]').forEach(function (s) {
+      s.classList.toggle('on', s.getAttribute('data-l') === lang);
+    });
+    try { localStorage.setItem('indica_lang', lang); } catch (e) {}
+    if (typeof refreshCounters === 'function') { try { refreshCounters(); } catch (e) {} }
   }
-  if (menu && nav) {
-    menu.addEventListener('click', function () {
-      var open = nav.classList.toggle('open');
-      menu.setAttribute('aria-expanded', String(open));
-      menu.setAttribute('aria-label', open ? menu.dataset.close : menu.dataset.open);
-    });
-    nav.querySelectorAll('a').forEach(function (link) { link.addEventListener('click', closeMenu); });
-    document.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape' && nav.classList.contains('open')) { closeMenu(); menu.focus(); }
-    });
-    document.addEventListener('click', function (event) {
-      if (nav.classList.contains('open') && !nav.contains(event.target) && !menu.contains(event.target)) closeMenu();
+
+  if (langBtn) {
+    langBtn.addEventListener('click', function () {
+      applyLang(currentLang === 'en' ? 'pt' : 'en');
     });
   }
-  var filters = document.querySelectorAll('[data-filter]');
-  var projects = document.querySelectorAll('.project-row');
-  var count = document.getElementById('work-count');
-  var empty = document.querySelector('.filter-empty');
-  function filterWork(value) {
-    var visible = 0;
-    projects.forEach(function (project) {
-      var matches = value === 'all' || project.dataset.axis === value;
-      project.hidden = !matches;
-      if (matches) visible += 1;
-    });
-    filters.forEach(function (button) { button.setAttribute('aria-pressed', String(button.dataset.filter === value)); });
-    if (count) count.textContent = visible;
-    if (empty) empty.hidden = visible !== 0;
+  var saved = null;
+  try { saved = localStorage.getItem('indica_lang'); } catch (e) {}
+  if (saved === 'en' || saved === 'pt') {
+    applyLang(saved);
+  } else {
+    // primeira visita: detecta o idioma do navegador (não-PT => inglês)
+    var navLang = (navigator.language || 'pt').toLowerCase();
+    applyLang(navLang.indexOf('pt') === 0 ? 'pt' : 'en');
   }
-  filters.forEach(function (button) {
-    button.addEventListener('click', function () {
-      filterWork(button.dataset.filter);
-      var url = new URL(location.href);
-      if (button.dataset.filter === 'all') url.searchParams.delete('eixo');
-      else url.searchParams.set('eixo', button.dataset.filter);
-      history.replaceState(null, '', url.pathname + url.search + url.hash);
+
+  /* ---------- Capítulos dos eixos: índice fixo que acompanha a rolagem ---------- */
+  var tabsBar = document.querySelector('.tabs');
+  var tabLinks = tabsBar ? [].slice.call(tabsBar.querySelectorAll('.tab')) : [];
+  var eixoSecs = [].slice.call(document.querySelectorAll('.eixo'));
+  var rootStyle = document.documentElement.style;
+  var navEl = document.getElementById('nav');
+  function medirBarras() {
+    if (navEl) rootStyle.setProperty('--navh', navEl.offsetHeight + 'px');
+    if (tabsBar) rootStyle.setProperty('--tabsh', tabsBar.offsetHeight + 'px');
+  }
+  medirBarras();
+  window.addEventListener('resize', medirBarras, { passive: true });
+  if (window.ResizeObserver) {
+    var roBarras = new ResizeObserver(medirBarras);
+    if (navEl) roBarras.observe(navEl);
+    if (tabsBar) roBarras.observe(tabsBar);
+  }
+  function spyEixos() {
+    if (!tabsBar) return;
+    var navh = navEl ? navEl.offsetHeight : 0;
+    var topo = tabsBar.getBoundingClientRect().top;
+    tabsBar.classList.toggle('stuck', topo <= navh + 0.5 && window.scrollY > 0);
+    var limite = navh + tabsBar.offsetHeight + 4, atual = -1;
+    for (var i = 0; i < eixoSecs.length; i++) {
+      if (eixoSecs[i].getBoundingClientRect().top <= limite) atual = i;
+    }
+    // depois do último capítulo, nenhum fica aceso
+    var ult = eixoSecs[eixoSecs.length - 1];
+    if (ult && ult.getBoundingClientRect().bottom <= limite) atual = -1;
+    tabLinks.forEach(function (t, i) {
+      var on = i === atual;
+      t.classList.toggle('active', on);
+      if (on) t.setAttribute('aria-current', 'true'); else t.removeAttribute('aria-current');
+    });
+  }
+
+  /* ---------- Celular: contador da fileira de campanhas (1 / 5) ---------- */
+  [].forEach.call(document.querySelectorAll('.eixo__cases'), function (trilho) {
+    var cards = trilho.querySelectorAll('.ecase');
+    var rotulo = trilho.parentElement.querySelector('.eixo__caseslabel');
+    if (!rotulo || cards.length < 2) return;
+    var cont = document.createElement('span');
+    cont.className = 'eixo__count';
+    cont.setAttribute('aria-hidden', 'true');
+    rotulo.appendChild(cont);
+    function atualiza() {
+      var passo = cards[1].offsetLeft - cards[0].offsetLeft || 1;
+      var idx = Math.min(cards.length, Math.round(trilho.scrollLeft / passo) + 1);
+      cont.textContent = idx + ' / ' + cards.length;
+    }
+    trilho.addEventListener('scroll', atualiza, { passive: true });
+    trilho.addEventListener('focusin', function (e) {
+      var card = e.target.closest ? e.target.closest('.ecase') : null;
+      if (!card) return;
+      var r = card.getBoundingClientRect(), t = trilho.getBoundingClientRect();
+      if (r.left < t.left || r.right > t.right) trilho.scrollTo({ left: card.offsetLeft - cards[0].offsetLeft, behavior: 'auto' });
+    });
+    window.addEventListener('resize', atualiza, { passive: true });
+    atualiza();
+  });
+
+  /* ---------- Nav: shadow on scroll ---------- */
+  var nav = document.getElementById('nav');
+  function onScroll() { nav.classList.toggle('scrolled', window.scrollY > 30); }
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* ---------- Mobile menu ---------- */
+  var burger = document.getElementById('burger');
+  var links = document.querySelector('.nav__links');
+  burger.addEventListener('click', function () {
+    var open = links.classList.toggle('open');
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  links.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      links.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
     });
   });
-  var selectedAxis = new URLSearchParams(location.search).get('eixo');
-  if (selectedAxis && ['democracia', 'ciencia', 'meio-ambiente'].includes(selectedAxis) && projects.length) filterWork(selectedAxis);
-  if (new URLSearchParams(location.search).get('enviado') === '1') {
-    var form = document.getElementById('contatoForm');
-    var success = document.getElementById('formOk');
-    if (form && success) { form.hidden = true; success.hidden = false; }
+
+  /* ---------- Reveal on scroll (escalonado) ---------- */
+  var pendingReveals = [].slice.call(document.querySelectorAll('.reveal'));
+  function staggerDelay(el) {
+    var sibs = [].filter.call(el.parentElement.children, function (c) {
+      return c.classList && c.classList.contains('reveal');
+    });
+    var i = sibs.indexOf(el);
+    return Math.min(i > 0 ? i * 85 : 0, 600);
   }
-  /* Âncoras da versão anterior continuam levando ao conteúdo correspondente. */
-  var legacy = { democracia: 'democracia', ciencia: 'ciencia', 'meio-ambiente': 'meio-ambiente' };
-  var hash = location.hash.slice(1);
-  var english = document.documentElement.lang === 'en';
-  if (legacy[hash] && !projects.length) location.replace((english ? '/en' : '') + '/trabalhos/?eixo=' + legacy[hash]);
-  if (hash === 'producoes' && !document.getElementById('producoes')) location.replace((english ? '/en' : '') + '/trabalhos/#producoes');
-  if (hash === 'rede' && !document.getElementById('rede')) location.replace((english ? '/en' : '') + '/a-indica/#rede');
+  function revealEl(el) {
+    var d = staggerDelay(el);
+    el.style.transitionDelay = d + 'ms';
+    el.classList.add('in');
+    setTimeout(function () { el.style.transitionDelay = ''; }, d + 750);
+  }
+  function checkReveals() {
+    if (!pendingReveals.length) return;
+    var ih = window.innerHeight;
+    var limit = ih > 0 ? ih * 0.92 : Infinity; // viewport indisponível: revela tudo
+    pendingReveals = pendingReveals.filter(function (el) {
+      if (el.getBoundingClientRect().top < limit) { revealEl(el); return false; }
+      return true;
+    });
+  }
+
+  /* ---------- Barra de progresso + scrollspy ---------- */
+  var progress = document.getElementById('progress');
+  var spyLinks = [].filter.call(document.querySelectorAll('.nav__links a'), function (a) {
+    return a.getAttribute('href').charAt(0) === '#' && a.getAttribute('href') !== '#top';
+  });
+  // todas as seções da página, em ordem; cada uma aponta para o link do menu que a representa (ou nenhum)
+  var spySecs = [].slice.call(document.querySelectorAll('main section[id]')).filter(function (s) {
+    return !s.closest('.pubs');
+  }).map(function (s) {
+    var alvo = s.classList.contains('eixo') ? 'atuacao' : s.id;
+    var link = null;
+    spyLinks.forEach(function (a) { if (a.getAttribute('href') === '#' + alvo) link = a; });
+    return { el: s, link: link };
+  });
+  function onScrollFx() {
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    if (progress) progress.style.transform = 'scaleX(' + (max > 0 ? window.scrollY / max : 0) + ')';
+    var atualLink = null, lim = (navEl ? navEl.offsetHeight : 60) + 60;
+    for (var i = 0; i < spySecs.length; i++) {
+      if (spySecs[i].el.getBoundingClientRect().top <= lim) atualLink = spySecs[i].link;
+    }
+    spyLinks.forEach(function (a) { a.classList.toggle('active', a === atualLink); });
+    spyEixos();
+    checkReveals();
+    checkCounters();
+  }
+
+  /* ---------- Paralaxe dos blocos (fallback JS quando view() nao roda) ---------- */
+  var blJS = [];
+  function blSetup() {
+    var todos = document.querySelectorAll('.bl');
+    if (!todos.length) return;
+    var nativa = window.CSS && CSS.supports && CSS.supports('animation-timeline: view()');
+    if (nativa) return; // scroll-timeline nativa (Chrome/Edge); Safari/Firefox usam o fallback JS
+    [].forEach.call(todos, function (el) {
+      var cs = getComputedStyle(el);
+      function px(v, d) { var n = parseFloat(cs.getPropertyValue(v)); return isNaN(n) ? d : n; }
+      el.style.animation = 'none';
+      blJS.push({ el: el, pai: el.parentElement, de: px('--de', 120), ate: px('--ate', -120) });
+    });
+  }
+  var blTick = false;
+  function blFrame() {
+    blTick = false;
+    var ih = window.innerHeight;
+    for (var i = 0; i < blJS.length; i++) {
+      var b = blJS[i], r = b.pai.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > ih + 200) continue;
+      var p = (ih - r.top) / (ih + r.height);       // range "cover": 0 entra, 1 sai
+      p = p < 0 ? 0 : p > 1 ? 1 : p;
+      var L = function (a, z) { return a + (z - a) * p; };
+      b.el.style.transform = 'translate3d(0,' + L(b.de, b.ate).toFixed(1) + 'px,0)';
+    }
+  }
+  function blOnScroll() {
+    if (blJS.length && !blTick) { blTick = true; requestAnimationFrame(blFrame); }
+  }
+  if (!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+    setTimeout(function () { blSetup(); blFrame(); }, 400);
+    window.addEventListener('scroll', blOnScroll, { passive: true });
+    window.addEventListener('resize', blOnScroll, { passive: true });
+  }
+
+  window.addEventListener('scroll', onScrollFx, { passive: true });
+  window.addEventListener('resize', onScrollFx, { passive: true });
+
+  /* ---------- Case detail modal ---------- */
+  var modal = document.getElementById('modal');
+  if (modal) {
+    var mLabel = document.getElementById('modalLabel');
+    var mMetric = document.getElementById('modalMetric');
+    var mMetricLabel = document.getElementById('modalMetricLabel');
+    var mTitle = document.getElementById('modalTitle');
+    var mDesc = document.getElementById('modalDesc');
+    var lastFocus = null;
+
+    function pick(card, base) {
+      if (currentLang === 'en') {
+        var en = card.getAttribute('data-' + base + '-en');
+        if (en != null) return en;
+      }
+      return card.getAttribute('data-' + base) || '';
+    }
+    var mLink = document.getElementById('modalLink');
+    var mLogo = document.getElementById('modalLogo');
+    function openModal(card) {
+      var logo = card.getAttribute('data-logo');
+      if (logo) {
+        mLogo.hidden = false;
+        mLogo.src = logo;
+        mLogo.alt = card.getAttribute('data-title') || '';
+        mLogo.classList.add('is-visible');
+      } else {
+        mLogo.classList.remove('is-visible');
+        mLogo.removeAttribute('src');
+        mLogo.hidden = true;
+      }
+      var eixo = card.closest('.eixo');
+      modal.setAttribute('data-eixo', eixo ? eixo.getAttribute('data-eixo') : 'democracia');
+      mLabel.textContent = pick(card, 'label');
+      mMetric.textContent = pick(card, 'metric');
+      mMetricLabel.textContent = pick(card, 'metriclabel');
+      mTitle.textContent = card.getAttribute('data-title') || '';
+      mDesc.textContent = pick(card, 'more');
+      var url = card.getAttribute('data-url');
+      if (url) {
+        mLink.href = url;
+        mLink.textContent = (currentLang === 'en') ? 'Visit website ↗' : 'Visitar site ↗';
+        mLink.classList.add('is-visible');
+      } else {
+        mLink.classList.remove('is-visible');
+      }
+      lastFocus = card;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      modal.querySelector('.modal__close').focus();
+    }
+    function closeModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      if (lastFocus) lastFocus.focus();
+    }
+    document.querySelectorAll('.ecase').forEach(function (card) {
+      card.addEventListener('click', function () { openModal(card); });
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(card); }
+      });
+    });
+    modal.querySelectorAll('[data-close]').forEach(function (el) {
+      el.addEventListener('click', closeModal);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+    });
+  }
+
+  /* ---------- Confirmação do formulário ---------- */
+  if (location.search.indexOf('enviado=1') !== -1) {
+    var okMsg = document.getElementById('formOk'), frm = document.getElementById('contatoForm');
+    if (okMsg) okMsg.hidden = false;
+    if (frm) frm.hidden = true;
+    var alvo = document.getElementById('contato');
+    if (alvo) setTimeout(function () { alvo.scrollIntoView(); }, 120);
+    if (history.replaceState) history.replaceState(null, '', location.pathname);
+  }
+
+  /* ---------- Count-up stats ---------- */
+  var pendingCounters = [].slice.call(document.querySelectorAll('.stat__num'));
+  function animate(el) {
+    var target = parseInt(el.getAttribute('data-count'), 10);
+    var suffix = sfx(el);
+    var dur = 1400, start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(eased * target) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  function sfx(el) {
+    return ((currentLang === 'en' ? el.getAttribute('data-suffix-en') : null) || el.getAttribute('data-suffix') || '');
+  }
+  function refreshCounters() {
+    document.querySelectorAll('.stat__num').forEach(function (el) {
+      if (pendingCounters.indexOf(el) === -1) el.textContent = el.getAttribute('data-count') + sfx(el);
+    });
+  }
+  function checkCounters() {
+    if (!pendingCounters.length) return;
+    var ih = window.innerHeight;
+    var limit = ih > 0 ? ih * 0.92 : Infinity;
+    pendingCounters = pendingCounters.filter(function (el) {
+      if (el.getBoundingClientRect().top < limit) { animate(el); return false; }
+      return true;
+    });
+  }
+
+  /* estado inicial (reveals/contadores/spy já visíveis no load) */
+  onScrollFx();
 })();
