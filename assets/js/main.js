@@ -375,7 +375,7 @@
       var rect = group.el.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
       var progress = clamp((height - rect.top) / (height + rect.height), 0, 1);
-      // A composição original é o ponto médio. Só as placas ganham profundidade.
+      // A composição é o ponto médio; o giro acompanha a rolagem sem atingir o texto.
       var phase = progress * 2 - 1;
       group.items.forEach(function (plate) {
         plate.tx = phase * plate.sway;
@@ -398,7 +398,11 @@
         plate.y += (plate.ty - plate.y) * follow;
         plate.r += (plate.tr - plate.r) * follow;
         if (Math.abs(plate.tx - plate.x) + Math.abs(plate.ty - plate.y) + Math.abs(plate.tr - plate.r) > .045) unsettled = true;
-        plate.el.style.transform = 'translate3d(' + plate.x.toFixed(2) + 'px,' + plate.y.toFixed(2) + 'px,0) rotate(' + plate.r.toFixed(3) + 'deg)';
+        var giro = plate.r;
+        plate.el.style.transform = 'translate3d(' + plate.x.toFixed(2) + 'px,' + plate.y.toFixed(2) + 'px,0) ' +
+          'rotateX(calc(var(--pitch) + ' + (giro * 1.4).toFixed(3) + 'deg)) ' +
+          'rotateY(calc(var(--yaw) + ' + (giro * 2.2).toFixed(3) + 'deg)) ' +
+          'rotateZ(calc(var(--roll) + ' + giro.toFixed(3) + 'deg))';
       });
     });
     return unsettled;

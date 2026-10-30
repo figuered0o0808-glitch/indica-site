@@ -196,15 +196,31 @@ b{font-weight:600}
 .service:nth-child(3) .service__no{background-image:linear-gradient(140deg,#8ace2b,#ff2e9a)}
 
 
-/* ============ PLACAS DE GRADIENTE ============ */
+/* ============ BLOCOS SÓLIDOS EM PERSPECTIVA ============ */
 /* Moram no campo vazio à direita do cabeçalho de cada seção (o .sec-head tem 780px;
    a coluna de conteúdo, até 1136px). Nunca passam sob texto nem atrás de card.
    Duas por seção, silhueta própria em cada uma, velocidades diferentes na rolagem. */
 .section > .container{position:relative;z-index:1}
 .sec-head{position:relative}
-.placas{position:absolute;top:0;bottom:0;left:calc(100% + 56px);width:250px;pointer-events:none}
-.bl{position:absolute;display:block;mix-blend-mode:screen;transform-origin:50% 50%;
-  backface-visibility:hidden}
+.placas{position:absolute;top:0;bottom:0;left:calc(100% + 56px);width:250px;pointer-events:none;
+  perspective:900px;perspective-origin:50% 45%}
+.bl{position:absolute;display:block;transform-origin:50% 50%;transform-style:preserve-3d;
+  --depth:28px;--pitch:-16deg;--yaw:-22deg;--roll:-5deg;
+  --top:linear-gradient(110deg,#a4dfff,#429ef5);--side:linear-gradient(180deg,#236cc8,#10346f);
+  background-color:var(--blue);background-blend-mode:normal;mix-blend-mode:normal;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 1px 0 0 rgba(255,255,255,.22),
+    inset -1px -1px 0 rgba(0,0,0,.18),12px 22px 28px rgba(0,0,0,.4);
+  transform:rotateX(var(--pitch)) rotateY(var(--yaw)) rotateZ(var(--roll));backface-visibility:hidden}
+/* As faces se encontram na frente opaca; a espessura se projeta para trás. */
+.bl::before,.bl::after{content:"";position:absolute;display:block;backface-visibility:hidden;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.bl::before{left:0;right:0;bottom:100%;height:var(--depth);background:var(--top);
+  transform-origin:50% 100%;transform:rotateX(90deg)}
+.bl::after{top:0;bottom:0;left:100%;width:var(--depth);background:var(--side);
+  transform-origin:0 50%;transform:rotateY(90deg)}
+.pl--s2,.pl--r2,.pl--p2,.pl--u2,.pl--q2{--pitch:-12deg;--yaw:-28deg;--roll:7deg;--depth:24px}
+.pl--r1,.pl--p1,.pl--q2{--top:linear-gradient(110deg,#e0ffa7,#a3e447);--side:linear-gradient(180deg,#4fa91c,#28550f)}
+.pl--s2,.pl--p2,.pl--u1{--top:linear-gradient(110deg,#c6eb83,#ff80bb);--side:linear-gradient(180deg,#af386f,#66163c)}
 .placas.is-tracking .bl{will-change:transform}
 /* Serviços: torre + faixa */
 .pl--s1{right:0;top:4%;width:128px;height:212px;background-image:var(--grad-blue);--de:38px;--ate:-38px;--sway:16;--turn:4.4}
@@ -224,7 +240,9 @@ b{font-weight:600}
 
 /* só aparecem quando o campo à direita do cabeçalho existe de verdade */
 @media(max-width:1179px){ .placas{display:none} }
-@media(prefers-reduced-motion:reduce){ .bl{transform:none!important;will-change:auto} }
+@media(prefers-reduced-motion:reduce){
+  .bl{transform:rotateX(var(--pitch)) rotateY(var(--yaw)) rotateZ(var(--roll))!important;will-change:auto}
+}
 
 /* ============ TABS DOS EIXOS ============ */
 /* índice fixo dos três capítulos: gruda sob o menu enquanto se percorre os eixos */
