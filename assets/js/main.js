@@ -5,7 +5,7 @@
   /* ---------- i18n (EN dictionary; PT lives in the HTML) ---------- */
   var EN = {
     'nav.about': 'About', 'nav.work': 'Our work', 'nav.productions': 'Productions',
-    'nav.pubs': 'Publications', 'nav.network': 'Network', 'nav.services': 'Services', 'nav.cta': 'Get in touch',
+    'nav.pubs': 'Library', 'nav.platform': 'Platform', 'nav.network': 'Network', 'nav.services': 'Services', 'nav.cta': 'Get in touch',
     'pubs.kicker': 'Our publications',
     'pubs.h2': "INDICA also<br>generates <span class='b'>knowledge</span>.",
     'pubs.lead': 'Beyond campaigns and productions, we publish articles and reports on the influence ecosystem, communication and public opinion.',
@@ -28,10 +28,10 @@
     'pubs.banda.t': 'Whoever pays the piper calls the tune',
     'pubs.banda.d': 'An analysis by INDICA in partnership with Entremídias, the Media Literacy Lab of the Journalism program at UFRRJ, on betting advertising, influencers’ discourse and regulation of the influencer market.',
     'pubs.banda.m': 'Francisco Figueiredo · Cecília Moreyra de Figueiredo · 27 pages',
-    'pubs.banda.read': 'Read the analysis (PDF) ↗',
-    'pubs.read': 'Read the paper (PDF) ↗',
-    'pubs.cta.tag': 'Subscribe', 'pubs.cta.t': 'Want to receive our publications?',
-    'pubs.cta.d': 'Get in touch →',
+    'pubs.banda.read': 'View the publication →',
+    'pubs.read': 'View the publication →',
+    'pubs.cta.tag': 'Library', 'pubs.cta.t': 'Explore the complete INDICA collection.',
+    'pubs.cta.d': 'Open the library →',
     'hero.lead': "Through the influence market, we stand up for <b class='t--green'>science</b>, <b class='t--blue'>democracy</b> and the <b class='t--pink'>environment</b>. We connect creators, data and narrative to move public opinion around what matters.",
     'hero.cta1': 'Start a project', 'hero.cta2': 'Our work',
     'stats.views': 'views', 'stats.influencers': 'influencers', 'stats.followers': 'followers in the network',
@@ -107,6 +107,9 @@
     'net.hub3': 'of Brazilians believe social media influences public opinion.',
     'net.hub4': 'have made purchases after recommendations on social media.',
     'net.source': 'Source: Quaest/2025 survey and the Influence.me/2026 Digital Influencers Report.',
+    'net.platform.t': 'Do you create content?',
+    'net.platform.d': 'Explore opportunities and resources for your work on the INDICA platform.',
+    'net.platform.a': 'Explore the platform',
     'part.kicker': 'Partners',
     'part.h2': "Who walks<br>with <span class='b'>us</span>.",
     'part.lead': 'Institutions, media outlets and organizations we have worked with on campaigns, productions and research.',
@@ -117,11 +120,13 @@
     'contact.h2': "Got a cause to set<br>in <span class='b'>motion</span>?",
     'contact.lead': 'Tell us what you want to communicate. INDICA designs the strategy, the production and the influence network — from briefing to measurement.',
     'footer.tag': 'Democracy · Science · Environment',
+    'footer.nav.aria': 'Explore the platform',
     'footer.copy': '© 2026 INDICA. All rights reserved.'
   };
 
   var currentLang = 'pt';
   var ptCache = new Map();
+  var ptHrefCache = new Map();
   var i18nEls = document.querySelectorAll('[data-i18n]');
   var langBtn = document.getElementById('lang');
 
@@ -137,8 +142,8 @@
       el.innerHTML = (lang === 'en') ? el.getAttribute('data-en') : ptCache.get(el);
     });
     document.querySelectorAll('[data-href-en]').forEach(function (el) {
-      if (!ptCache.has(el)) ptCache.set(el, el.getAttribute('href'));
-      el.setAttribute('href', (lang === 'en') ? el.getAttribute('data-href-en') : ptCache.get(el));
+      if (!ptHrefCache.has(el)) ptHrefCache.set(el, el.getAttribute('href'));
+      el.setAttribute('href', (lang === 'en') ? el.getAttribute('data-href-en') : (el.getAttribute('data-href-pt') || ptHrefCache.get(el)));
     });
     document.querySelectorAll('[data-src-en]').forEach(function (el) {
       if (!ptCache.has(el)) ptCache.set(el, el.getAttribute('src'));

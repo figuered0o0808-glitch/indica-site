@@ -1,4 +1,32 @@
-# INDICA — Site Vitrine
+# INDICA — site público e Plataforma
+
+Uma publicação pública em **https://agenciaindica.com/**:
+
+- `/`: apresentação da agência, atuação, serviços, trabalhos, equipe e contato.
+- `/plataforma/`: oportunidades e biblioteca para criadores, em português, inglês e espanhol.
+
+A administração, a Fábrica de Criadores e as métricas ficam no projeto e servidor separados. Este repositório público não contém suas telas, banco ou credenciais.
+
+## Plataforma integrada
+
+O fonte em `plataforma-src/` foi incorporado de `figuered0o0808-glitch/tilt-plataforma`, revisão `e4858c3aedd4f52203851869d3b20c0a55cd1cc7`. A exportação publicada fica em `plataforma/`. Para atualizar, com Node.js 20 ou posterior:
+
+```sh
+cd plataforma-src
+npm ci
+cd ..
+node scripts/atualizar-plataforma.mjs
+```
+
+O build do Next.js verifica tipos e gera as páginas. A saída anterior só é substituída depois de o build passar. O comando fixa `/plataforma` como caminho e `https://agenciaindica.com` como origem canônica e corrige o idioma dos HTML exportados. A saída `plataforma/` deve acompanhar cada alteração no fonte.
+
+O GitHub Pages mantém a raiz da branch `main` e o domínio existente. Preserve `.nojekyll` para servir `_next`. A integração não altera DNS. Na prévia local abaixo, a plataforma abre em `/plataforma/`.
+
+A biblioteca é o catálogo canônico; a home da agência mostra suas publicações como prévia. Os PDFs antigos da agência continuam disponíveis para preservar links existentes.
+
+Esta etapa mantém o edital de carros elétricos em **consulta**, sem turma aberta, e o canal de envio externo desligado. A ligação dos formulários ao banco administrativo será implementada separadamente. Não inclua `.env`, chaves, sessões ou dados administrativos neste repositório.
+
+## Site institucional
 
 Site institucional (one-page) da agência **INDICA**, reconstruído a partir do portfólio.
 HTML/CSS/JS puro, sem build e sem dependências — abre direto no navegador.

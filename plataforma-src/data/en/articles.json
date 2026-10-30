@@ -1,0 +1,218 @@
+[
+  {
+    "slug": "desenho-economico-mercado-influencia",
+    "titulo": "The economic design of the influence market",
+    "trilha": "organizacoes",
+    "autoria": [
+      "Francisco Figueiredo"
+    ],
+    "organizacao": "INDICA",
+    "logoOrganizacao": "/organizacoes/indica.png",
+    "tema": "Influencer economy",
+    "palavrasChave": [
+      "The influencer economy",
+      "Influence market",
+      "Attention",
+      "Advertising",
+      "Content creators"
+    ],
+    "resumo": "Introduction to the series. It describes the participants in the influence market, what each one gives and receives, and where attention and money flow. It presents the fields covered by the series.",
+    "formato": "Introduction",
+    "atualizadoEm": "2026-10-30",
+    "secoes": [
+      {
+        "titulo": "Series",
+        "paragrafos": [
+          "The influencer economy"
+        ]
+      },
+      {
+        "titulo": "About this publication",
+        "paragrafos": [
+          "This text opens The influencer economy series. It describes the market from which the other studies start and explains why it deserves to be studied with economic theory."
+        ]
+      },
+      {
+        "titulo": "Full text",
+        "paragrafos": [
+          "PDFs available in Portuguese (13 pages) and English (13 pages)."
+        ]
+      }
+    ],
+    "arquivos": [
+      {
+        "idioma": "Portuguese",
+        "arquivo": "/materiais/desenho-economico-mercado-influencia-pt.pdf"
+      },
+      {
+        "idioma": "English",
+        "arquivo": "/materiais/desenho-economico-mercado-influencia-en.pdf"
+      }
+    ],
+    "capa": "/materiais/capas/desenho-economico-mercado-influencia-en.png"
+  },
+  {
+    "slug": "modelo-economico-redes-algoritmicas",
+    "titulo": "An economic model for the content market on algorithmic social networks",
+    "trilha": "organizacoes",
+    "autoria": [
+      "Francisco Figueiredo",
+      "Lauanny Brandão",
+      "Pedro Bordinhão"
+    ],
+    "organizacao": "INDICA",
+    "tema": "Attention economy",
+    "palavrasChave": [
+      "The influencer economy",
+      "Attention economy",
+      "Algorithmic social networks",
+      "Timing",
+      "Latent demand",
+      "Active supply",
+      "Publication window"
+    ],
+    "resumo": "A theory of timing in the dispute for attention: latent demand, active supply and the optimal publication window. It treats attention as a scarce resource and derives the condition that closes the window, when active supply starts growing faster than demand.",
+    "formato": "Academic paper",
+    "atualizadoEm": "2026-10-29",
+    "secoes": [
+      {
+        "titulo": "Series",
+        "paragrafos": [
+          "The influencer economy"
+        ]
+      },
+      {
+        "titulo": "About this publication",
+        "paragrafos": [
+          "This paper belongs to The influencer economy series. It proposes an economic model to study publication timing and competition between pieces of content for attention on algorithmic social networks."
+        ]
+      },
+      {
+        "titulo": "Full text",
+        "paragrafos": [
+          "PDFs available in Portuguese (48 pages) and English (47 pages)."
+        ]
+      }
+    ],
+    "arquivos": [
+      {
+        "idioma": "Portuguese",
+        "arquivo": "/materiais/modelo-economico-redes-algoritmicas-pt.pdf"
+      },
+      {
+        "idioma": "English",
+        "arquivo": "/materiais/modelo-economico-redes-algoritmicas-en.pdf"
+      }
+    ],
+    "logoOrganizacao": "/organizacoes/indica.png",
+    "capa": "/materiais/capas/modelo-economico-redes-algoritmicas-en.png"
+  },
+  {
+    "slug": "formacao-preco-mercado-influencia",
+    "titulo": "Price formation in the influence market",
+    "trilha": "organizacoes",
+    "autoria": [
+      "Francisco Figueiredo"
+    ],
+    "organizacao": "INDICA",
+    "logoOrganizacao": "/organizacoes/indica.png",
+    "tema": "Influencer economy",
+    "palavrasChave": [
+      "The influencer economy",
+      "Price formation",
+      "Sponsored content",
+      "Reputational stock",
+      "Credibility",
+      "Bargaining"
+    ],
+    "resumo": "Why the price of sponsored content lies above production costs and varies across similar creators. The paper examines reputational stock and bargaining between the creator’s costs and risks and what the advertiser can and wants to pay.",
+    "formato": "Academic paper",
+    "atualizadoEm": "2026-10-29",
+    "secoes": [
+      {
+        "titulo": "Series",
+        "paragrafos": [
+          "The influencer economy"
+        ]
+      },
+      {
+        "titulo": "About this publication",
+        "paragrafos": [
+          "This paper belongs to The influencer economy series. It discusses how credibility, affect and legitimacy enter the price of sponsored content, bargained between a creator’s floor and an advertiser’s ceiling."
+        ]
+      },
+      {
+        "titulo": "Full text",
+        "paragrafos": [
+          "PDFs available in Portuguese (37 pages) and English (36 pages)."
+        ]
+      }
+    ],
+    "arquivos": [
+      {
+        "idioma": "Portuguese",
+        "arquivo": "/materiais/formacao-preco-mercado-influencia-pt.pdf"
+      },
+      {
+        "idioma": "English",
+        "arquivo": "/materiais/formacao-preco-mercado-influencia-en.pdf"
+      }
+    ],
+    "capa": "/materiais/capas/formacao-preco-mercado-influencia-en.png"
+  },
+  {
+    "slug": "quem-banca-a-banda-escolhe-a-musica",
+    "titulo": "Whoever pays the piper calls the tune",
+    "trilha": "criadores",
+    "autoria": [
+      "Francisco Figueiredo",
+      "Cecília Moreyra de Figueiredo"
+    ],
+    "organizacao": "INDICA",
+    "logoOrganizacao": "/organizacoes/indica.png",
+    "tema": "Advertising and regulation",
+    "palavrasChave": [
+      "Analyses",
+      "Betting",
+      "Advertising",
+      "Influencers",
+      "Regulation",
+      "Entremídias",
+      "UFRRJ"
+    ],
+    "resumo": "An analysis by INDICA in partnership with Entremídias, the Media Literacy Lab of the Journalism program at UFRRJ, on betting advertising, influencers’ discourse and regulation of the influencer market.",
+    "formato": "Analysis",
+    "atualizadoEm": "2026-10-29",
+    "secoes": [
+      {
+        "titulo": "Series",
+        "paragrafos": [
+          "Analyses"
+        ]
+      },
+      {
+        "titulo": "About this publication",
+        "paragrafos": [
+          "The first publication in the Analyses series, produced by INDICA in partnership with Entremídias, the Media Literacy Lab of the Journalism program at UFRRJ. It has two parts: The herd, on betting companies’ presence in the influencer market, and The chorus, on influencers’ discourse and regulation."
+        ]
+      },
+      {
+        "titulo": "Full text",
+        "paragrafos": [
+          "PDFs available in Portuguese (27 pages) and English (27 pages)."
+        ]
+      }
+    ],
+    "arquivos": [
+      {
+        "idioma": "Portuguese",
+        "arquivo": "/materiais/quem-banca-a-banda-escolhe-a-musica-pt.pdf"
+      },
+      {
+        "idioma": "English",
+        "arquivo": "/materiais/quem-banca-a-banda-escolhe-a-musica-en.pdf"
+      }
+    ],
+    "capa": "/materiais/capas/quem-banca-a-banda-escolhe-a-musica-en.jpg"
+  }
+]

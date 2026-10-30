@@ -1,0 +1,1384 @@
+/* Identidade INDICA: os mesmos arquivos e cores do site agenciaindica.com. */
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400 600; font-display: swap; src: url('../../public/fonts/inter-latin.woff2') format('woff2'); }
+@font-face { font-family: 'Jost'; font-style: normal; font-weight: 200 700; font-display: swap; src: url('../../public/fonts/jost-latin.woff2') format('woff2'); }
+:root {
+  /* ---------- Paleta oficial ---------- */
+  --azul: #151515;
+  --amarelo: #151515;
+  --menta: #151515;
+  --areia: #111111;
+  --preto: #f3f5f8;
+  --branco: #080808;
+  --rosa: #151515;
+
+  --tinta-media: #c4cbd5;
+  --tinta-suave: #a5afbd;     /* 5,2:1 sobre a menta, a superficie mais clara com texto */
+  --linha: rgba(255, 255, 255, 0.14);
+  --destaque: #f3f5f8;
+
+  /* ---------- Escala tipografica ----------
+     1rem = 16px. O corpo do texto e --texto-xg.
+     Os degraus grandes crescem com a largura da tela, sem media query.
+     A entrelinha vem junto do tamanho: Times fecha bem em titulo grande
+     e precisa de folga em texto corrido. */
+  --texto-xp: 0.6875rem;                                        /* 11px, rotulo em caixa alta */
+  --texto-p: 0.8125rem;                                         /* 13px, nota curta */
+  --texto-m: 0.9375rem;                                         /* 15px, texto de apoio */
+  --texto-g: 1rem;                                              /* 16px, campo, tabela, ficha */
+  --texto-xg: clamp(1.0625rem, 1.03rem + 0.16vw, 1.125rem);     /* 17 a 18px, corpo */
+  --texto-lead: clamp(1.1875rem, 1.11rem + 0.32vw, 1.375rem);   /* 19 a 22px, entrada de pagina */
+
+  --titulo-p: 1.1875rem;                                        /* 19px */
+  --titulo-m: clamp(1.25rem, 1.19rem + 0.26vw, 1.4375rem);      /* 20 a 23px */
+  --titulo-g: clamp(1.5rem, 1.25rem + 1.1vw, 2.25rem);          /* 24 a 36px */
+  --titulo-xg: clamp(2rem, 1.45rem + 2.4vw, 3.5rem);            /* 32 a 56px */
+  --titulo-cartaz: clamp(2.5rem, 1.4rem + 4.7vw, 5.5rem);       /* 40 a 88px */
+  --numero-g: clamp(1.5rem, 1.2rem + 1.1vw, 1.9rem);            /* 24 a 30px, cifra em mono */
+
+  --entrelinha-cartaz: 0.98;
+  --entrelinha-xg: 1.06;
+  --entrelinha-g: 1.14;
+  --entrelinha-m: 1.22;
+  --entrelinha-p: 1.35;
+  --entrelinha-corpo: 1.55;
+  --entrelinha-prosa: 1.62;
+  --entrelinha-rotulo: 1.3;
+
+  /* ---------- Ritmo de espaco ---------- */
+  --esp-4: 4px;
+  --esp-8: 8px;
+  --esp-12: 12px;
+  --esp-16: 16px;
+  --esp-24: 24px;
+  --esp-32: 32px;
+  --esp-48: 48px;
+  --esp-64: 64px;
+  --esp-96: 96px;
+
+  /* Respiro que acompanha a largura da tela, tambem sem media query.
+     O teto e o degrau da escala; o piso e o respiro que o celular aguenta. */
+  --margem-lateral: clamp(18px, 3.4vw, 28px);
+  --secao-y: clamp(40px, 5.2vw, var(--esp-64));
+  --secao-y-curta: clamp(28px, 3.4vw, var(--esp-48));
+  --secao-y-alta: clamp(56px, 7.6vw, var(--esp-96));
+
+  /* ---------- Medidas de componente ---------- */
+  --raio: 6px;
+  --raio-g: 10px;
+  --raio-pilula: 999px;
+
+  --largura: 1140px;
+  --largura-estreita: 720px;
+  --cabecalho-altura: 76px;
+  --toque: 44px;          /* area minima de toque no celular */
+
+  --foco-cor: var(--preto);
+
+  --serif: 'Inter', system-ui, sans-serif;
+  /* Monoespacada de sistema: nenhuma fonte e baixada da rede. */
+  --mono: 'Inter', system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--serif);
+  font-size: var(--texto-xg);
+  line-height: var(--entrelinha-corpo);
+  color: var(--preto);
+  background: var(--branco);
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+  color: var(--preto);
+  margin: 0 0 0.4em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--titulo-xg);
+  line-height: var(--entrelinha-xg);
+  letter-spacing: -0.015em;
+}
+h2 {
+  font-size: var(--titulo-g);
+  line-height: var(--entrelinha-g);
+  letter-spacing: -0.01em;
+}
+h3 { font-size: var(--titulo-m); line-height: var(--entrelinha-m); }
+h4 { font-size: var(--titulo-p); line-height: var(--entrelinha-p); }
+
+p { margin: 0 0 0.9em; }
+p:last-child { margin-bottom: 0; }
+
+a { color: var(--preto); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+
+em, i { font-style: italic; }
+
+/* Foco: anel preto solido, branco quando o fundo e preto. Todo elemento
+   que recebe foco herda daqui; nenhuma regra abaixo apaga o anel. */
+:focus-visible {
+  outline: 2px solid var(--foco-cor);
+  outline-offset: 3px;
+}
+
+ul, ol { margin: 0 0 1em; padding-left: 1.1em; }
+li { margin-bottom: 0.35em; }
+
+hr { border: 0; border-top: 1px solid var(--linha); margin: var(--esp-32) 0; }
+
+table { border-collapse: collapse; width: 100%; }
+
+img, svg { max-width: 100%; }
+
+/* Ancora sob cabecalho fixo: o titulo nao fica escondido atras da barra. */
+:target { scroll-margin-top: calc(var(--cabecalho-altura) + var(--esp-16)); }
+
+/* ---------- Estrutura ---------- */
+
+.container { width: 100%; max-width: var(--largura); margin: 0 auto; padding: 0 var(--margem-lateral); }
+.container-estreito { width: 100%; max-width: var(--largura-estreita); margin: 0 auto; padding: 0 var(--margem-lateral); }
+
+.secao { padding: var(--secao-y) 0; }
+.secao--curta { padding: var(--secao-y-curta) 0; }
+.secao--alta { padding: var(--secao-y-alta) 0; }
+.secao--fundo { background: var(--areia); }
+
+
+.secao--branco { background: var(--branco); }
+.secao--preto { background: var(--branco); color: var(--preto); --foco-cor: var(--preto); }
+.secao--preto h1,
+.secao--preto h2,
+.secao--preto h3,
+.secao--preto h4,
+.secao--preto a { color: var(--preto); }
+.secao--preto .olho,
+.secao--preto .rotulo,
+.secao--preto .registro__rotulo { color: rgba(255, 255, 255, 0.6); }
+.secao--preto .texto-guia,
+.secao--preto .texto-pequeno,
+.secao--preto .texto-secundario { color: rgba(255, 255, 255, 0.82); }
+.secao--preto .registro { border-color: rgba(255, 255, 255, 0.22); }
+.secao--preto .registro:last-child { border-bottom-color: rgba(255, 255, 255, 0.22); }
+.secao--preto .btn { border-color: var(--preto); color: var(--preto); }
+.secao--preto .btn:hover:not(:disabled) { background: var(--preto); color: var(--branco); }
+.secao--preto .btn--primario { background: var(--preto); color: var(--branco); }
+.secao--preto .btn--primario:hover:not(:disabled) { background: transparent; color: var(--preto); }
+
+.pilha { display: flex; flex-direction: column; gap: var(--esp-16); }
+.pilha--g { display: flex; flex-direction: column; gap: var(--esp-32); }
+.pilha--p { display: flex; flex-direction: column; gap: var(--esp-8); }
+.linha { display: flex; align-items: center; gap: var(--esp-12); flex-wrap: wrap; }
+.linha--fim { justify-content: space-between; }
+
+.grade { display: grid; gap: var(--esp-24); grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); }
+.grade--2 { display: grid; gap: var(--esp-24); grid-template-columns: repeat(2, 1fr); }
+.grade--3 { display: grid; gap: var(--esp-24); grid-template-columns: repeat(3, 1fr); }
+.grade--4 { display: grid; gap: var(--esp-16); grid-template-columns: repeat(4, 1fr); }
+.grade--lateral { display: grid; gap: var(--esp-48); grid-template-columns: minmax(0, 1fr) 320px; align-items: start; }
+
+/* Malha de pontos da marca, usada como textura de fundo em blocos grandes. */
+.malha {
+  background-image: radial-gradient(circle, currentColor 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+}
+
+
+/* Regua de secao: numero e titulo alinhados por uma linha preta. */
+.secao__marca {
+  display: flex;
+  align-items: baseline;
+  gap: var(--esp-16);
+  padding-bottom: var(--esp-16);
+  border-bottom: 1px solid var(--preto);
+  margin-bottom: var(--esp-32);
+}
+
+.secao__marca h2 { margin: 0; }
+
+
+/* Linha de conteudo do manual: rotulo curto a esquerda, texto a direita. */
+.registro {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: var(--esp-32);
+  padding: var(--esp-24) 0;
+  border-top: 1px solid var(--linha);
+}
+.registro:last-child { border-bottom: 1px solid var(--linha); }
+.registro__rotulo {
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  line-height: var(--entrelinha-rotulo);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+  margin: 0;
+}
+
+/* Abertura de pagina: olho, titulo, entrada e as acoes na mesma base. */
+.cabecalho-pagina { padding-bottom: 0; }
+.cabecalho-pagina__topo { align-items: flex-end; gap: var(--esp-24); }
+.cabecalho-pagina__texto { max-width: 46rem; }
+
+/* ---------- Tipografia auxiliar ---------- */
+
+.olho {
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  line-height: var(--entrelinha-rotulo);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--preto);
+  margin: 0 0 var(--esp-16);
+}
+
+.texto-guia { font-size: var(--texto-lead); line-height: var(--entrelinha-corpo); color: var(--preto); max-width: 58ch; }
+.texto-secundario { color: var(--tinta-media); }
+.texto-pequeno { font-size: var(--texto-m); line-height: var(--entrelinha-corpo); color: var(--tinta-media); letter-spacing: normal; text-transform: none; }
+.texto-mini { font-size: var(--texto-p); line-height: var(--entrelinha-corpo); color: var(--tinta-suave); letter-spacing: normal; text-transform: none; }
+.rotulo {
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  line-height: var(--entrelinha-rotulo);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+}
+.rotulo--forte { color: var(--preto); }
+.numero-grande {
+  font-family: var(--mono);
+  font-size: var(--numero-g);
+  font-weight: 500;
+  line-height: var(--entrelinha-cartaz);
+  letter-spacing: -0.02em;
+}
+
+.prosa { max-width: 64ch; }
+.prosa p { margin-bottom: 1.05em; font-size: var(--texto-xg); line-height: var(--entrelinha-prosa); }
+.prosa h2 { margin-top: 1.7em; }
+.prosa h3 { margin-top: 1.5em; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---------- Botoes: pilula, como na landing page da marca ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-8);
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: var(--entrelinha-rotulo);
+  padding: var(--esp-16) var(--esp-24);
+  border-radius: var(--raio-pilula);
+  border: 1px solid var(--preto);
+  background: transparent;
+  color: var(--preto);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+}
+.btn:hover { text-decoration: none; }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.btn--primario { background: var(--preto); color: var(--branco); }
+.btn--primario:hover:not(:disabled) { background: transparent; color: var(--preto); }
+
+.btn--secundario { background: transparent; color: var(--preto); }
+.btn--secundario:hover:not(:disabled) { background: var(--preto); color: var(--branco); }
+
+.btn--discreto {
+  border-color: transparent;
+  padding: var(--esp-8) 2px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  letter-spacing: 0.06em;
+}
+.btn--discreto:hover:not(:disabled) { text-decoration-thickness: 2px; }
+
+.btn--pequeno { padding: var(--esp-12) var(--esp-16); }
+.btn--largo { width: 100%; }
+
+.link-seta { white-space: nowrap; }
+.link-seta::after { content: ' \2192'; }
+
+/* ---------- Cartoes ---------- */
+
+.cartao {
+  background: var(--branco);
+  border: 1px solid var(--preto);
+  border-radius: 2px;
+  padding: var(--esp-24);
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-12);
+}
+.cartao--compacto { padding: var(--esp-16); gap: var(--esp-8); }
+
+
+/* Cor entra como marca curta no alto do cartao, nao como fundo. */
+.cartao--marcado { position: relative; overflow: hidden; padding-top: var(--esp-32); }
+.cartao--marcado::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: var(--marca, var(--menta));
+}
+
+a.cartao { color: inherit; text-decoration: none; }
+a.cartao:hover { background: var(--areia); }
+
+
+a.cartao:hover .cartao__titulo { text-decoration: underline; text-underline-offset: 4px; }
+
+.cartao__titulo { margin: 0; font-size: var(--titulo-m); line-height: var(--entrelinha-m); }
+.cartao__texto { color: var(--tinta-media); font-size: var(--texto-g); line-height: var(--entrelinha-corpo); margin: 0; }
+.cartao__rodape {
+  margin-top: auto;
+  padding-top: var(--esp-16);
+  border-top: 1px solid var(--linha);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-12);
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  line-height: var(--entrelinha-rotulo);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+}
+
+/* ---------- Chips e selos ---------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: var(--esp-8) var(--esp-12);
+  border-radius: 2px;
+  background: var(--areia);
+  color: var(--preto);
+  white-space: nowrap;
+}
+.chip--menta { background: var(--menta); }
+.chip--azul { background: var(--azul); }
+.chip--amarelo { background: var(--amarelo); }
+.chip--rosa { background: var(--rosa); }
+.chip--areia { background: var(--areia); }
+.chip--vazado { background: transparent; border: 1px solid var(--preto); }
+
+.chips { display: flex; flex-wrap: wrap; gap: var(--esp-8); }
+
+.selo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-8);
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: var(--esp-8) var(--esp-12);
+  border-radius: 2px;
+  border: 1px solid var(--preto);
+  color: var(--preto);
+  background: transparent;
+  white-space: nowrap;
+}
+.selo::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: var(--raio-pilula);
+  background: currentColor;
+  flex: none;
+}
+.selo--ativo { background: var(--preto); color: var(--branco); }
+.selo--neutro { background: var(--branco); }
+.selo--apagado { border-color: var(--linha); color: var(--tinta-suave); }
+
+
+/* ---------- Faixa de prototipo, cabecalho e rodape ---------- */
+
+
+.cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--branco);
+  border-bottom: 1px solid var(--preto);
+}
+.cabecalho__interno {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-24);
+  min-height: var(--cabecalho-altura);
+  padding-top: var(--esp-12);
+  padding-bottom: var(--esp-12);
+}
+.cabecalho__marca {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  color: var(--preto);
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+.cabecalho__marca:hover { opacity: 0.6; }
+/* Na home a marca se forma no meio da tela; a do cabecalho espera a rolagem.
+   O lugar fica reservado para a navegacao nao pular quando ela aparece. */
+.cabecalho__marca--oculta { opacity: 0; pointer-events: none; }
+
+/* Marca e navegacao a esquerda, idioma e acao a direita. */
+.cabecalho__nav { display: flex; align-items: center; gap: var(--esp-4); }
+.cabecalho__link {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  line-height: var(--entrelinha-rotulo);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--preto);
+  text-decoration: none;
+  padding: var(--esp-12) var(--esp-16);
+  border-radius: var(--raio-pilula);
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.cabecalho__link:hover { border-color: var(--preto); text-decoration: none; }
+.cabecalho__link[aria-current='page'] { background: var(--preto); color: var(--branco); border-color: var(--preto); }
+.cabecalho__acoes { display: flex; align-items: center; gap: var(--esp-12); margin-left: auto; }
+
+/* Seletor de idioma: tres siglas separadas por barra fina. */
+.seletor-idioma { display: flex; align-items: center; flex: none; }
+.seletor-idioma__opcao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  border-radius: var(--raio-pilula);
+  min-width: 34px;
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  letter-spacing: 0.1em;
+  color: var(--tinta-suave);
+  text-decoration: none;
+  padding: 0 var(--esp-4);
+}
+.seletor-idioma__opcao:hover { color: var(--preto); text-decoration: none; }
+.seletor-idioma__opcao[aria-current='true'] { color: var(--branco); background: var(--preto); }
+.seletor-idioma__opcao + .seletor-idioma__opcao { border-left: 1px solid var(--linha); }
+
+.rodape {
+  margin-top: 0;
+  border-top: 1px solid var(--preto);
+  background: var(--branco);
+  padding: var(--secao-y) 0 var(--esp-32);
+  font-size: var(--texto-m);
+}
+.rodape__grade { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: var(--esp-48); }
+.rodape__titulo {
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  line-height: var(--entrelinha-rotulo);
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--tinta-suave);
+  margin-bottom: var(--esp-16);
+}
+.rodape__marca { margin: 0 0 var(--esp-12); }
+.rodape__tagline { margin: 0 0 var(--esp-16); }
+.rodape__descricao { max-width: 40ch; }
+.rodape__lista { list-style: none; padding: 0; margin: 0; }
+.rodape__lista li { margin-bottom: var(--esp-8); }
+
+
+/* ---------- Blocos de destaque ---------- */
+
+.destaque {
+  background: var(--areia);
+  border-radius: 2px;
+  padding: var(--esp-24);
+}
+.destaque__titulo {
+  font-size: var(--texto-xp);
+  line-height: var(--entrelinha-rotulo);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--preto);
+  margin: 0 0 var(--esp-12);
+}
+.destaque__texto { color: var(--preto); font-size: var(--texto-g); line-height: var(--entrelinha-corpo); margin: 0; }
+
+.nota { font-size: var(--texto-m); line-height: var(--entrelinha-corpo); color: var(--tinta-media); border-left: 2px solid var(--preto); padding-left: var(--esp-12); }
+
+
+/* ---------- Tabelas ---------- */
+
+/*
+ * A tabela e mais larga que o quadro no telefone (min-width de 580px contra
+ * ~337px de largura util em 375), e no macOS e no iOS a barra de rolagem so
+ * aparece durante o gesto: a tabela terminava rente a borda do cartao e parecia
+ * completa, com uma coluna inteira escondida. As duas tampas brancas sao
+ * `local` e andam com o conteudo; as duas sombras sao `scroll` e ficam presas
+ * ao quadro. O efeito e que a sombra so existe do lado que ainda tem coluna por
+ * ver, e some sozinha ao chegar na ponta.
+ */
+.tabela-rolagem {
+  overflow-x: auto;
+  border: 1px solid var(--preto);
+  border-radius: 2px;
+  background-color: var(--branco);
+  background-image:
+    linear-gradient(to right, var(--branco), rgba(255, 255, 255, 0)),
+    linear-gradient(to left, var(--branco), rgba(255, 255, 255, 0)),
+    linear-gradient(to right, rgba(0, 0, 0, 0.26), rgba(0, 0, 0, 0)),
+    linear-gradient(to left, rgba(0, 0, 0, 0.26), rgba(0, 0, 0, 0));
+  background-position: left center, right center, left center, right center;
+  background-repeat: no-repeat;
+  background-size: 26px 100%, 26px 100%, 12px 100%, 12px 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+.tabela { font-size: var(--texto-g); min-width: 580px; }
+.tabela th {
+  text-align: left;
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  line-height: var(--entrelinha-rotulo);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 400;
+  color: var(--tinta-suave);
+  padding: var(--esp-16);
+  border-bottom: 1px solid var(--preto);
+  white-space: nowrap;
+}
+.tabela td { padding: var(--esp-16); border-bottom: 1px solid var(--linha); color: var(--tinta-media); vertical-align: top; }
+.tabela tr:last-child td { border-bottom: 0; }
+.tabela td:first-child { color: var(--preto); }
+.tabela .num { text-align: right; font-family: var(--mono); font-size: var(--texto-m); font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--preto); }
+.tabela tfoot td { border-top: 1px solid var(--preto); color: var(--preto); }
+
+/* ---------- Formularios: campos em pilula, como no material da marca ---------- */
+
+.campo { display: flex; flex-direction: column; gap: var(--esp-8); }
+.campo__rotulo {
+  font-size: var(--texto-p);
+  line-height: var(--entrelinha-rotulo);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--preto);
+}
+.campo__ajuda { font-size: var(--texto-m); line-height: var(--entrelinha-p); color: var(--tinta-suave); margin: 0; }
+/* Erro: le-se como frase, no tamanho de leitura. O rosa marca, o texto informa. */
+.campo__erro {
+  font-family: var(--serif);
+  font-size: var(--texto-m);
+  line-height: var(--entrelinha-p);
+  color: var(--preto);
+  background: var(--rosa);
+  padding: var(--esp-8) var(--esp-12);
+  border-radius: 2px;
+  align-self: flex-start;
+  margin: 0;
+}
+.campo__opcional { color: var(--tinta-suave); }
+
+input[type='text'],
+input[type='email'],
+input[type='number'],
+input[type='search'],
+input[type='url'],
+input[type='tel'],
+select,
+textarea {
+  font-family: var(--serif);
+  font-size: var(--texto-g);
+  line-height: var(--entrelinha-corpo);
+  color: var(--preto);
+  background: var(--branco);
+  border: 1px solid var(--preto);
+  border-radius: var(--raio-pilula);
+  padding: var(--esp-12) var(--esp-24);
+  width: 100%;
+}
+/* Caixa de texto corrido: raio grande, mas nao a pilula inteira, senao a
+   primeira linha nasce dentro da curva. */
+textarea { resize: vertical; min-height: 130px; border-radius: var(--esp-24); }
+/* O placeholder e rotulo, nao texto: mono, caixa alta, tinta a 45%.
+   O que a pessoa digita volta a ser serifa preta. */
+input::placeholder, textarea::placeholder {
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-style: normal;
+  color: var(--tinta-suave);
+  opacity: 1;
+}
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--foco-cor); outline-offset: 2px; }
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' fill='none' stroke='%23000' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--esp-24) center;
+  padding-right: var(--esp-48);
+}
+
+
+/* ---------- Publicacoes ---------- */
+
+/* Capa de publicacao, em qualquer tamanho: a imagem sangra ate o corte; sem
+   imagem, a malha de pontos da marca sobre o tom da trilha com a marca de
+   quem publica. Vale na home, na estante e na pagina do material. */
+.bib-capa {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+  object-position: center top;
+}
+.bib-capa-marca {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: var(--esp-16);
+  overflow: hidden;
+}
+.bib-capa-marca__malha {
+  position: absolute;
+  inset: 0;
+  color: rgba(255, 255, 255, 0.35);
+  background-image: radial-gradient(circle, currentColor 1.2px, transparent 1.2px);
+  background-size: 16px 16px;
+}
+.bib-capa-marca__logo {
+  position: relative;
+  display: block;
+  width: auto;
+  max-width: 76%;
+  max-height: 40%;
+}
+.bib-capa-marca__sigla {
+  position: relative;
+  font-family: var(--mono);
+  font-size: var(--texto-p);
+  line-height: 1.35;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--preto);
+}
+
+/* Nichos: selecao multipla em pilulas, sem lista comprida de caixas. */
+.nichos { display: flex; flex-wrap: wrap; gap: var(--esp-8); }
+.nicho {
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: var(--esp-8) var(--esp-12);
+  border: 1px solid var(--preto);
+  border-radius: var(--raio-pilula);
+  background: var(--branco);
+  color: var(--preto);
+  cursor: pointer;
+  user-select: none;
+}
+.nicho:hover { background: var(--areia); }
+.nicho--marcado { background: var(--preto); color: var(--branco); }
+.nicho:focus-within { outline: 2px solid var(--foco-cor); outline-offset: 3px; }
+
+/* Linha de rede no cadastro: plataforma, perfil e seguidores lado a lado. */
+
+
+/* ---------- Passos ---------- */
+
+.passos { display: flex; gap: 0; list-style: none; padding: 0; margin: 0 0 var(--esp-32); border-bottom: 1px solid var(--linha); flex-wrap: wrap; }
+.passo {
+  display: flex; align-items: center; gap: var(--esp-8);
+  padding: var(--esp-8) var(--esp-24) var(--esp-12) 0; margin-right: var(--esp-24);
+  font-family: var(--mono);
+  font-size: var(--texto-xp); letter-spacing: 0.12em; text-transform: uppercase;
+  line-height: var(--entrelinha-rotulo);
+  color: var(--tinta-suave); margin-bottom: -1px;
+}
+/* O passo e um ponto de 15px, igual aos pontos de medida: vazado enquanto
+   falta, cheio quando concluido ou em curso. */
+.passo__ponto {
+  width: 15px; height: 15px; border-radius: var(--raio-pilula);
+  border: 1px solid var(--preto); background: transparent;
+  display: inline-block; flex: none; box-sizing: border-box;
+}
+.passo--ativo { color: var(--preto); border-bottom: 2px solid var(--preto); }
+.passo--ativo .passo__ponto { background: var(--preto); }
+.passo--concluido { color: var(--preto); }
+.passo--concluido .passo__ponto { background: var(--preto); }
+
+/* ---------- Abas ---------- */
+
+.aba {
+  font-family: var(--mono);
+  font-size: var(--texto-xp); letter-spacing: 0.13em; text-transform: uppercase;
+  line-height: var(--entrelinha-rotulo);
+  padding: var(--esp-12) var(--esp-16);
+  border: 1px solid var(--preto);
+  border-radius: var(--raio-pilula);
+  background: transparent;
+  color: var(--preto);
+  cursor: pointer;
+}
+.aba:hover { background: var(--branco); }
+.aba[aria-selected='true'],
+.aba[aria-pressed='true'] { background: var(--preto); border-color: var(--preto); color: var(--branco); }
+.aba[aria-pressed='true']:hover { background: var(--preto); }
+
+/* Filtros da lista: a mesma densidade do controle da Biblioteca. Tres linhas
+   cabem numa faixa so, e a primeira chamada entra na tela sem rolar. */
+.filtros {
+  background: var(--branco);
+  border: 1px solid var(--preto);
+  border-radius: 2px;
+  padding: var(--esp-8) var(--esp-16);
+}
+.filtros__linha {
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr);
+  gap: var(--esp-16);
+  align-items: center;
+  padding: var(--esp-8) 0;
+}
+.filtros__linha + .filtros__linha { border-top: 1px solid var(--linha); }
+.filtros__rotulo {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+}
+.filtros__opcoes { display: flex; flex-wrap: wrap; gap: 6px; }
+.filtros .aba { padding: 7px 11px; line-height: 1; letter-spacing: 0.1em; }
+
+/* ---------- Avatar ---------- */
+
+.avatar {
+  width: 48px; height: 48px; border-radius: 2px;
+  font-family: var(--mono);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: var(--texto-p); letter-spacing: 0.06em; flex: none;
+  border: 1px solid var(--preto); color: var(--preto); background: var(--areia);
+}
+.avatar--g { width: 80px; height: 80px; font-size: var(--texto-lead); }
+.avatar--p { width: 34px; height: 34px; font-size: var(--texto-xp); }
+.avatar--menta { background: var(--menta); }
+.avatar--azul { background: var(--azul); }
+.avatar--amarelo { background: var(--amarelo); }
+.avatar--rosa { background: var(--rosa); }
+.avatar--areia { background: var(--areia); }
+
+/* ---------- Listas de definicoes ---------- */
+
+.definicoes { display: grid; gap: var(--esp-24); margin: 0; }
+.definicoes--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.definicoes dt {
+  font-family: var(--mono);
+  font-size: var(--texto-xp); text-transform: uppercase; letter-spacing: 0.12em;
+  line-height: var(--entrelinha-rotulo);
+  color: var(--tinta-suave); margin-bottom: var(--esp-4);
+}
+.definicoes dd { margin: 0; color: var(--preto); font-size: var(--texto-g); line-height: var(--entrelinha-corpo); }
+
+/* ---------- Estado vazio ---------- */
+
+.vazio {
+  border: 1px dashed var(--preto);
+  border-radius: 2px;
+  padding: var(--esp-48) var(--esp-24);
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: var(--esp-16);
+  background: var(--branco);
+}
+.vazio__titulo { font-size: var(--titulo-m); line-height: var(--entrelinha-m); color: var(--preto); margin: 0; }
+.vazio__texto { margin: 0; max-width: 38ch; }
+/* A acao fica separada do texto: e a saida, nao parte do recado. */
+.vazio .btn { margin-top: var(--esp-8); }
+
+/* ---------- Hero ---------- */
+
+.hero { padding: var(--secao-y-alta) 0 var(--secao-y); }
+
+.hero__frase {
+  font-size: var(--titulo-cartaz);
+  line-height: var(--entrelinha-cartaz);
+  letter-spacing: -0.03em;
+  margin: 0 0 var(--esp-24);
+}
+
+/* ---------- O enxame e a porta, as colunas sao a casa ----------
+   O ponto do logotipo faz tres trabalhos: forma a marca (.enxame), marca cada
+   coluna (.marcador) e mede as vagas (.pontos). A cor entra so como superficie
+   de coluna e nos tres pontos da ponte. */
+
+/* A marca em movimento. O SVG acompanha a largura pedida e nunca passa do
+   bloco em que esta. Cada ponto traz o proprio deslocamento inicial em
+   --dx/--dy, na unidade do viewBox: o percurso escala junto com a marca. */
+/* overflow visible e o que importa: os pontos entram voando de FORA da caixa
+   do SVG (deslocamento de ate 38 unidades num viewBox de 94 x 23), e sem isso
+   o navegador os recorta na aresta retangular durante o movimento. */
+.enxame { display: block; max-width: 100%; height: auto; color: var(--preto); overflow: visible; }
+.enxame__ponto { animation: assentar 2.4s cubic-bezier(0.22, 0.61, 0.36, 1) forwards; }
+@keyframes assentar {
+  0%   { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+  18%  { opacity: 1; }
+  100% { transform: translate(0, 0); opacity: 1; }
+}
+
+/* A ponte: tres pontos na cor das tres colunas, que so aparecem depois que a
+   marca assentou. A cor desce para o lugar dela. */
+.ponte { display: flex; align-items: center; gap: var(--esp-8); opacity: 0; animation: surgir 0.9s ease 2.3s forwards; }
+@keyframes surgir { to { opacity: 1; } }
+.ponte__rotulo {
+  margin-left: var(--esp-8);
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  line-height: var(--entrelinha-rotulo);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+}
+
+/* As colunas: tres superficies de cor, da borda a borda da tela, separadas por
+   um fio preto. Ficam fora do .container; o respiro interno e da coluna. */
+.colunas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--preto);
+}
+.coluna {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-16);
+  min-width: 0;
+  padding: var(--esp-32) clamp(var(--esp-24), 2.7vw, 36px) var(--esp-32);
+}
+.coluna:not(:last-child) { border-right: 1px solid var(--preto); }
+.coluna--rosa { background: var(--rosa); }
+.coluna--menta { background: var(--menta); }
+.coluna--amarelo { background: var(--amarelo); }
+
+/* A coluna fora da grade (a lateral de uma chamada, por exemplo): a mesma
+   superficie, com a borda inteira, porque nao ha vizinha para partilhar o fio. */
+.coluna--solta { border: 1px solid var(--preto); border-radius: 2px; }
+.coluna--solta:not(:last-child) { border-right: 1px solid var(--preto); }
+
+/* Pecas de dentro da coluna, para as tres falarem a mesma lingua. */
+.coluna__cabeca { display: flex; align-items: center; gap: var(--esp-12); flex-wrap: wrap; }
+.coluna__titulo {
+  margin: 0;
+  font-size: var(--titulo-m);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+.coluna__linhas { display: flex; flex-direction: column; gap: var(--esp-8); }
+.coluna__linha {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--esp-16);
+  padding-bottom: var(--esp-8);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  font-size: var(--texto-m);
+  flex-wrap: wrap;
+}
+.coluna__linha .rotulo { color: var(--preto); flex: none; }
+/* O valor fica a direita enquanto cabe ao lado do rotulo; numa coluna estreita
+   desce para a linha de baixo inteiro, em vez de quebrar cifra no meio. */
+.coluna__linha > span:not(.rotulo) { flex: 1 1 120px; min-width: 0; text-align: right; }
+/* Valor que e frase (apoio sem faixa) desce sempre, alinhado a esquerda. */
+.coluna__linha--longa > span:not(.rotulo) { flex-basis: 100%; text-align: left; }
+/* O que fecha a coluna (botao, link) desce ate o pe, e as tres alinham.
+   Filho direto da coluna, um .btn ocupa a largura inteira sozinho (flex). */
+.coluna__pe { margin-top: auto; }
+
+/* Link para pular o cabecalho: fora da tela ate receber foco pelo teclado. */
+.pular {
+  position: absolute;
+  top: 0;
+  left: -9999px;
+  z-index: 100;
+  padding: var(--esp-12) var(--esp-24);
+  background: var(--preto);
+  color: var(--branco);
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.pular:focus-visible { left: 0; outline: 2px solid var(--branco); outline-offset: -6px; }
+main:focus { outline: none; }
+
+/* Carrossel da coluna: um item por vez, rolo horizontal com encaixe. As setas
+   moram na cabeca da coluna, com o contador; o trilho e o que se arrasta. */
+.carrossel__caixa { display: flex; flex-direction: column; gap: var(--esp-16); flex: 1 1 auto; min-width: 0; }
+.carrossel__nav { margin-left: auto; display: flex; align-items: center; gap: var(--esp-8); flex: none; }
+.carrossel__contador {
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  letter-spacing: 0.08em;
+  color: var(--preto);
+  margin-right: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.carrossel__seta {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--preto);
+  border-radius: var(--raio-pilula);
+  background: var(--branco);
+  color: var(--preto);
+  font-size: 15px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+.carrossel__seta:hover { background: var(--preto); color: var(--branco); }
+.carrossel {
+  display: flex;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  /* O trilho e o corpo da coluna: cresce e leva o pe de cada item ao chao. */
+  flex: 1 1 auto;
+  /* Respiro para o anel de foco dos links de dentro nao ser cortado pelo rolo.
+     O encaixe desconta o mesmo respiro, e o vao entre itens o repoe: cada
+     passo do rolo mede exatamente a largura visivel, sem o vizinho aparecer. */
+  margin: -4px;
+  padding: 4px;
+  scroll-padding-inline: 4px;
+  gap: 8px;
+}
+.carrossel::-webkit-scrollbar { display: none; }
+.carrossel__item {
+  flex: 0 0 100%;
+  min-width: 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+}
+.carrossel__conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-16);
+  width: 100%;
+  min-width: 0;
+}
+
+/* Marcador de coluna: um aglomerado de pontos onde outro site poria um icone. */
+.marcador { flex: none; }
+
+/* O hero da home: a marca se forma no centro, e so depois vem a frase. */
+.hero--enxame { padding: var(--esp-24) 0 0; }
+.hero__marca {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-24);
+  padding: var(--esp-32) 0 var(--esp-48);
+}
+.hero__marca .enxame { width: min(560px, 78vw); }
+.hero__corpo {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: var(--esp-48);
+  align-items: end;
+  padding-bottom: var(--esp-48);
+}
+.hero__acoes { display: flex; flex-direction: column; gap: var(--esp-24); align-items: flex-start; }
+
+/* Os campos da coluna de cadastro sao atalhos para o formulario, e nao
+   campos de verdade: parecem pilula de campo, mas sao links. */
+.campo-atalho {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 20px;
+  border: 1px solid var(--preto);
+  border-radius: var(--raio-pilula);
+  font-family: var(--mono);
+  font-size: var(--texto-xp);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+  text-decoration: none;
+  background: transparent;
+}
+.campo-atalho:hover { color: var(--preto); background: rgba(255, 255, 255, 0.08); }
+
+/* Pontos de medida: cada vaga e um ponto. Cheio, ocupada; vazado, aberta. */
+.pontos { display: flex; flex-wrap: wrap; gap: 7px; }
+.pontos__ponto {
+  display: block;
+  flex: none;
+  width: 15px;
+  height: 15px;
+  border-radius: var(--raio-pilula);
+  background: var(--preto);
+}
+.pontos__ponto--vazado { background: transparent; border: 1px solid var(--preto); }
+
+
+.barra-resultado {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--esp-16);
+  flex-wrap: wrap; margin: var(--esp-24) 0 var(--esp-16);
+  font-family: var(--mono);
+  font-size: var(--texto-xp); letter-spacing: 0.12em; text-transform: uppercase;
+  line-height: var(--entrelinha-rotulo); color: var(--tinta-suave);
+}
+
+.lateral { position: sticky; top: calc(var(--cabecalho-altura) + var(--esp-24)); display: flex; flex-direction: column; gap: var(--esp-16); }
+
+.ilustracao { color: var(--preto); display: block; }
+
+
+/* ---------- Responsivo ---------- */
+
+@media (max-width: 1040px) {
+  .grade--4 { grid-template-columns: repeat(2, 1fr); }
+  .grade--lateral { grid-template-columns: minmax(0, 1fr); gap: var(--esp-32); }
+  .lateral { position: static; }
+  .registro { grid-template-columns: minmax(0, 1fr); gap: var(--esp-8); }
+}
+
+@media (max-width: 780px) {
+  /* Os tres passos cabem em 375px com o respiro menor; o ultimo nao precisa de nenhum. */
+  .passo { padding-right: var(--esp-12); margin-right: var(--esp-12); }
+  .passo:last-child { padding-right: 0; margin-right: 0; }
+  .grade--2, .grade--3, .grade--4 { grid-template-columns: minmax(0, 1fr); }
+  .definicoes--2 { grid-template-columns: minmax(0, 1fr); }
+  .rodape__grade { grid-template-columns: minmax(0, 1fr); gap: var(--esp-24); }
+  /* No celular o rotulo do filtro fica em cima das pilulas. */
+  .filtros__linha { grid-template-columns: minmax(0, 1fr); gap: var(--esp-8); }
+  .passos { overflow-x: auto; flex-wrap: nowrap; }
+  .vazio { padding: var(--esp-32) var(--esp-16); }
+}
+
+@media (max-width: 760px) {
+
+  .hero__corpo { grid-template-columns: minmax(0, 1fr); gap: var(--esp-24); align-items: start; }
+  .hero__marca { padding: var(--esp-24) 0 var(--esp-32); }
+  /* As colunas empilham; o fio que as separava passa a correr embaixo. */
+  .colunas { grid-template-columns: minmax(0, 1fr); }
+  .coluna { padding: var(--esp-32) var(--margem-lateral); }
+  .coluna:not(:last-child) { border-right: 0; border-bottom: 1px solid var(--preto); }
+
+  /* Cabecalho no celular: duas faixas separadas por um fio.
+     Em cima, a marca e o idioma. Embaixo, para onde ir e o que fazer.
+     O logotipo mantem o tamanho, as tres siglas de idioma tem area de toque
+     de 44px e a navegacao ocupa a faixa de baixo inteira.
+     O corte e aqui: abaixo de 760px a linha unica ja fica sem folga em
+     espanhol, que tem os rotulos mais compridos. */
+  /* Com duas faixas a barra fica mais alta, e a ancora precisa saber disso. */
+  :root { --cabecalho-altura: 106px; }
+
+  .cabecalho__interno {
+    flex-wrap: wrap;
+    gap: var(--esp-4) var(--esp-8);
+    min-height: 0;
+    padding-top: var(--esp-4);
+    padding-bottom: var(--esp-4);
+  }
+  /* Fio que separa as duas faixas: e ele que forca a quebra de linha. */
+  .cabecalho__interno::before {
+    content: '';
+    order: 2;
+    width: 100%;
+    height: 1px;
+    background: var(--linha);
+  }
+  .cabecalho__marca { order: 0; margin-right: auto; }
+  .cabecalho__acoes { display: contents; }
+  .seletor-idioma { order: 1; }
+  .cabecalho__nav { order: 3; margin-left: 0; gap: var(--esp-12); flex-wrap: wrap; min-width: 0; }
+  .cabecalho__acoes .btn { order: 4; margin-left: auto; }
+
+  /* Sem moldura: os rotulos alinham com o logotipo e com o titulo da pagina.
+     A pagina em que se esta fica sublinhada, e nao dentro de um bloco preto,
+     que nesta largura empurraria o botao para uma terceira linha. */
+  .cabecalho__link { min-height: var(--toque); padding: 0; border: 0; }
+  .cabecalho__link[aria-current='page'] {
+    background: transparent;
+    color: var(--preto);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+  }
+  .cabecalho__acoes .btn--pequeno { min-height: var(--toque); padding: var(--esp-8); }
+  .seletor-idioma__opcao { min-height: var(--toque); min-width: var(--toque); }
+}
+
+/* Onde o ponteiro e o dedo, todo controle chega aos 44px, sem mudar a fonte. */
+@media (pointer: coarse) {
+  .aba, .nicho, .btn--discreto, .cabecalho__link, .cabecalho__acoes .btn--pequeno {
+    min-height: var(--toque);
+    display: inline-flex;
+    align-items: center;
+  }
+  .seletor-idioma__opcao { min-height: var(--toque); min-width: var(--toque); }
+  /* As pilulas densas (filtros da lista e do acervo) crescem menos, para o
+     controle continuar denso: 35px de altura e mais vao entre elas. */
+  .filtros .aba, .bib-pilula { min-height: 0; padding-top: 12px; padding-bottom: 12px; }
+  .filtros__opcoes, .bib-opcoes { gap: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+  /* Sem animacao, a marca ja nasce formada e a ponte ja esta la. */
+  .enxame__ponto { animation: none; }
+  .ponte { opacity: 1; animation: none; }
+}
+
+/* ---------- Impressao ----------
+   O papel guarda a chamada e o material: fica o conteudo e o endereco dos
+   links. Sai a navegacao, o fundo colorido e todo controle que so serve na
+   tela. Cartao nao quebra entre paginas. */
+
+@media print {
+  @page { margin: 16mm 14mm; }
+
+  :root {
+    --margem-lateral: 0;
+    --secao-y: var(--esp-16);
+    --secao-y-curta: var(--esp-12);
+    --secao-y-alta: var(--esp-16);
+  }
+
+  html, body {
+    background: #fff;
+    color: #000;
+    font-size: 11pt;
+    display: block;
+  }
+
+  .cabecalho,
+  .rodape,
+  .seletor-idioma,
+  .passos,
+  .filtros,
+  .btn,
+  .nichos { display: none !important; }
+
+  .secao, .secao--curta, .secao--alta, .hero { padding: 0 0 var(--esp-16); }
+  .container, .container-estreito { max-width: none; padding: 0; }
+
+  .grade, .grade--2, .grade--3, .grade--4, .grade--lateral {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--esp-12);
+  }
+  .lateral { position: static; }
+
+  /* Nada de cartao partido ao meio, nem titulo orfao no pe da folha. */
+  .cartao,
+  .registro,
+  .destaque,
+  .vazio,
+  .definicoes > div,
+  .tabela tr { break-inside: avoid; }
+  h1, h2, h3, h4 { break-after: avoid; }
+
+  /* Fundo colorido nao imprime bem: fica o preto sobre o branco. */
+  .secao--fundo, .secao--menta, .secao--azul, .secao--amarelo, .secao--rosa,
+  .cartao--menta, .cartao--azul, .cartao--amarelo, .cartao--rosa, .cartao--areia,
+  .coluna--rosa, .coluna--menta, .coluna--amarelo,
+  .chip, .destaque, .aviso-papel, .avatar, .livro__capa {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  /* No papel nao ha tempo: a marca sai formada e a ponte, visivel. */
+  .enxame__ponto { animation: none !important; }
+  .ponte { opacity: 1 !important; animation: none !important; }
+  .assinatura-indica__ponto { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .secao--preto {
+    background: #fff !important;
+    color: #000 !important;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+  }
+  .secao--preto h1, .secao--preto h2, .secao--preto h3, .secao--preto h4,
+  .secao--preto a, .secao--preto .olho, .secao--preto .rotulo,
+  .secao--preto .registro__rotulo, .secao--preto .texto-guia,
+  .secao--preto .texto-pequeno, .secao--preto .texto-secundario { color: #000 !important; }
+  .chip, .selo { border: 1px solid #000; }
+  .selo--ativo { background: #fff !important; color: #000 !important; }
+  .cartao--marcado::before { background: #000; height: 2px; }
+  .malha, .capa__malha { background-image: none; }
+
+  .tabela-rolagem { overflow: visible; }
+  .tabela { min-width: 0; }
+  .tabela td, .tabela th { color: #000; }
+
+  /* No papel o link precisa dizer para onde vai. */
+  a { color: #000; text-decoration: underline; }
+  a[href^='http']::after {
+    content: ' <' attr(href) '>';
+    font-family: var(--mono);
+    font-size: 0.85em;
+    letter-spacing: 0;
+    word-break: break-all;
+  }
+}
+
+/* Aplicação da marca INDICA em todas as áreas. */
+:root { --indica-azul: #2f9bff; --indica-verde: #8ace2b; --indica-rosa: #ff2e9a; color-scheme: dark; }
+body { background: #000; }
+::selection { background: #ffffff33; color: #fff; }
+.cabecalho { background: #000000ed; backdrop-filter: blur(16px); border-color: var(--linha); }
+.cabecalho::before { content: none; }
+.cabecalho__link { text-transform: none; letter-spacing: 0; font-size: var(--texto-m); }
+.cabecalho__link[aria-current='page'] { color: #fff; background: #ffffff0d; border-color: #ffffff33; }
+.cabecalho__marca img { max-width: 110px; }
+.hero { background: #000; }
+.hero__marca { gap: var(--esp-16); padding-top: var(--esp-64); }
+.hero__marca .marca-indica { width: min(420px, 72vw) !important; }
+.marca-indica img { width: 100% !important; height: auto !important; }
+.hero__frase { font-family: 'Jost', sans-serif; font-weight: 300; letter-spacing: -.035em; }
+.hero__marca .olho { color: var(--tinta-suave); }
+.ponte { opacity: 1; animation: none; }
+.colunas { border-color: var(--linha); }
+.coluna { position: relative; border-top: 1px solid var(--linha); }
+.coluna--rosa { border-top-color: var(--linha); }
+.coluna--menta { border-top-color: var(--linha); }
+.coluna--amarelo { border-top-color: var(--linha); }
+.coluna:not(:last-child), .coluna--solta, .rodape { border-color: var(--linha); }
+.coluna--rosa .coluna__cabeca { color: var(--tinta-media); }
+.coluna--menta .coluna__cabeca { color: var(--tinta-media); }
+.coluna--amarelo .coluna__cabeca { color: var(--tinta-media); }
+.coluna__cabeca .marcador { color: inherit; }
+.coluna__titulo { font-family: 'Jost', sans-serif; font-weight: 400; }
+.btn { border-radius: 999px; border-color: #ffffff30; }
+.btn--primario { background: #f3f5f8; color: #080808; border-color: #f3f5f8; }
+.btn--primario:hover:not(:disabled) { background: #dfe2e6; color: #080808; border-color: #dfe2e6; }
+.btn--secundario:hover:not(:disabled) { background: #ffffff12; color: var(--preto); }
+.campo-atalho, .campo__input, input, select, textarea { border-color: #ffffff30; }
+.rodape { background: #000; }
+.rodape__tagline { color: var(--tinta-suave); }
+.cartao, .coluna--solta, .destaque { border-radius: 16px; }
+@media (max-width: 760px) { .hero__marca { padding-top: var(--esp-32); } .cabecalho__interno { gap: var(--esp-12); } .cabecalho__marca img { max-width: 85px; } }
+@media print { body { background: white; color: black; } .marca-indica img, .cabecalho__marca img, .rodape__marca img { filter: invert(1); } }
+
+/* Mesma assinatura cromática e ordem de agenciaindica.com. */
+:root {
+  --indica-grad-blue: linear-gradient(150deg,#62c2ff,#2f6df0);
+  --indica-grad-green: linear-gradient(150deg,#c2ee5a,#5cbf1f);
+  --indica-grad-pink: linear-gradient(140deg,#8ace2b,#ff2e9a);
+}
+.assinatura-indica { display: inline-flex; align-items: center; gap: calc(var(--ponto-tamanho, 14px) * 11 / 14); flex: none; }
+.assinatura-indica__ponto { display: block; width: var(--ponto-tamanho, 14px); height: var(--ponto-tamanho, 14px); border-radius: 50%; border: 0; box-shadow: 0 2px 10px rgba(0,0,0,.4); flex: none; }
+.assinatura-indica__ponto--azul { background: var(--indica-grad-blue); }
+.assinatura-indica__ponto--verde { background: var(--indica-grad-green); }
+.assinatura-indica__ponto--rosa { background: var(--indica-grad-pink); }
+
+/* A carinha acompanha os caminhos da plataforma, sem palco de vídeo. */
+.hero--criadores { padding: clamp(38px, 5.6vw, 72px) 0; }
+.hero-criadores { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5.5vw, 76px); align-items: center; }
+.hero-criadores__assinatura { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+.hero-criadores__assinatura .olho { color: var(--tinta-suave); margin: 0; }
+.hero-criadores .hero__frase { font-size: clamp(2.4rem, 4.2vw, 3.7rem); max-width: 17ch; margin-bottom: 22px; }
+.hero-criadores__introducao { color: var(--tinta-suave); font-size: var(--texto-m); max-width: 34ch; line-height: 1.6; margin: 0; }
+.indica-caminhos { min-width: 0; }
+.indica-caminhos__carinha { display: grid; place-items: center; width: 160px; height: 120px; pointer-events: none; }
+.indica-caminhos__carinha > svg { width: 120px; height: 120px; }
+.indica-caminhos__links { min-width: 0; }
+.indica-caminhos__link { display: grid; grid-template-columns: 160px minmax(0, 1fr) 20px; align-items: center; gap: 18px; padding: 24px 0; border-bottom: 1px solid var(--linha); text-decoration: none; }
+.indica-caminhos__link:first-child { border-top: 1px solid var(--linha); }
+.indica-caminhos__conteudo { display: grid; gap: 5px; }
+.indica-caminhos__titulo { font-family: 'Jost', sans-serif; font-size: 20px; line-height: 1.2; }
+.indica-caminhos__descricao { color: var(--tinta-suave); font-size: 12px; line-height: 1.5; }
+.indica-caminhos__seta { font-size: 20px; color: var(--tinta-suave); transition: transform .25s ease, color .25s ease; }
+.indica-caminhos__link:hover { text-decoration: none; }
+.indica-caminhos__link:hover .indica-caminhos__titulo, .indica-caminhos__link:focus-visible .indica-caminhos__titulo { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
+.indica-caminhos__link:hover .indica-caminhos__seta, .indica-caminhos__link:focus-visible .indica-caminhos__seta { transform: translateX(3px); color: #fff; }
+.cabecalho-pagina__abertura { display: flex; align-items: center; gap: clamp(24px, 4vw, 48px); min-width: 0; }
+.cabecalho-pagina__marca { display: grid; place-items: center; width: 176px; height: 132px; flex: none; }
+.cabecalho-pagina__marca > svg { width: 132px; height: 132px; }
+.cabecalho-pagina__conteudo { min-width: 0; }
+.cabecalho-pagina__abertura h1 { margin-bottom: 0; }
+.cabecalho-pagina__abertura .olho { margin-bottom: 14px; }
+.indica-rosto { display: block; max-width: 100%; height: auto; filter: invert(1); mix-blend-mode: screen; flex: none; }
+.confirmacao-indica { display: flex; align-items: center; gap: 22px; }
+.confirmacao-indica > svg { width: 90px; flex: none; }
+@media (min-width: 761px) and (max-width: 1040px) { .hero-criadores { gap: 28px; } .indica-caminhos__titulo { font-size: 18px; } .indica-caminhos__link { grid-template-columns: 128px minmax(0, 1fr) 18px; gap: 12px; } .indica-caminhos__carinha { width: 128px; height: 96px; } .indica-caminhos__carinha > svg { width: 96px; height: 96px; } }
+@media (max-width: 760px) {
+  .hero-criadores { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .hero-criadores .hero__frase { max-width: 20ch; font-size: clamp(2rem, 5.8vw, 2.65rem); margin-bottom: 16px; }
+  .hero-criadores__assinatura { margin-bottom: 20px; }
+  .hero-criadores__introducao { max-width: 40ch; }
+  .indica-caminhos__carinha { width: 128px; height: 96px; }
+  .indica-caminhos__carinha > svg { width: 96px; height: 96px; }
+  .indica-caminhos__link { padding: 20px 0; grid-template-columns: 128px minmax(0, 1fr) 18px; gap: 12px; }
+  .indica-caminhos__titulo { font-size: 19px; }
+  .indica-caminhos__descricao { font-size: 11px; }
+  .cabecalho-pagina__abertura { gap: 20px; }
+  .cabecalho-pagina__marca { width: 128px; height: 96px; }
+  .cabecalho-pagina__marca > svg { width: 96px; height: 96px; }
+  .cabecalho-pagina__abertura h1 { font-size: clamp(1.5rem, 4.5vw, 2rem); overflow-wrap: anywhere; }
+  .confirmacao-indica { gap: 12px; }
+  .confirmacao-indica > svg { width: 70px; }
+}
+@media (max-width: 360px) {
+  .indica-caminhos__link { grid-template-columns: 112px minmax(0, 1fr) 18px; gap: 10px; }
+  .indica-caminhos__carinha, .cabecalho-pagina__marca { width: 112px; height: 84px; }
+  .indica-caminhos__carinha > svg, .cabecalho-pagina__marca > svg { width: 84px; height: 84px; }
+  .indica-caminhos__titulo { font-size: 17px; }
+  .cabecalho-pagina__abertura { gap: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .indica-caminhos__seta { transition: none; } }
+@media print { .indica-caminhos__carinha { display: none; } .indica-caminhos { display: block; } .indica-rosto { filter: none; mix-blend-mode: normal; } }

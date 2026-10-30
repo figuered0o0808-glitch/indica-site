@@ -1,0 +1,35 @@
+.numeros {
+  container-type: inline-size;
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 24px 56px;
+  margin: 0;
+  padding: 24px 0;
+  border-block: 1px solid var(--linha);
+}
+.numeros > div { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.numeros dt {
+  color: var(--tinta-suave);
+  font-size: 10px;
+  letter-spacing: .12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+.numeros dd { margin: 0; font-family: 'Jost', sans-serif; line-height: 1; font-variant-numeric: tabular-nums; }
+.orcamento dd { display: flex; flex-direction: column; gap: 4px; }
+.ate { font-size: 15px; font-weight: 400; line-height: 1.2; }
+.valor { font-size: clamp(2.25rem, 8cqi, 4.75rem); font-weight: 500; letter-spacing: -.045em; white-space: nowrap; }
+.propostas { padding-bottom: 3px; }
+.propostas dd { font-size: clamp(2rem, 5cqi, 3.25rem); font-weight: 400; letter-spacing: -.035em; }
+.compacto { gap: 20px; padding: 22px 0; }
+.compacto .orcamento { flex-basis: 100%; }
+.compacto .valor { font-size: clamp(2rem, 14cqi, 3.5rem); }
+.compacto .propostas { flex-direction: row-reverse; justify-content: flex-end; align-items: center; gap: 12px; padding: 0; }
+.compacto .propostas dt { max-width: 13ch; }
+.compacto .propostas dd { font-size: 32px; }
+@media (max-width: 480px) {
+  .numeros { gap: 24px; }
+  .numeros:not(.compacto) .orcamento { flex-basis: 100%; }
+  .numeros:not(.compacto) .propostas { flex-direction: row-reverse; justify-content: flex-end; align-items: center; gap: 16px; }
+}

@@ -1,0 +1,218 @@
+[
+  {
+    "slug": "desenho-economico-mercado-influencia",
+    "titulo": "El diseño económico del mercado de influencia",
+    "trilha": "organizacoes",
+    "autoria": [
+      "Francisco Figueiredo"
+    ],
+    "organizacao": "INDICA",
+    "logoOrganizacao": "/organizacoes/indica.png",
+    "tema": "Economía de la influencia",
+    "palavrasChave": [
+      "La economía de los influencers",
+      "Mercado de influencia",
+      "Atención",
+      "Publicidad",
+      "Creadores de contenido"
+    ],
+    "resumo": "Introducción a la serie. Describe los participantes del mercado de influencia, qué entrega y recibe cada uno y por dónde circulan la atención y el dinero. Presenta los campos que abarca la serie.",
+    "formato": "Introducción",
+    "atualizadoEm": "2026-10-30",
+    "secoes": [
+      {
+        "titulo": "Serie",
+        "paragrafos": [
+          "La economía de los influencers"
+        ]
+      },
+      {
+        "titulo": "Sobre la publicación",
+        "paragrafos": [
+          "Este texto abre la serie La economía de los influencers. Describe el mercado del que parten los demás estudios y explica por qué merece ser estudiado con la teoría económica."
+        ]
+      },
+      {
+        "titulo": "Texto completo",
+        "paragrafos": [
+          "Los PDF están disponibles en portugués (13 páginas) e inglés (13 páginas). No hay una versión en español."
+        ]
+      }
+    ],
+    "arquivos": [
+      {
+        "idioma": "Portugués",
+        "arquivo": "/materiais/desenho-economico-mercado-influencia-pt.pdf"
+      },
+      {
+        "idioma": "Inglés",
+        "arquivo": "/materiais/desenho-economico-mercado-influencia-en.pdf"
+      }
+    ],
+    "capa": "/materiais/capas/desenho-economico-mercado-influencia-pt.png"
+  },
+  {
+    "slug": "modelo-economico-redes-algoritmicas",
+    "titulo": "Un modelo económico para el mercado de contenido en redes sociales algorítmicas",
+    "trilha": "organizacoes",
+    "autoria": [
+      "Francisco Figueiredo",
+      "Lauanny Brandão",
+      "Pedro Bordinhão"
+    ],
+    "organizacao": "INDICA",
+    "tema": "Economía de la atención",
+    "palavrasChave": [
+      "La economía de los influencers",
+      "Economía de la atención",
+      "Redes sociales algorítmicas",
+      "Momento de publicación",
+      "Demanda latente",
+      "Oferta activa",
+      "Ventana de publicación"
+    ],
+    "resumo": "Una teoría del momento de publicación en la disputa por la atención: demanda latente, oferta activa y ventana óptima de publicación. Trata la atención como un recurso escaso y deriva la condición que cierra la ventana, cuando la oferta activa empieza a crecer más rápido que la demanda.",
+    "formato": "Artículo académico",
+    "atualizadoEm": "2026-10-29",
+    "secoes": [
+      {
+        "titulo": "Serie",
+        "paragrafos": [
+          "La economía de los influencers"
+        ]
+      },
+      {
+        "titulo": "Sobre la publicación",
+        "paragrafos": [
+          "El artículo integra la serie La economía de los influencers. Propone un modelo económico para estudiar el momento de publicación y la competencia entre contenidos por la atención en las redes sociales algorítmicas."
+        ]
+      },
+      {
+        "titulo": "Texto completo",
+        "paragrafos": [
+          "Los PDF están disponibles en portugués (48 páginas) e inglés (47 páginas). No hay una versión en español."
+        ]
+      }
+    ],
+    "arquivos": [
+      {
+        "idioma": "Portugués",
+        "arquivo": "/materiais/modelo-economico-redes-algoritmicas-pt.pdf"
+      },
+      {
+        "idioma": "Inglés",
+        "arquivo": "/materiais/modelo-economico-redes-algoritmicas-en.pdf"
+      }
+    ],
+    "logoOrganizacao": "/organizacoes/indica.png",
+    "capa": "/materiais/capas/modelo-economico-redes-algoritmicas-pt.png"
+  },
+  {
+    "slug": "formacao-preco-mercado-influencia",
+    "titulo": "Formación del precio en el mercado de influencia",
+    "trilha": "organizacoes",
+    "autoria": [
+      "Francisco Figueiredo"
+    ],
+    "organizacao": "INDICA",
+    "logoOrganizacao": "/organizacoes/indica.png",
+    "tema": "Economía de la influencia",
+    "palavrasChave": [
+      "La economía de los influencers",
+      "Formación de precios",
+      "Contenido patrocinado",
+      "Acervo reputacional",
+      "Credibilidad",
+      "Negociación"
+    ],
+    "resumo": "Por qué el precio de un contenido patrocinado supera el costo de producción y varía entre creadores semejantes. El artículo analiza el acervo reputacional y la negociación entre los costos y riesgos del creador y lo que el anunciante puede y quiere pagar.",
+    "formato": "Artículo académico",
+    "atualizadoEm": "2026-10-29",
+    "secoes": [
+      {
+        "titulo": "Serie",
+        "paragrafos": [
+          "La economía de los influencers"
+        ]
+      },
+      {
+        "titulo": "Sobre la publicación",
+        "paragrafos": [
+          "Este artículo integra la serie La economía de los influencers. Examina cómo la credibilidad, el afecto y la legitimidad entran en el precio del contenido patrocinado, negociado entre un mínimo del creador y un máximo del anunciante."
+        ]
+      },
+      {
+        "titulo": "Texto completo",
+        "paragrafos": [
+          "Los PDF están disponibles en portugués (37 páginas) e inglés (36 páginas). No hay una versión en español."
+        ]
+      }
+    ],
+    "arquivos": [
+      {
+        "idioma": "Portugués",
+        "arquivo": "/materiais/formacao-preco-mercado-influencia-pt.pdf"
+      },
+      {
+        "idioma": "Inglés",
+        "arquivo": "/materiais/formacao-preco-mercado-influencia-en.pdf"
+      }
+    ],
+    "capa": "/materiais/capas/formacao-preco-mercado-influencia-pt.png"
+  },
+  {
+    "slug": "quem-banca-a-banda-escolhe-a-musica",
+    "titulo": "Quien paga a la banda elige la música",
+    "trilha": "criadores",
+    "autoria": [
+      "Francisco Figueiredo",
+      "Cecília Moreyra de Figueiredo"
+    ],
+    "organizacao": "INDICA",
+    "logoOrganizacao": "/organizacoes/indica.png",
+    "tema": "Publicidad y regulación",
+    "palavrasChave": [
+      "Análisis",
+      "Apuestas",
+      "Publicidad",
+      "Influencers",
+      "Regulación",
+      "Entremídias",
+      "UFRRJ"
+    ],
+    "resumo": "Análisis de INDICA en colaboración con Entremídias, el Laboratorio de Educación Mediática de la carrera de Periodismo de la UFRRJ, sobre la publicidad de apuestas, los discursos de los influencers y la regulación del mercado de influencia.",
+    "formato": "Análisis",
+    "atualizadoEm": "2026-10-29",
+    "secoes": [
+      {
+        "titulo": "Serie",
+        "paragrafos": [
+          "Análisis"
+        ]
+      },
+      {
+        "titulo": "Sobre la publicación",
+        "paragrafos": [
+          "Primera publicación de la serie Análisis, realizada por INDICA en colaboración con Entremídias, el Laboratorio de Educación Mediática de la carrera de Periodismo de la UFRRJ. El texto tiene dos partes: La manada, sobre la presencia de las empresas de apuestas en el mercado de influencia, y El coro, sobre los discursos de los influencers y la regulación."
+        ]
+      },
+      {
+        "titulo": "Texto completo",
+        "paragrafos": [
+          "Los PDF están disponibles en portugués (27 páginas) e inglés (27 páginas). No hay una versión en español."
+        ]
+      }
+    ],
+    "arquivos": [
+      {
+        "idioma": "Portugués",
+        "arquivo": "/materiais/quem-banca-a-banda-escolhe-a-musica-pt.pdf"
+      },
+      {
+        "idioma": "Inglés",
+        "arquivo": "/materiais/quem-banca-a-banda-escolhe-a-musica-en.pdf"
+      }
+    ],
+    "capa": "/materiais/capas/quem-banca-a-banda-escolhe-a-musica-pt.jpg"
+  }
+]

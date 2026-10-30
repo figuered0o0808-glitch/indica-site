@@ -1,0 +1,175 @@
+[
+  {
+    "slug": "carros-eletricos-no-brasil",
+    "titulo": "Carros elétricos no Brasil: chamada pública de comunicação digital",
+    "organizacao": "INDICA",
+    "logoOrganizacao": "/organizacoes/indica.png",
+    "status": "consulta",
+    "tipo": "pauta-especifica",
+    "modalidade": "Chamada pública",
+    "publico": "ambos",
+    "resumo": "Seleção de soluções de comunicação científica, educativa e de conscientização social sobre veículos elétricos no Brasil. O edital prevê de 3 a 14 propostas e orçamento global de até R$ 100 mil.",
+    "proponente": "INDICA",
+    "apresentacao": [
+      "A INDICA torna pública a chamada para recebimento e seleção de propostas de soluções de comunicação digital. Podem participar criadores de conteúdo, influenciadores digitais, agências de comunicação, coletivos criativos ou de mídia e produtores independentes.",
+      "O objetivo é ampliar a conscientização pública sobre a transição para a mobilidade sustentável no Brasil, democratizando informações sobre custos de aquisição e manutenção de veículos limpos, benefícios ambientais e sociais da eletrificação e políticas públicas como o Programa Mover.",
+      "O foco é o ecossistema digital: redes sociais, plataformas de vídeo, áudio e mídias online. Também são admitidas e incentivadas ações presenciais ou intervenções de rua, desde que integradas à estratégia de distribuição e amplificação digital."
+    ],
+    "escopo": [
+      "Pessoas físicas, incluindo criadores de conteúdo e influenciadores digitais, e pessoas jurídicas, incluindo agências, produtoras e coletivos de mídia, brasileiras ou residentes no Brasil.",
+      "O documento inclui MEI, EIRELI e sociedades limitadas entre as pessoas jurídicas elegíveis.",
+      "Propostas técnicas e financeiras de comunicação científica, educativa e de conscientização social sobre os veículos elétricos no Brasil.",
+      "Soluções digitais em vídeo, áudio, texto, carrosséis educativos e outros formatos; ações presenciais são admitidas quando integradas aos canais digitais.",
+      "As propostas devem abordar um ou mais eixos do briefing orientador: custos e acessibilidade; políticas públicas e Programa Mover; sustentabilidade e transição energética; mitos e fatos da eletrificação."
+    ],
+    "naoApoiado": [],
+    "criteriosDescricao": "A comissão avaliadora fará análise qualitativa e técnica, sem atribuição de notas numéricas.",
+    "criterios": [
+      {
+        "titulo": "Aderência temática e qualidade da solução",
+        "descricao": "Alinhamento com o briefing orientador, criatividade da abordagem e relevância da solução de comunicação digital para a conscientização sobre veículos elétricos no Brasil."
+      },
+      {
+        "titulo": "Linguagem e comunicação científico-educativa",
+        "descricao": "Clareza conceitual, rigor técnico e capacidade de traduzir temas econômicos e ambientais complexos em linguagem atraente, inclusiva e de alto impacto."
+      },
+      {
+        "titulo": "Capacidade operacional e histórico",
+        "descricao": "Qualidade técnica da equipe ou do criador, histórico de projetos bem-sucedidos e capacidade comprovada de execução dentro dos prazos do cronograma."
+      },
+      {
+        "titulo": "Eficiência orçamentária e custo-benefício",
+        "descricao": "Coerência da proposta financeira com o escopo, valorizando a otimização de recursos e a capacidade de operar por valores eficientes abaixo de R$ 25.000,00."
+      },
+      {
+        "titulo": "Estratégia de integração e distribuição",
+        "descricao": "Consistência do plano de veiculação digital e, quando houver ações presenciais ou de rua, efetividade de sua integração e amplificação junto ao público online."
+      }
+    ],
+    "banca": [],
+    "bancaDescricao": "A seleção será realizada por uma comissão avaliadora. O documento não identifica nominalmente seus integrantes.",
+    "distribuicao": [
+      {
+        "faixa": "Propostas selecionadas",
+        "quantidade": "De 3 a 14",
+        "observacao": "A quantidade depende dos perfis dos proponentes e dos valores apresentados."
+      },
+      {
+        "faixa": "Propostas acima de R$ 25.000,00",
+        "quantidade": "No máximo 2",
+        "observacao": "O edital informa alta probabilidade de contemplação de apenas uma proposta nessa faixa."
+      }
+    ],
+    "valorTotal": 100000,
+    "valorTotalAte": true,
+    "faixaApoio": null,
+    "apoioDescricao": "Valor definido por proposta, sujeito à avaliação e a ajustes de escopo e orçamento.",
+    "vagas": {
+      "min": 3,
+      "max": 14
+    },
+    "inscricoesAte": "2026-10-31",
+    "cronograma": [
+      {
+        "etapa": "Inscrições e envio de propostas",
+        "data": "2026-10-28",
+        "dataFim": "2026-10-31"
+      },
+      {
+        "etapa": "Triagem e avaliação de propostas pela banca",
+        "data": "2026-11-01",
+        "dataFim": "2026-11-11"
+      },
+      {
+        "etapa": "Divulgação do resultado preliminar",
+        "data": "2026-11-11"
+      },
+      {
+        "etapa": "Interposição de recursos (48 horas)",
+        "data": "2026-11-12",
+        "dataFim": "2026-11-13"
+      },
+      {
+        "etapa": "Contratação, alinhamento e briefing técnico",
+        "data": "2026-11-12",
+        "dataFim": "2026-11-27"
+      },
+      {
+        "etapa": "Produção, validação e publicação dos conteúdos",
+        "data": "2026-11-12",
+        "dataFim": "2026-11-18"
+      },
+      {
+        "etapa": "Consolidação de métricas e entrega de relatório",
+        "data": "2026-11-19",
+        "dataFim": "2026-11-30"
+      }
+    ],
+    "resultado": null,
+    "arquivoEdital": {
+      "arquivo": "/editais/carros-eletricos-brasil.pdf",
+      "idioma": "pt",
+      "paginas": 5
+    },
+    "secoesComplementares": [
+      {
+        "id": "regras-orcamentarias",
+        "titulo": "Regras orçamentárias",
+        "itens": [
+          "O orçamento global é de até R$ 100.000,00. A organização não é obrigada a investir a totalidade desse valor; o aporte depende da quantidade, viabilidade e relevância das propostas aprovadas.",
+          "Os valores poderão variar dentro do orçamento global, de acordo com o escopo e o alcance de cada projeto. O documento não fixa uma faixa única de apoio por proposta.",
+          "Serão selecionadas no mínimo 3 e no máximo 14 propostas. No máximo duas poderão ter valor individual superior a R$ 25.000,00, com alta probabilidade, segundo o edital, de contemplação de apenas uma nessa faixa.",
+          "A comissão priorizará propostas eficientes e capazes de operar com custos inferiores a R$ 25.000,00, permitindo maior diversidade de canais de comunicação.",
+          "A organização poderá propor adequações de escopo e ajustes orçamentários como condição para celebrar o contrato, sem obrigação de aprovar integralmente o valor solicitado."
+        ]
+      },
+      {
+        "id": "documentacao",
+        "titulo": "Documentação e informações exigidas",
+        "itens": [
+          "Identificação oficial: RG ou CNH para pessoas físicas; comprovante de CNPJ e contrato social ou estatuto vigente para pessoas jurídicas.",
+          "Apresentação do proponente, agência ou coletivo, com breve histórico, portfólio institucional ou perfil profissional dos envolvidos.",
+          "Links atualizados dos perfis, canais ativos e/ou portfólio de conteúdos digitais produzidos anteriormente.",
+          "Mídia kit atualizado ou relatórios analíticos oficiais das plataformas, com alcance, engajamento e perfil demográfico totalmente abertos para verificação da comissão.",
+          "Proposta técnica e financeira: formatos digitais, plano de distribuição, linha editorial, cronograma e planilha orçamentária discriminada. Ações de rua ou presenciais devem explicar sua integração ao ecossistema digital."
+        ]
+      },
+      {
+        "id": "obrigacoes",
+        "titulo": "Obrigações e contrapartidas dos selecionados",
+        "itens": [
+          "Executar e veicular a solução conforme a proposta aprovada e o briefing orientador do Anexo I.",
+          "Submeter roteiros, artes, planos de ações de rua e prévias dos conteúdos à validação técnica da INDICA antes da veiculação.",
+          "Manter as métricas de alcance, impressões, visualizações completas, engajamento, salvamentos e retenção abertas para acompanhamento e auditoria em tempo real pela INDICA.",
+          "Manter as publicações digitais ativas e publicamente acessíveis por pelo menos um ano após a publicação.",
+          "Entregar o relatório consolidado de resultados no prazo previsto no cronograma.",
+          "Identificar claramente o conteúdo educativo patrocinado ou a parceria, conforme as diretrizes regulatórias das redes sociais."
+        ]
+      },
+      {
+        "id": "briefing",
+        "titulo": "Anexo I — briefing orientador",
+        "paragrafos": [
+          "A comunicação deve considerar os desafios econômicos e estruturais da mobilidade elétrica no Brasil, incluindo o custo de aquisição e a infraestrutura necessária à adoção pelo consumidor.",
+          "As propostas devem abordar um ou mais dos eixos abaixo. Podem combinar vídeos curtos, Reels ou TikTok, vídeos longos para YouTube, podcasts, carrosséis educativos, artigos e threads. Ações presenciais são opcionais e devem gerar conteúdo e engajamento para as plataformas digitais."
+        ],
+        "itens": [
+          "Eixo A — Custos e acessibilidade: compra, manutenção, abastecimento ou recarga e depreciação em comparação com veículos a combustão.",
+          "Eixo B — Políticas públicas e Programa Mover: diretrizes, incentivos, produção nacional e descarbonização.",
+          "Eixo C — Sustentabilidade e transição energética: redução das emissões de gases de efeito estufa e melhoria da qualidade do ar nas metrópoles.",
+          "Eixo D — Mitos e fatos da eletrificação: autonomia das baterias, tempo de recarga e descarte de componentes.",
+          "Tom informativo e fundamentado, com dados oficiais e linguagem acessível; abordagem construtiva, capaz de estimular reflexão crítica e debate consciente.",
+          "Acessibilidade e inclusão: legendas, áudio límpido e recursos visuais didáticos."
+        ]
+      },
+      {
+        "id": "recursos",
+        "titulo": "Recursos e disposições gerais",
+        "paragrafos": [
+          "O resultado preliminar admite recurso em até 48 horas após sua divulgação. O envio deverá ocorrer pelo canal oficial indicado na publicação do resultado.",
+          "Casos omissos e dúvidas sobre o edital serão resolvidos pela comissão organizadora da INDICA."
+        ]
+      }
+    ]
+  }
+]
