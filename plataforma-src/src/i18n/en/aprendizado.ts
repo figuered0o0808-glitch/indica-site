@@ -2,11 +2,11 @@
 export const aprendizado = {
   indice: {
     olho: 'Library',
-    titulo: 'INDICA publications',
+    titulo: 'Library',
     /* So na etiqueta <meta>: a pagina nao repete o titulo em subtitulo. */
-    descricao: 'INDICA articles and analyses on the influence market, with full texts in PDF.',
-    materiaisTitulo: 'Publications',
-    materiaisAcao: 'See all publications',
+    descricao: 'A library for collecting articles, guides and references from different authors and organizations.',
+    materiaisTitulo: 'Materials',
+    materiaisAcao: 'See all materials',
     cursosTitulo: 'Courses',
     cursosVazio: 'No course published.',
     /* Sem turma publicada, o que a pagina de cursos tem sao as condicoes. */
@@ -52,13 +52,13 @@ export const aprendizado = {
     irAoPainel: 'See in the dashboard',
     voltarCatalogo: 'See the courses',
     vazioTitulo: 'No course published',
-    vazioAcao: 'See the publications',
+    vazioAcao: 'Explore the library',
   },
   materiais: {
     olho: 'Library',
-    titulo: 'Publications',
+    titulo: 'Materials',
     /* So na etiqueta <meta>. */
-    descricao: 'INDICA articles and analyses on the influence market.',
+    descricao: 'A collection for gathering articles, guides and references from different authors and organizations.',
     trilha: 'Track',
     trilhaCriadores: 'For creators',
     trilhaOrganizacoes: 'For organizations',
@@ -86,7 +86,7 @@ export const aprendizado = {
     maisDaOrganizacao: 'More from',
     mesmoTema: 'Same topic',
     vazioTitulo: 'No material published',
-    vazioAcao: 'See the publications',
+    vazioAcao: 'Explore the library',
     /* Modelos de data: o acervo mostra a data em cada cartão e na ficha. */
     meses: [
       'January', 'February', 'March', 'April', 'May', 'June',

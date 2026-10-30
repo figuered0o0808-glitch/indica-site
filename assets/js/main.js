@@ -5,7 +5,7 @@
   /* ---------- i18n (EN dictionary; PT lives in the HTML) ---------- */
   var EN = {
     'nav.about': 'About', 'nav.work': 'Our work', 'nav.productions': 'Productions',
-    'nav.pubs': 'Library', 'nav.platform': 'Platform', 'nav.network': 'Network', 'nav.services': 'Services', 'nav.cta': 'Get in touch',
+    'nav.pubs': 'Publications', 'nav.platform': 'Platform', 'nav.network': 'Network', 'nav.services': 'Services', 'nav.cta': 'Get in touch',
     'pubs.kicker': 'Our publications',
     'pubs.h2': "INDICA also<br>generates <span class='b'>knowledge</span>.",
     'pubs.lead': 'Beyond campaigns and productions, we publish articles and reports on the influence ecosystem, communication and public opinion.',
@@ -28,10 +28,10 @@
     'pubs.banda.t': 'Whoever pays the piper calls the tune',
     'pubs.banda.d': 'An analysis by INDICA in partnership with Entremídias, the Media Literacy Lab of the Journalism program at UFRRJ, on betting advertising, influencers’ discourse and regulation of the influencer market.',
     'pubs.banda.m': 'Francisco Figueiredo · Cecília Moreyra de Figueiredo · 27 pages',
-    'pubs.banda.read': 'View the publication →',
-    'pubs.read': 'View the publication →',
-    'pubs.cta.tag': 'Library', 'pubs.cta.t': 'Explore the complete INDICA collection.',
-    'pubs.cta.d': 'Open the library →',
+    'pubs.banda.read': 'Read the analysis (PDF) ↗',
+    'pubs.read': 'Read the article (PDF) ↗',
+    'pubs.cta.tag': 'Stay in touch', 'pubs.cta.t': 'Want to receive our publications?',
+    'pubs.cta.d': 'Get in touch →',
     'hero.lead': "Through the influence market, we stand up for <b class='t--green'>science</b>, <b class='t--blue'>democracy</b> and the <b class='t--pink'>environment</b>. We connect creators, data and narrative to move public opinion around what matters.",
     'hero.cta1': 'Start a project',
     'hero.platform.label': 'For creators and organizations',
@@ -124,7 +124,7 @@
     'contact.h2': "Got a cause to set<br>in <span class='b'>motion</span>?",
     'contact.lead': 'Tell us what you want to communicate. INDICA designs the strategy, the production and the influence network — from briefing to measurement.',
     'footer.tag': 'Democracy · Science · Environment',
-    'footer.nav.aria': 'Explore the platform',
+    'footer.nav.aria': 'Agency navigation',
     'footer.copy': '© 2026 INDICA. All rights reserved.'
   };
 
