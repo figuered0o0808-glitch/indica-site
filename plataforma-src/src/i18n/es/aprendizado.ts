@@ -2,9 +2,8 @@
 export const aprendizado = {
   indice: {
     olho: 'Biblioteca',
-    titulo: 'Biblioteca',
-    /* So na etiqueta <meta>: a pagina nao repete o titulo em subtitulo. */
-    descricao: 'Una biblioteca para reunir artículos, guías y referencias de diferentes autores y organizaciones.',
+    titulo: 'Artículos, materiales y cursos',
+    descricao: 'Para influencers y quienes quieren entender el mercado de la influencia.',
     materiaisTitulo: 'Materiales',
     materiaisAcao: 'Ver todos los materiales',
     cursosTitulo: 'Cursos',

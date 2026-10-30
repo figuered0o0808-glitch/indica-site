@@ -30,7 +30,7 @@ export async function generateMetadata({
   const { idioma } = await params;
   if (!ehIdioma(idioma)) return {};
   const { indice } = textos(idioma).aprendizado;
-  return { title: indice.titulo, description: indice.descricao, alternates: alternativas(idioma, 'biblioteca') };
+  return { title: indice.titulo, description: `${indice.titulo}. ${indice.descricao}`, alternates: alternativas(idioma, 'biblioteca') };
 }
 
 /**
@@ -54,8 +54,10 @@ export default async function BibliotecaPage({
   return (
     <>
       <EstilosAcervo />
-      <CabecalhoPagina olho={indice.olho} titulo={indice.titulo}
-        ilustracao={<MarcaVivaIndica expressao="02" cor="rosa" />} />
+      <div className="bib-abertura">
+        <CabecalhoPagina olho={indice.olho} titulo={indice.titulo} descricao={indice.descricao}
+          ilustracao={<MarcaVivaIndica expressao="02" cor="rosa" />} />
+      </div>
 
       <section className="secao">
         <div className="container pilha--g">

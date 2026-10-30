@@ -6,6 +6,14 @@
  * do sistema, para herdar paleta, tipografia e o canto reto de 2px.
  */
 const CSS = `
+/* A descricao da Biblioteca explica o acervo e precisa de espaco para leitura. */
+.bib-abertura .texto-guia { margin-top: var(--esp-16); }
+@media (max-width: 760px) {
+  .bib-abertura .cabecalho-pagina__abertura { gap: 16px; }
+  .bib-abertura .cabecalho-pagina__marca,
+  .bib-abertura .cabecalho-pagina__marca > svg { width: 64px; height: 64px; }
+}
+
 /* Barra de busca e filtros: um cartao denso em cima; a estante embaixo usa a largura toda. */
 .bib-controles {
   background: var(--branco);
