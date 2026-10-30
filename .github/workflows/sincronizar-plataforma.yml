@@ -1,0 +1,57 @@
+name: Publicar conteúdo do sistema
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'plataforma-src/**'
+      - 'scripts/**'
+      - '.github/workflows/sincronizar-plataforma.yml'
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: catalogo-publico
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      NEXT_PUBLIC_INDICA_API: https://indica-3by7.onrender.com
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Consultar conteúdo publicado no sistema
+        id: catalogo
+        run: node scripts/sincronizar-catalogo.mjs ${{ github.event_name != 'schedule' && '--forcar' || '' }}
+      - name: Instalar dependências
+        if: steps.catalogo.outputs.mudou == 'true' || github.event_name != 'schedule'
+        run: npm ci --prefix plataforma-src
+      - name: Gerar páginas públicas
+        if: steps.catalogo.outputs.mudou == 'true' || github.event_name != 'schedule'
+        run: node scripts/atualizar-plataforma.mjs
+      - name: Guardar versão publicada
+        if: steps.catalogo.outputs.mudou == 'true' || github.event_name != 'schedule'
+        run: |
+          git config user.name 'INDICA publicação'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add plataforma plataforma-src/data plataforma-src/public
+          if ! git diff --cached --quiet; then
+            git commit -m 'Atualiza conteúdo público a partir do sistema'
+            git push origin HEAD:main
+          fi
+      - name: Atualizar site no GitHub Pages
+        if: steps.catalogo.outputs.mudou == 'true' || github.event_name != 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST 'repos/${{ github.repository }}/pages/builds' --silent
