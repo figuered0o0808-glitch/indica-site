@@ -203,33 +203,28 @@ b{font-weight:600}
 .section > .container{position:relative;z-index:1}
 .sec-head{position:relative}
 .placas{position:absolute;top:0;bottom:0;left:calc(100% + 56px);width:250px;pointer-events:none}
-.bl{position:absolute;display:block;mix-blend-mode:screen;will-change:transform;
-  animation:deriva linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
-@keyframes deriva{
-  from{transform:translate3d(0,var(--de,20px),0)}
-  to{transform:translate3d(0,var(--ate,-20px),0)}
-}
+.bl{position:absolute;display:block;mix-blend-mode:screen;transform-origin:50% 50%;
+  backface-visibility:hidden}
+.placas.is-tracking .bl{will-change:transform}
 /* Serviços: torre + faixa */
-.pl--s1{right:0;top:4%;width:128px;height:212px;background-image:var(--grad-blue);--de:14px;--ate:-14px}
-.pl--s2{right:86px;top:50%;width:164px;height:82px;background-image:var(--grad-pink);--de:44px;--ate:-44px}
+.pl--s1{right:0;top:4%;width:128px;height:212px;background-image:var(--grad-blue);--de:14px;--ate:-14px;--sway:6;--turn:1.6}
+.pl--s2{right:86px;top:50%;width:164px;height:82px;background-image:var(--grad-pink);--de:36px;--ate:-36px;--sway:-9;--turn:-1.1}
 /* Rede: lombada deitada cruzada por uma haste */
-.pl--r1{right:0;top:30%;width:232px;height:70px;background-image:var(--grad-green);--de:12px;--ate:-12px}
-.pl--r2{right:148px;top:2%;width:62px;height:196px;background-image:var(--grad-blue);--de:40px;--ate:-40px}
+.pl--r1{right:0;top:30%;width:232px;height:70px;background-image:var(--grad-green);--de:12px;--ate:-12px;--sway:7;--turn:1.1}
+.pl--r2{right:148px;top:2%;width:62px;height:196px;background-image:var(--grad-blue);--de:32px;--ate:-32px;--sway:-8;--turn:-1.7}
 /* Produções: quadro + lâmina */
-.pl--p1{right:44px;top:6%;width:150px;height:150px;background-image:var(--grad-green);--de:14px;--ate:-14px}
-.pl--p2{right:0;top:22%;width:58px;height:218px;background-image:var(--grad-pink);--de:40px;--ate:-40px}
+.pl--p1{right:44px;top:6%;width:150px;height:150px;background-image:var(--grad-green);--de:14px;--ate:-14px;--sway:6;--turn:1.6}
+.pl--p2{right:0;top:22%;width:58px;height:218px;background-image:var(--grad-pink);--de:32px;--ate:-32px;--sway:-8;--turn:-1.7}
 /* Publicações: coluna + régua */
-.pl--u1{right:96px;top:0;width:118px;height:224px;background-image:var(--grad-pink);--de:14px;--ate:-14px}
-.pl--u2{right:0;top:56%;width:176px;height:74px;background-image:var(--grad-blue);--de:42px;--ate:-42px}
+.pl--u1{right:96px;top:0;width:118px;height:224px;background-image:var(--grad-pink);--de:14px;--ate:-14px;--sway:6;--turn:1.6}
+.pl--u2{right:0;top:56%;width:176px;height:74px;background-image:var(--grad-blue);--de:34px;--ate:-34px;--sway:-8;--turn:-1.2}
 /* Quem somos: bloco baixo + quadrado */
-.pl--q1{right:34px;top:12%;width:208px;height:94px;background-image:var(--grad-blue);--de:14px;--ate:-14px}
-.pl--q2{right:0;top:calc(12% + 64px);width:104px;height:104px;background-image:var(--grad-green);--de:24px;--ate:-24px}
+.pl--q1{right:34px;top:12%;width:208px;height:94px;background-image:var(--grad-blue);--de:14px;--ate:-14px;--sway:6;--turn:1.6}
+.pl--q2{right:0;top:calc(12% + 64px);width:104px;height:104px;background-image:var(--grad-green);--de:24px;--ate:-24px;--sway:-6;--turn:-1.4}
 
-/* sem suporte a scroll-timeline: paradas, ainda compõem (o JS assume no Safari/Firefox) */
-@supports not (animation-timeline: view()){ .bl{animation:none} }
 /* só aparecem quando o campo à direita do cabeçalho existe de verdade */
 @media(max-width:1179px){ .placas{display:none} }
-@media(prefers-reduced-motion:reduce){ .bl{animation:none!important} }
+@media(prefers-reduced-motion:reduce){ .bl{transform:none!important;will-change:auto} }
 
 /* ============ TABS DOS EIXOS ============ */
 /* índice fixo dos três capítulos: gruda sob o menu enquanto se percorre os eixos */
@@ -370,36 +365,17 @@ b{font-weight:600}
 body.modal-open{overflow:hidden}
 
 
-/* ============ ROLAGEM CRIATIVA ============ */
-/* 1. o hero se afasta: logo encolhe e desfoca conforme sai de cena */
-@supports (animation-timeline: view()) {
-  .hero__inner{animation:heroLeave linear both;animation-timeline:view();animation-range:exit 0% exit 90%}
-  @keyframes heroLeave{to{opacity:0;transform:translateY(-40px) scale(.9);filter:blur(6px)}}
-
-  /* 2. cada bloco entra subindo e "ganha foco" */
-  .team__card,.ecase,.service,.show,.pubs__list>li,.pub--cta,.hub,.creator{
-    animation:blocoEntra linear both;animation-timeline:view();animation-range:entry 0% entry 42%}
-  @keyframes blocoEntra{from{opacity:0;transform:translateY(46px) scale(.96)}to{opacity:1;transform:none}}
-
-  /* 3. os títulos de seção deslizam e revelam */
-  .sec-head .display{animation:tituloEntra linear both;animation-timeline:view();animation-range:entry 5% entry 55%}
-  @keyframes tituloEntra{from{opacity:0;transform:translateY(38px);letter-spacing:.04em}to{opacity:1;transform:none;letter-spacing:-.015em}}
-
-
-  /* 5. os números do hero contam presença ao entrar */
-  .hero__stats-row>div{animation:blocoEntra linear both;animation-timeline:view();animation-range:entry 10% entry 60%}
-}
-
-
-
-@media(prefers-reduced-motion:reduce){
-  .hero__inner,.team__card,.ecase,.service,.show,.pubs__list>li,.pub--cta,.hub,.creator,.sec-head .display,.eixo__side,.hero__stats-row>div{animation:none!important}
-}
-
-/* ============ REVEAL ============ */
-.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
-.reveal--left{transform:translateX(-30px)}
-.reveal.in{opacity:1;transform:none}
+/* ============ ENTRADAS DE CONTEÚDO ============ */
+/* O texto fica estável e nítido. Só elementos preparados pelo JS aguardam a entrada. */
+.reveal{opacity:1;transform:none;
+  transition:opacity 620ms cubic-bezier(.2,.65,.25,1) var(--reveal-delay,0ms),
+    transform 760ms cubic-bezier(.16,.75,.25,1) var(--reveal-delay,0ms),
+    border-color 240ms ease,background-color 240ms ease}
+.reveal.reveal-pending{opacity:0;transform:translate3d(0,20px,0)}
+.reveal--left.reveal-pending{transform:translate3d(-18px,0,0)}
+.reveal:focus-within{opacity:1;transform:none;transition:none}
+.motion-paused .dots .d,.motion-paused .marquee__track,
+.motion-offscreen .d,.motion-offscreen .marquee__track{animation-play-state:paused}
 
 /* ============ MARQUEE DE PARCEIROS ============ */
 .marquee{overflow:hidden;position:relative;

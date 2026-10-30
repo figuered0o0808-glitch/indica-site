@@ -237,9 +237,8 @@
 
   /* ---------- Nav: shadow on scroll ---------- */
   var nav = document.getElementById('nav');
-  function onScroll() { nav.classList.toggle('scrolled', window.scrollY > 30); }
+  function onScroll() { if (nav) nav.classList.toggle('scrolled', window.scrollY > 30); }
   onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
 
   /* ---------- Mobile menu ---------- */
   var burger = document.getElementById('burger');
@@ -255,30 +254,50 @@
     });
   });
 
-  /* ---------- Reveal on scroll (escalonado) ---------- */
+  /* ---------- Entradas de conteúdo: uma vez, sem retirar a leitura ---------- */
+  var motionQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  var reducedMotion = motionQuery ? motionQuery.matches : false;
   var pendingReveals = [].slice.call(document.querySelectorAll('.reveal'));
+  var revealObserver = null;
   function staggerDelay(el) {
     var sibs = [].filter.call(el.parentElement.children, function (c) {
       return c.classList && c.classList.contains('reveal');
     });
-    var i = sibs.indexOf(el);
-    return Math.min(i > 0 ? i * 85 : 0, 600);
+    return Math.min(Math.max(0, sibs.indexOf(el)) * 65, 195);
   }
-  function revealEl(el) {
-    var d = staggerDelay(el);
-    el.style.transitionDelay = d + 'ms';
+  function revealEl(el, instant) {
+    if (!el || el.classList.contains('in')) return;
+    var d = instant || reducedMotion ? 0 : staggerDelay(el);
+    el.style.setProperty('--reveal-delay', d + 'ms');
     el.classList.add('in');
-    setTimeout(function () { el.style.transitionDelay = ''; }, d + 750);
+    el.classList.remove('reveal-pending');
+    if (revealObserver) revealObserver.unobserve(el);
+    var i = pendingReveals.indexOf(el);
+    if (i !== -1) pendingReveals.splice(i, 1);
+    if (d) setTimeout(function () { el.style.removeProperty('--reveal-delay'); }, d + 800);
   }
-  function checkReveals() {
-    if (!pendingReveals.length) return;
-    var ih = window.innerHeight;
-    var limit = ih > 0 ? ih * 0.92 : Infinity; // viewport indisponível: revela tudo
-    pendingReveals = pendingReveals.filter(function (el) {
-      if (el.getBoundingClientRect().top < limit) { revealEl(el); return false; }
-      return true;
+  function setupReveals() {
+    if (revealObserver) revealObserver.disconnect();
+    if (reducedMotion || !window.IntersectionObserver) {
+      pendingReveals.slice().forEach(function (el) { revealEl(el, true); });
+      return;
+    }
+    revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) { if (entry.isIntersecting) revealEl(entry.target); });
+    }, { rootMargin: '0px 0px -40px 0px', threshold: .01 });
+    pendingReveals.slice().forEach(function (el) {
+      // Tudo o que já está à vista (ou antes de uma âncora) fica disponível imediatamente.
+      if (el.getBoundingClientRect().top < window.innerHeight - 40) revealEl(el, true);
+      else { el.classList.add('reveal-pending'); revealObserver.observe(el); }
     });
   }
+  document.addEventListener('focusin', function (event) {
+    var el = event.target.closest ? event.target.closest('.reveal') : null;
+    while (el) {
+      revealEl(el, true);
+      el = el.parentElement ? el.parentElement.closest('.reveal') : null;
+    }
+  });
 
   /* ---------- Barra de progresso + scrollspy ---------- */
   var progress = document.getElementById('progress');
@@ -304,48 +323,133 @@
     }
     spyLinks.forEach(function (a) { a.classList.toggle('active', a === atualLink); });
     spyEixos();
-    checkReveals();
+    onScroll();
     checkCounters();
   }
 
-  /* ---------- Paralaxe dos blocos (fallback JS quando view() nao roda) ---------- */
-  var blJS = [];
-  function blSetup() {
-    var todos = document.querySelectorAll('.bl');
-    if (!todos.length) return;
-    var nativa = window.CSS && CSS.supports && CSS.supports('animation-timeline: view()');
-    if (nativa) return; // scroll-timeline nativa (Chrome/Edge); Safari/Firefox usam o fallback JS
-    [].forEach.call(todos, function (el) {
-      var cs = getComputedStyle(el);
-      function px(v, d) { var n = parseFloat(cs.getPropertyValue(v)); return isNaN(n) ? d : n; }
-      el.style.animation = 'none';
-      blJS.push({ el: el, pai: el.parentElement, de: px('--de', 120), ate: px('--ate', -120) });
+  /* ---------- Placas: profundidade com inércia curta, na rolagem nativa ---------- */
+  var plateGroups = [];
+  var scrollFrame = 0;
+  var scrollDirty = true;
+  var previousFrame = 0;
+  function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
+  function preparePlates() {
+    document.querySelectorAll('.placas').forEach(function (box) {
+      var group = { el: box, visible: !window.IntersectionObserver, initialized: false, items: [] };
+      box.querySelectorAll('.bl').forEach(function (el) {
+        var cs = getComputedStyle(el);
+        function value(name, fallback) { var n = parseFloat(cs.getPropertyValue(name)); return isNaN(n) ? fallback : n; }
+        group.items.push({ el: el, from: value('--de', 14), to: value('--ate', -14),
+          sway: value('--sway', 6), turn: value('--turn', 1.2), x: 0, y: 0, r: 0, tx: 0, ty: 0, tr: 0 });
+      });
+      plateGroups.push(group);
     });
-  }
-  var blTick = false;
-  function blFrame() {
-    blTick = false;
-    var ih = window.innerHeight;
-    for (var i = 0; i < blJS.length; i++) {
-      var b = blJS[i], r = b.pai.getBoundingClientRect();
-      if (r.bottom < -200 || r.top > ih + 200) continue;
-      var p = (ih - r.top) / (ih + r.height);       // range "cover": 0 entra, 1 sai
-      p = p < 0 ? 0 : p > 1 ? 1 : p;
-      var L = function (a, z) { return a + (z - a) * p; };
-      b.el.style.transform = 'translate3d(0,' + L(b.de, b.ate).toFixed(1) + 'px,0)';
+    if (window.IntersectionObserver) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          plateGroups.forEach(function (group) {
+            if (group.el !== entry.target) return;
+            group.visible = entry.isIntersecting;
+            group.el.classList.toggle('is-tracking', group.visible && !reducedMotion);
+          });
+        });
+        requestScrollFrame();
+      }, { rootMargin: '90px 0px', threshold: 0 });
+      plateGroups.forEach(function (group) { observer.observe(group.el); });
     }
   }
-  function blOnScroll() {
-    if (blJS.length && !blTick) { blTick = true; requestAnimationFrame(blFrame); }
+  function observeAmbientMotion() {
+    if (!window.IntersectionObserver) return;
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        entry.target.classList.toggle('motion-offscreen', !entry.isIntersecting);
+      });
+    });
+    document.querySelectorAll('.dots,.marquee').forEach(function (el) { observer.observe(el); });
   }
-  if (!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-    setTimeout(function () { blSetup(); blFrame(); }, 400);
-    window.addEventListener('scroll', blOnScroll, { passive: true });
-    window.addEventListener('resize', blOnScroll, { passive: true });
+  function updatePlateTargets() {
+    if (reducedMotion) return;
+    var height = window.innerHeight;
+    plateGroups.forEach(function (group) {
+      if (!group.visible) return;
+      var rect = group.el.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      var progress = clamp((height - rect.top) / (height + rect.height), 0, 1);
+      // A composição original é o ponto médio. Só as placas ganham profundidade.
+      var phase = progress * 2 - 1;
+      group.items.forEach(function (plate) {
+        plate.tx = phase * plate.sway;
+        plate.ty = plate.from + (plate.to - plate.from) * progress;
+        plate.tr = phase * plate.turn;
+        if (!group.initialized) { plate.x = plate.tx; plate.y = plate.ty; plate.r = plate.tr; }
+      });
+      group.initialized = true;
+    });
   }
-
-  window.addEventListener('scroll', onScrollFx, { passive: true });
-  window.addEventListener('resize', onScrollFx, { passive: true });
+  function paintPlates(time) {
+    if (reducedMotion) return false;
+    var elapsed = previousFrame ? clamp(time - previousFrame, 8, 50) : 16;
+    var follow = 1 - Math.exp(-elapsed / 105);
+    var unsettled = false;
+    plateGroups.forEach(function (group) {
+      if (!group.visible || !group.initialized) return;
+      group.items.forEach(function (plate) {
+        plate.x += (plate.tx - plate.x) * follow;
+        plate.y += (plate.ty - plate.y) * follow;
+        plate.r += (plate.tr - plate.r) * follow;
+        if (Math.abs(plate.tx - plate.x) + Math.abs(plate.ty - plate.y) + Math.abs(plate.tr - plate.r) > .045) unsettled = true;
+        plate.el.style.transform = 'translate3d(' + plate.x.toFixed(2) + 'px,' + plate.y.toFixed(2) + 'px,0) rotate(' + plate.r.toFixed(3) + 'deg)';
+      });
+    });
+    return unsettled;
+  }
+  function paintScroll(time) {
+    scrollFrame = 0;
+    if (document.hidden) { previousFrame = 0; return; }
+    if (scrollDirty) {
+      scrollDirty = false;
+      onScrollFx();
+      updatePlateTargets();
+    }
+    var unsettled = paintPlates(time);
+    previousFrame = time;
+    if (unsettled) scrollFrame = requestAnimationFrame(paintScroll);
+    else previousFrame = 0;
+  }
+  function requestScrollFrame() {
+    scrollDirty = true;
+    if (!document.hidden && !scrollFrame) scrollFrame = requestAnimationFrame(paintScroll);
+  }
+  function motionPreferenceChanged() {
+    reducedMotion = motionQuery ? motionQuery.matches : false;
+    setupReveals();
+    plateGroups.forEach(function (group) {
+      group.el.classList.toggle('is-tracking', group.visible && !reducedMotion);
+      if (reducedMotion) group.items.forEach(function (plate) {
+        plate.el.style.removeProperty('transform');
+        plate.x = plate.y = plate.r = 0;
+      });
+    });
+    if (reducedMotion) finishCounters();
+    requestScrollFrame();
+  }
+  if (motionQuery) {
+    if (motionQuery.addEventListener) motionQuery.addEventListener('change', motionPreferenceChanged);
+    else if (motionQuery.addListener) motionQuery.addListener(motionPreferenceChanged);
+  }
+  document.addEventListener('visibilitychange', function () {
+    document.documentElement.classList.toggle('motion-paused', document.hidden);
+    if (document.hidden) {
+      cancelAnimationFrame(scrollFrame);
+      scrollFrame = 0;
+      previousFrame = 0;
+      finishCounters();
+    } else requestScrollFrame();
+  });
+  window.addEventListener('scroll', requestScrollFrame, { passive: true });
+  window.addEventListener('resize', requestScrollFrame, { passive: true });
+  window.addEventListener('load', requestScrollFrame, { once: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(requestScrollFrame);
 
   /* ---------- Case detail modal ---------- */
   var modal = document.getElementById('modal');
@@ -431,18 +535,36 @@
 
   /* ---------- Count-up stats ---------- */
   var pendingCounters = [].slice.call(document.querySelectorAll('.stat__num'));
+  var activeCounters = [];
   function animate(el) {
     var target = parseInt(el.getAttribute('data-count'), 10);
-    var suffix = sfx(el);
-    var dur = 1400, start = null;
+    if (reducedMotion) { el.textContent = target + sfx(el); return; }
+    var counter = { el: el, frame: 0, done: false };
+    activeCounters.push(counter);
+    var dur = 1250, start = null;
     function step(ts) {
+      if (counter.done) return;
       if (!start) start = ts;
       var p = Math.min((ts - start) / dur, 1);
       var eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(eased * target) + suffix;
-      if (p < 1) requestAnimationFrame(step);
+      el.textContent = Math.round(eased * target) + sfx(el);
+      if (p < 1) counter.frame = requestAnimationFrame(step);
+      else { counter.done = true; activeCounters = activeCounters.filter(function (item) { return item !== counter; }); }
     }
-    requestAnimationFrame(step);
+    counter.frame = requestAnimationFrame(step);
+  }
+  function finishCounters() {
+    if (!activeCounters || !pendingCounters) return;
+    activeCounters.forEach(function (counter) {
+      counter.done = true;
+      cancelAnimationFrame(counter.frame);
+      counter.el.textContent = counter.el.getAttribute('data-count') + sfx(counter.el);
+    });
+    activeCounters = [];
+    if (reducedMotion) {
+      pendingCounters.forEach(function (el) { el.textContent = el.getAttribute('data-count') + sfx(el); });
+      pendingCounters = [];
+    }
   }
   function sfx(el) {
     return ((currentLang === 'en' ? el.getAttribute('data-suffix-en') : null) || el.getAttribute('data-suffix') || '');
@@ -462,6 +584,10 @@
     });
   }
 
-  /* estado inicial (reveals/contadores/spy já visíveis no load) */
+  /* Conteúdo visível sem JS; animações só são habilitadas após a preparação. */
+  setupReveals();
+  preparePlates();
+  observeAmbientMotion();
   onScrollFx();
+  requestScrollFrame();
 })();

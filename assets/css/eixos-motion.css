@@ -1,0 +1,97 @@
+/* A imagem original reserva o espaço exato da marca, inclusive durante a carga. */
+.eixo__logocard { position: relative; }
+.eixo__logocard .eixo-motion__art {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  overflow: visible;
+  visibility: hidden;
+  pointer-events: none;
+}
+.eixo__logocard[data-motion-ready="true"] > img { visibility: hidden; }
+.eixo__logocard[data-motion-ready="true"] .eixo-motion__art { visibility: visible; }
+.eixo-motion__intro, .eixo-motion__idle, .eixo-motion__focus { transform-box: view-box; }
+.eixo-motion__intro, .eixo-motion__idle, .eixo-motion__river { animation-play-state: paused !important; }
+.eixo__logocard[data-motion-run="true"] .eixo-motion__intro,
+.eixo__logocard[data-motion-run="true"] .eixo-motion__idle,
+.eixo__logocard[data-motion-run="true"] .eixo-motion__river { animation-play-state: running !important; }
+.eixo-motion__focus { transition: transform 580ms cubic-bezier(.22,.72,.2,1); }
+
+/* Democracia: uma voz se apresenta, a outra responde; ambas voltam ao acordo. */
+[data-motion-entered="true"] .eixo-motion__voice-in--0 { animation: eixo-voz-entrada 1.25s cubic-bezier(.2,.72,.2,1) both; }
+[data-motion-entered="true"] .eixo-motion__voice-in--1 { animation: eixo-voz-entrada 1.25s .16s cubic-bezier(.2,.72,.2,1) both; }
+[data-motion-entered="true"] .eixo-motion__voice--0 { animation: eixo-voz-esquerda 12.4s 1.65s ease-in-out infinite; }
+[data-motion-entered="true"] .eixo-motion__voice--1 { animation: eixo-voz-direita 12.4s 1.65s ease-in-out infinite; }
+[data-motion-interacting="true"] .eixo-motion__voice-focus--0 { transform: translate(-8px,-5px) scaleY(.94); }
+[data-motion-interacting="true"] .eixo-motion__voice-focus--1 { transform: translate(8px,5px) scaleY(.94); }
+@keyframes eixo-voz-entrada {
+  0% { transform: scaleY(.62); }
+  62% { transform: scaleY(1.025); }
+  100% { transform: scaleY(1); }
+}
+@keyframes eixo-voz-esquerda {
+  0%,64%,96%,100% { transform: scaleY(1); }
+  71% { transform: scaleY(.8); }
+  78% { transform: scaleY(.98); }
+  86% { transform: scaleY(.9); }
+}
+@keyframes eixo-voz-direita {
+  0%,71%,100% { transform: scaleY(1); }
+  79% { transform: scaleY(.84); }
+  88% { transform: scaleY(.96); }
+  94% { transform: scaleY(1); }
+}
+
+/* Ciência: precessão pequena nas órbitas; a tipografia permanece à frente. */
+[data-motion-entered="true"] .eixo-motion__atom-in { animation: eixo-atomo-entrada 1.6s cubic-bezier(.2,.72,.2,1) both; }
+[data-motion-entered="true"] .eixo-motion__atom { animation: eixo-atomo-precessao 15.6s 1.7s ease-in-out infinite; }
+[data-motion-interacting="true"] .eixo-motion__atom-focus { transform: rotate(4deg) scale(1.025); }
+.eixo-motion__electron { opacity: .94; }
+@keyframes eixo-atomo-entrada {
+  0% { transform: rotate(-11deg) scale(.96); }
+  100% { transform: rotate(0) scale(1); }
+}
+@keyframes eixo-atomo-precessao {
+  0%,100% { transform: rotate(0); }
+  24% { transform: rotate(6deg); }
+  53% { transform: rotate(-5deg); }
+  79% { transform: rotate(3.5deg); }
+}
+
+/* Meio ambiente: os pulsos seguem o leito do rio, sob as letras brancas. */
+.eixo-motion__river {
+  fill: none;
+  stroke: #f3fff4;
+  stroke-linecap: round;
+  stroke-dasharray: 110 1010;
+  opacity: 0;
+  transition: stroke-width 500ms ease;
+}
+[data-motion-entered="true"] .eixo-motion__river--idle {
+  animation: eixo-rio-fluxo var(--river-period,8.8s) var(--river-delay,0s) linear infinite;
+}
+[data-motion-interacting="true"] .eixo-motion__river--response { animation: eixo-rio-resposta 2.8s var(--river-delay,0s) linear both; }
+[data-motion-interacting="true"] .eixo-motion__river { stroke-width: 7; }
+@keyframes eixo-rio-fluxo {
+  0% { stroke-dashoffset: 1120; opacity: 0; }
+  5% { opacity: .5; }
+  44% { stroke-dashoffset: 0; opacity: .5; }
+  51% { stroke-dashoffset: -150; opacity: 0; }
+  100% { stroke-dashoffset: -1120; opacity: 0; }
+}
+@keyframes eixo-rio-resposta {
+  0% { stroke-dashoffset: 1120; opacity: 0; }
+  12%,78% { opacity: .6; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+@media (max-width:980px) { .eixo__logocard .eixo-motion__art { max-width: 260px; } }
+@media (prefers-reduced-motion:reduce) {
+  .eixo-motion__intro, .eixo-motion__idle, .eixo-motion__focus { animation: none !important; transform: none !important; transition: none !important; }
+  .eixo-motion__river { animation: none !important; opacity: 0 !important; }
+  .eixo-motion__electron { visibility: hidden; }
+}
