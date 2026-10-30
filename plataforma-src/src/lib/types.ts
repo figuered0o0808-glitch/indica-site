@@ -52,6 +52,8 @@ export interface ResultadoEdital {
 
 export interface Call {
   slug: string;
+  /** Identificador da operação; o slug público também pode resolver a chamada. */
+  chamadaId?: string;
   titulo: string;
   /** Quem opera a chamada. A marca aparece na pagina. */
   organizacao?: string;
@@ -105,6 +107,7 @@ export interface ModuloCurso {
 export interface Course {
   slug: string;
   titulo: string;
+  organizacao?: string;
   status: 'aberto' | 'em-breve';
   resumo: string;
   descricao: string[];
@@ -152,6 +155,9 @@ export interface Article {
 }
 
 export type StatusCandidatura =
+  | 'recebida'
+  | 'selecionada'
+  | 'inabilitada'
   | 'em-avaliacao'
   | 'aprovada'
   | 'nao-selecionada'
@@ -162,6 +168,9 @@ export interface Candidatura {
   id: string;
   /** Numero devolvido pela API da INDICA quando o canal esta aberto. */
   protocolo?: string;
+  chamadaId?: string;
+  /** Segredo restrito ao navegador que recebeu o comprovante. */
+  reciboToken?: string;
   editalSlug: string;
   editalTitulo: string;
   projeto: string;
@@ -190,6 +199,17 @@ export interface CursoDoCriador {
   titulo: string;
   status: 'inscrito' | 'em-andamento' | 'concluido';
   progresso: number;
+}
+
+/** Retorno mínimo de uma consulta autorizada pelo segredo do comprovante. */
+export interface ReciboPublico {
+  tipo: string;
+  referencia: string;
+  protocolo?: string;
+  estado: string;
+  titulo: string;
+  enviadaEm: string;
+  reciboToken: string;
 }
 
 

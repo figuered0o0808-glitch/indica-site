@@ -20,10 +20,15 @@ import { FormularioCandidatura, type EditalResumo } from './_FormularioCandidatu
  * o link que alguem guardou continua valendo depois do prazo, e o que ele
  * mostra e o aviso de que as inscricoes fecharam, nao um 404.
  */
+export const dynamicParams = false;
+
 export function generateStaticParams() {
-  return IDIOMAS.flatMap((idioma) =>
+  const caminhos = IDIOMAS.flatMap((idioma) =>
     conteudo(idioma).editais.map((edital) => ({ idioma, slug: edital.slug })),
   );
+  // Next export exige ao menos um caminho. A sentinela nunca entra no catálogo;
+  // sem documento correspondente, a página usa notFound() normalmente.
+  return caminhos.length ? caminhos : IDIOMAS.map((idioma) => ({ idioma, slug: '__sem-conteudo__' }));
 }
 
 export async function generateMetadata({
@@ -81,6 +86,7 @@ export default async function PaginaCandidatura({
 
   const resumo: EditalResumo = {
     slug: edital.slug,
+    chamadaId: edital.chamadaId,
     titulo: edital.titulo,
     faixaApoio: edital.faixaApoio,
   };

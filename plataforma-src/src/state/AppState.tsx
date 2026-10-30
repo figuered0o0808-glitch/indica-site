@@ -1,231 +1,160 @@
 'use client';
 
-/**
- * Estado local da pessoa que navega: cadastro, candidaturas enviadas e
- * inscricoes em curso. Nao ha divisao de papel: quem entra e sempre a mesma
- * pessoa, e o cadastro apenas desbloqueia a area de acompanhamento.
- *
- * Persiste em localStorage quando disponivel. Nada quebra sem ele: o estado
- * inicial vem sempre do conteudo publicado, e todo acesso ao storage e protegido.
- */
-
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react';
-
+/** Cache pessoal de confirmações da API; nunca substitui a gravação no servidor. */
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { STORAGE_KEY, LEGACY_STORAGE_KEY } from '@/config/program';
-import { proximoId } from '@/lib/format';
-import type { Candidatura, PerfilCadastro } from '@/lib/types';
-import {
-  enviarCadastro as enviarCadastroParaIndica,
-  enviarCandidatura as enviarCandidaturaParaIndica,
-  protocoloDaResposta,
-} from '@/lib/envio';
+import type { Candidatura, PerfilCadastro, ReciboPublico, StatusCandidatura } from '@/lib/types';
+import { enviarCadastro, enviarCandidatura as enviarProposta, enviarInscricaoCurso, consultarRecibo, ErroEnvio } from '@/lib/envio';
 
 interface Estado {
   cadastrado: boolean;
+  cadastroConfirmado: boolean;
   nome: string;
   perfil: PerfilCadastro | null;
   candidaturas: Candidatura[];
   cursosInscritos: string[];
+  recibos: ReciboPublico[];
 }
-
 function estadoInicial(): Estado {
-  return {
-    cadastrado: false,
-    nome: '',
-    perfil: null,
-    candidaturas: [],
-    cursosInscritos: [],
-  };
+  return { cadastrado: false, cadastroConfirmado: false, nome: '', perfil: null, candidaturas: [], cursosInscritos: [], recibos: [] };
 }
-
-/** Tudo que o formulario colheu: vai inteiro para a INDICA e fica no navegador para o comprovante. */
-export type NovaCandidatura = Omit<Candidatura, 'id' | 'enviadaEm' | 'status' | 'protocolo'>;
-
+export type NovaCandidatura = Omit<Candidatura, 'id' | 'enviadaEm' | 'status' | 'protocolo' | 'reciboToken'>;
 interface ContextoApp extends Estado {
   hidratado: boolean;
-  cadastrar: (perfil: PerfilCadastro) => void;
-  enviarCandidatura: (dados: NovaCandidatura) => Candidatura;
-  inscreverCurso: (slug: string) => void;
+  cadastrar: (perfil: PerfilCadastro) => Promise<void>;
+  enviarCandidatura: (dados: NovaCandidatura, envioId: string) => Promise<Candidatura>;
+  inscreverCurso: (slug: string, envioId: string) => Promise<ReciboPublico>;
+  atualizarRecibos: (tokenExtra?: string) => Promise<boolean>;
   estaInscrito: (slug: string) => boolean;
   reiniciar: () => void;
 }
-
 const Contexto = createContext<ContextoApp | null>(null);
 
-/** Dia da acao no calendario local de quem esta usando o navegador. */
-function dataDaAcao(): string {
-  const agora = new Date();
-  const mes = String(agora.getMonth() + 1).padStart(2, '0');
-  const dia = String(agora.getDate()).padStart(2, '0');
-  return `${agora.getFullYear()}-${mes}-${dia}`;
+function perfilValido(valor: unknown): valor is PerfilCadastro {
+  if (!valor || typeof valor !== 'object') return false;
+  const p = valor as PerfilCadastro;
+  return ['nome', 'email', 'telefone', 'pais', 'cidade', 'uf'].every((k) => typeof p[k as keyof PerfilCadastro] === 'string') &&
+    Array.isArray(p.nichos) && p.nichos.every((n) => typeof n === 'string') &&
+    Array.isArray(p.redes) && p.redes.every((r) => r && typeof r.plataforma === 'string' && typeof r.perfil === 'string' && typeof r.seguidores === 'string');
 }
-
-/*
- * O que vem do localStorage e texto que qualquer um pode ter editado. Cada
- * campo so entra se tiver o tipo esperado; o resto e descartado, e o painel
- * nunca quebra por um valor fora do lugar.
- */
-function ler(): Partial<Estado> | null {
-  if (typeof window === 'undefined') return null;
+function reciboValido(valor: unknown): valor is ReciboPublico {
+  if (!valor || typeof valor !== 'object') return false;
+  const r = valor as ReciboPublico;
+  return (r.protocolo === undefined || typeof r.protocolo === 'string') && ['tipo', 'referencia', 'estado', 'titulo', 'enviadaEm', 'reciboToken'].every((k) => typeof r[k as keyof ReciboPublico] === 'string' && Boolean(r[k as keyof ReciboPublico]));
+}
+function ler(): Estado | null {
   try {
     const bruto = window.localStorage.getItem(STORAGE_KEY) ?? window.localStorage.getItem(LEGACY_STORAGE_KEY);
     if (!bruto) return null;
-    const salvo: unknown = JSON.parse(bruto);
-    if (!salvo || typeof salvo !== 'object') return null;
-    const registro = salvo as Record<string, unknown>;
-    const estado: Partial<Estado> = {};
-    if (typeof registro.cadastrado === 'boolean') estado.cadastrado = registro.cadastrado;
-    if (typeof registro.nome === 'string') estado.nome = registro.nome;
-    if (registro.perfil && typeof registro.perfil === 'object') estado.perfil = registro.perfil as PerfilCadastro;
-    if (Array.isArray(registro.candidaturas)) {
-      estado.candidaturas = registro.candidaturas.filter(
-        (item): item is Candidatura =>
-          Boolean(item) && typeof item === 'object' && typeof (item as Candidatura).id === 'string',
-      );
-    }
-    if (Array.isArray(registro.cursosInscritos)) {
-      estado.cursosInscritos = registro.cursosInscritos.filter((item): item is string => typeof item === 'string');
-    }
-    return estado;
-  } catch {
-    return null;
-  }
+    const registro = JSON.parse(bruto) as Partial<Estado>;
+    if (!registro || typeof registro !== 'object') return null;
+    const perfil = perfilValido(registro.perfil) ? registro.perfil : null;
+    const confirmado = registro.cadastroConfirmado === true && Boolean(perfil);
+    // Registros antigos sem confirmação eram apenas simulações locais. O perfil
+    // continua disponível como rascunho, mas eles não viram comprovantes recebidos.
+    const candidaturas = Array.isArray(registro.candidaturas) ? registro.candidaturas.filter((c): c is Candidatura =>
+      Boolean(c) && ['id', 'protocolo', 'reciboToken', 'editalSlug', 'editalTitulo', 'projeto', 'formato', 'enviadaEm', 'status'].every((k) => typeof c[k as keyof Candidatura] === 'string') && Boolean(c.reciboToken) && typeof c.valorSolicitado === 'number' && Number.isFinite(c.valorSolicitado)) : [];
+    const recibos = Array.isArray(registro.recibos) ? registro.recibos.filter(reciboValido) : [];
+    return {
+      cadastrado: confirmado, cadastroConfirmado: confirmado, perfil, nome: perfil?.nome ?? '', candidaturas, recibos,
+      cursosInscritos: Array.isArray(registro.cursosInscritos) ? registro.cursosInscritos.filter((slug) => typeof slug === 'string' && recibos.some((r) => r.tipo.includes('curso') && r.referencia === slug)) : [],
+    };
+  } catch { return null; }
 }
-
-function gravar(estado: Estado): void {
-  if (typeof window === 'undefined') return;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
-  } catch {
-    /* modo privado ou storage cheio: a navegacao segue em memoria */
-  }
+function juntarRecibos(atuais: ReciboPublico[], novos: ReciboPublico[]): ReciboPublico[] {
+  const mapa = new Map(atuais.map((r) => [r.reciboToken, r]));
+  novos.forEach((r) => mapa.set(r.reciboToken, r));
+  return [...mapa.values()];
+}
+function statusDaApi(estado: string, anterior: StatusCandidatura): StatusCandidatura {
+  const chave = estado.toLowerCase().replaceAll('_', '-');
+  if (['recebida', 'recebido'].includes(chave)) return 'recebida';
+  if (chave === 'enviada') return 'enviada';
+  if (['em-avaliacao', 'em-analise', 'avaliacao'].includes(chave)) return 'em-avaliacao';
+  if (['aprovada', 'aprovado'].includes(chave)) return 'aprovada';
+  if (chave === 'selecionada') return 'selecionada';
+  if (chave === 'inabilitada') return 'inabilitada';
+  if (['nao-selecionada', 'reprovada', 'recusada'].includes(chave)) return 'nao-selecionada';
+  return anterior;
 }
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [estado, setEstado] = useState<Estado>(estadoInicial);
   const [hidratado, setHidratado] = useState(false);
-
+  const estadoRef = useRef(estado);
+  estadoRef.current = estado;
   useEffect(() => {
     const salvo = ler();
-    if (salvo) setEstado((atual) => ({ ...atual, ...salvo }));
+    if (salvo) setEstado(salvo);
     setHidratado(true);
   }, []);
-
   useEffect(() => {
-    if (hidratado) gravar(estado);
+    if (!hidratado) return;
+    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(estado)); } catch { /* cache opcional */ }
   }, [estado, hidratado]);
 
-  const cadastrar = useCallback((perfil: PerfilCadastro) => {
-    setEstado((atual) => ({
-      ...atual,
-      cadastrado: true,
-      nome: perfil.nome.trim(),
-      perfil,
-    }));
-
-    /*
-     * Sai daqui para a INDICA quando ha destino configurado (ver src/lib/envio.ts).
-     * Sem destino, nao ha requisicao nenhuma, e e esse o estado de hoje.
-     * O envio nao e esperado de proposito: a confirmacao na tela responde ao que
-     * a pessoa fez, e nao ao que a rede conseguiu fazer.
-     */
-    void enviarCadastroParaIndica(perfil);
+  const cadastrar = useCallback(async (perfil: PerfilCadastro) => {
+    await enviarCadastro(perfil);
+    setEstado((atual) => ({ ...atual, cadastrado: true, cadastroConfirmado: true, nome: perfil.nome.trim(), perfil }));
   }, []);
 
-  const enviarCandidatura = useCallback(
-    (dados: NovaCandidatura): Candidatura => {
-      /* O documento (CPF/CNPJ) vai so para a API: nao fica guardado no navegador. */
-      const nova: Candidatura = {
-        ...dados,
-        proponente: dados.proponente ? { ...dados.proponente, documento: undefined } : undefined,
-        id: proximoId('cand', estado.candidaturas),
-        enviadaEm: dataDaAcao(),
-        status: 'enviada',
-      };
-      setEstado((atual) => ({
-        ...atual,
-        cadastrado: true,
-        candidaturas: [nova, ...atual.candidaturas],
-      }));
+  const enviarCandidatura = useCallback(async (dados: NovaCandidatura, envioId: string): Promise<Candidatura> => {
+    const resposta = await enviarProposta({
+      chamadaSlug: dados.editalSlug, chamadaId: dados.chamadaId, envioId,
+      proponente: Object.fromEntries(Object.entries(dados.proponente ?? {}).filter((par): par is [string, string] => typeof par[1] === 'string')),
+      projeto: { titulo: dados.projeto, formato: dados.formato, descricao: dados.descricao ?? '', justificativa: dados.justificativa ?? '', alcance: dados.alcance ?? '', distribuicao: dados.distribuicao ?? '' },
+      valorSolicitado: dados.valorSolicitado,
+    });
+    const enviadaEm = new Date().toISOString();
+    const nova: Candidatura = {
+      ...dados, ...resposta, id: `cand-${envioId}`, enviadaEm, status: 'enviada',
+      proponente: dados.proponente ? { ...dados.proponente, documento: undefined } : undefined,
+    };
+    const recibo: ReciboPublico = { tipo: 'candidatura', referencia: dados.editalSlug, protocolo: resposta.protocolo, estado: 'recebida', titulo: dados.editalTitulo, enviadaEm, reciboToken: resposta.reciboToken };
+    setEstado((atual) => ({ ...atual,
+      candidaturas: [nova, ...atual.candidaturas.filter((c) => c.reciboToken !== resposta.reciboToken)],
+      recibos: juntarRecibos(atual.recibos, [recibo]),
+    }));
+    return nova;
+  }, []);
 
-      /*
-       * Mesmo desenho do cadastro: nao espera e nao bloqueia a confirmacao.
-       * Quando a API responde com protocolo, ele entra na candidatura depois,
-       * e o comprovante que ainda estiver na tela passa a mostra-lo.
-       */
-      void enviarCandidaturaParaIndica({
-        chamadaSlug: dados.editalSlug,
-        proponente: Object.fromEntries(
-          Object.entries(dados.proponente ?? {}).filter((par): par is [string, string] => typeof par[1] === 'string'),
-        ),
-        projeto: {
-          titulo: dados.projeto,
-          formato: dados.formato,
-          descricao: dados.descricao ?? '',
-          justificativa: dados.justificativa ?? '',
-          alcance: dados.alcance ?? '',
-          distribuicao: dados.distribuicao ?? '',
-        },
-        valorSolicitado: dados.valorSolicitado,
-      }).then((resultado) => {
-        const protocolo = protocoloDaResposta(resultado);
-        if (!protocolo) return;
-        setEstado((atual) => ({
-          ...atual,
-          candidaturas: atual.candidaturas.map((item) =>
-            item.id === nova.id ? { ...item, protocolo } : item,
-          ),
-        }));
-      });
+  const inscreverCurso = useCallback(async (slug: string, envioId: string): Promise<ReciboPublico> => {
+    const perfil = estadoRef.current.perfil;
+    if (!estadoRef.current.cadastroConfirmado || !perfil) throw new ErroEnvio('perfil');
+    const resposta = await enviarInscricaoCurso(slug, perfil, envioId);
+    const recibo: ReciboPublico = { tipo: 'curso', referencia: slug, estado: 'inscrito', titulo: slug, enviadaEm: new Date().toISOString(), reciboToken: resposta.reciboToken };
+    setEstado((atual) => ({ ...atual,
+      cursosInscritos: atual.cursosInscritos.includes(slug) ? atual.cursosInscritos : [...atual.cursosInscritos, slug],
+      recibos: juntarRecibos(atual.recibos, [recibo]),
+    }));
+    return recibo;
+  }, []);
 
-      return nova;
-    },
-    [estado.candidaturas],
-  );
-
-  const inscreverCurso = useCallback((slug: string) => {
-    setEstado((atual) =>
-      atual.cursosInscritos.includes(slug)
-        ? atual
-        : { ...atual, cadastrado: true, cursosInscritos: [...atual.cursosInscritos, slug] },
-    );
+  const atualizarRecibos = useCallback(async (tokenExtra?: string): Promise<boolean> => {
+    const atual = estadoRef.current;
+    const tokens = new Set([...atual.recibos.map((r) => r.reciboToken), ...atual.candidaturas.flatMap((c) => c.reciboToken ? [c.reciboToken] : []), ...(tokenExtra ? [tokenExtra] : [])]);
+    if (tokens.size === 0) return true;
+    const respostas = await Promise.allSettled([...tokens].map(consultarRecibo));
+    const recebidos = respostas.flatMap((r) => r.status === 'fulfilled' ? [r.value] : []);
+    if (recebidos.length) setEstado((anterior) => ({ ...anterior,
+      recibos: juntarRecibos(anterior.recibos, recebidos),
+      candidaturas: anterior.candidaturas.map((c) => {
+        const recibo = recebidos.find((r) => r.reciboToken === c.reciboToken);
+        return recibo ? { ...c, protocolo: recibo.protocolo ?? c.protocolo, status: statusDaApi(recibo.estado, c.status), enviadaEm: recibo.enviadaEm } : c;
+      }),
+    }));
+    return respostas.every((r) => r.status === 'fulfilled');
   }, []);
 
   const reiniciar = useCallback(() => {
     setEstado(estadoInicial());
-    if (typeof window !== 'undefined') {
-      try {
-        window.localStorage.removeItem(STORAGE_KEY);
-      } catch {
-        /* sem storage, nada a limpar */
-      }
-    }
+    try { window.localStorage.removeItem(STORAGE_KEY); window.localStorage.removeItem(LEGACY_STORAGE_KEY); } catch { /* cache opcional */ }
   }, []);
-
-  const valor = useMemo<ContextoApp>(
-    () => ({
-      ...estado,
-      hidratado,
-      cadastrar,
-      enviarCandidatura,
-      inscreverCurso,
-      estaInscrito: (slug: string) => estado.cursosInscritos.includes(slug),
-      reiniciar,
-    }),
-    [estado, hidratado, cadastrar, enviarCandidatura, inscreverCurso, reiniciar],
-  );
-
+  const valor = useMemo<ContextoApp>(() => ({ ...estado, hidratado, cadastrar, enviarCandidatura, inscreverCurso, atualizarRecibos,
+    estaInscrito: (slug) => estado.cursosInscritos.includes(slug), reiniciar,
+  }), [estado, hidratado, cadastrar, enviarCandidatura, inscreverCurso, atualizarRecibos, reiniciar]);
   return <Contexto.Provider value={valor}>{children}</Contexto.Provider>;
 }
-
 export function useApp(): ContextoApp {
   const contexto = useContext(Contexto);
   if (!contexto) throw new Error('useApp precisa estar dentro de AppProvider');

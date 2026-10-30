@@ -2,12 +2,8 @@
   {
     "slug": "carros-eletricos-no-brasil",
     "titulo": "Carros elétricos no Brasil: chamada pública de comunicação digital",
-    "organizacao": "INDICA",
-    "logoOrganizacao": "/organizacoes/indica.png",
     "status": "consulta",
     "tipo": "pauta-especifica",
-    "modalidade": "Chamada pública",
-    "publico": "ambos",
     "resumo": "Seleção de soluções de comunicação científica, educativa e de conscientização social sobre veículos elétricos no Brasil. O edital prevê de 3 a 14 propostas e orçamento global de até R$ 100 mil.",
     "proponente": "INDICA",
     "apresentacao": [
@@ -23,7 +19,6 @@
       "As propostas devem abordar um ou mais eixos do briefing orientador: custos e acessibilidade; políticas públicas e Programa Mover; sustentabilidade e transição energética; mitos e fatos da eletrificação."
     ],
     "naoApoiado": [],
-    "criteriosDescricao": "A comissão avaliadora fará análise qualitativa e técnica, sem atribuição de notas numéricas.",
     "criterios": [
       {
         "titulo": "Aderência temática e qualidade da solução",
@@ -47,7 +42,6 @@
       }
     ],
     "banca": [],
-    "bancaDescricao": "A seleção será realizada por uma comissão avaliadora. O documento não identifica nominalmente seus integrantes.",
     "distribuicao": [
       {
         "faixa": "Propostas selecionadas",
@@ -61,13 +55,7 @@
       }
     ],
     "valorTotal": 100000,
-    "valorTotalAte": true,
     "faixaApoio": null,
-    "apoioDescricao": "Valor definido por proposta, sujeito à avaliação e a ajustes de escopo e orçamento.",
-    "vagas": {
-      "min": 3,
-      "max": 14
-    },
     "inscricoesAte": "2026-10-31",
     "cronograma": [
       {
@@ -106,9 +94,21 @@
       }
     ],
     "resultado": null,
+    "organizacao": "INDICA",
+    "logoOrganizacao": "/organizacoes/indica.png",
+    "criteriosDescricao": "A comissão avaliadora fará análise qualitativa e técnica, sem atribuição de notas numéricas.",
+    "bancaDescricao": "A seleção será realizada por uma comissão avaliadora. O documento não identifica nominalmente seus integrantes.",
+    "valorTotalAte": true,
+    "apoioDescricao": "Valor definido por proposta, sujeito à avaliação e a ajustes de escopo e orçamento.",
+    "modalidade": "Chamada pública",
+    "publico": "ambos",
+    "vagas": {
+      "min": 3,
+      "max": 14
+    },
     "arquivoEdital": {
-      "arquivo": "/editais/carros-eletricos-brasil.pdf",
       "idioma": "pt",
+      "arquivo": "/editais/carros-eletricos-brasil.pdf",
       "paginas": 5
     },
     "secoesComplementares": [
@@ -170,6 +170,7 @@
           "Casos omissos e dúvidas sobre o edital serão resolvidos pela comissão organizadora da INDICA."
         ]
       }
-    ]
+    ],
+    "chamadaId": "C01"
   }
 ]

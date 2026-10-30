@@ -7,7 +7,6 @@
       "Francisco Figueiredo"
     ],
     "organizacao": "INDICA",
-    "logoOrganizacao": "/organizacoes/indica.png",
     "tema": "Influencer economy",
     "palavrasChave": [
       "The influencer economy",
@@ -49,7 +48,61 @@
         "arquivo": "/materiais/desenho-economico-mercado-influencia-en.pdf"
       }
     ],
+    "logoOrganizacao": "/organizacoes/indica.png",
     "capa": "/materiais/capas/desenho-economico-mercado-influencia-en.png"
+  },
+  {
+    "slug": "formacao-preco-mercado-influencia",
+    "titulo": "Price formation in the influence market",
+    "trilha": "organizacoes",
+    "autoria": [
+      "Francisco Figueiredo"
+    ],
+    "organizacao": "INDICA",
+    "tema": "Influencer economy",
+    "palavrasChave": [
+      "The influencer economy",
+      "Price formation",
+      "Sponsored content",
+      "Reputational stock",
+      "Credibility",
+      "Bargaining"
+    ],
+    "resumo": "Why the price of sponsored content lies above production costs and varies across similar creators. The paper examines reputational stock and bargaining between the creator’s costs and risks and what the advertiser can and wants to pay.",
+    "formato": "Academic paper",
+    "atualizadoEm": "2026-10-29",
+    "secoes": [
+      {
+        "titulo": "Series",
+        "paragrafos": [
+          "The influencer economy"
+        ]
+      },
+      {
+        "titulo": "About this publication",
+        "paragrafos": [
+          "This paper belongs to The influencer economy series. It discusses how credibility, affect and legitimacy enter the price of sponsored content, bargained between a creator’s floor and an advertiser’s ceiling."
+        ]
+      },
+      {
+        "titulo": "Full text",
+        "paragrafos": [
+          "PDFs available in Portuguese (37 pages) and English (36 pages)."
+        ]
+      }
+    ],
+    "arquivos": [
+      {
+        "idioma": "Portuguese",
+        "arquivo": "/materiais/formacao-preco-mercado-influencia-pt.pdf"
+      },
+      {
+        "idioma": "English",
+        "arquivo": "/materiais/formacao-preco-mercado-influencia-en.pdf"
+      }
+    ],
+    "logoOrganizacao": "/organizacoes/indica.png",
+    "capa": "/materiais/capas/formacao-preco-mercado-influencia-en.png"
   },
   {
     "slug": "modelo-economico-redes-algoritmicas",
@@ -108,59 +161,6 @@
     "capa": "/materiais/capas/modelo-economico-redes-algoritmicas-en.png"
   },
   {
-    "slug": "formacao-preco-mercado-influencia",
-    "titulo": "Price formation in the influence market",
-    "trilha": "organizacoes",
-    "autoria": [
-      "Francisco Figueiredo"
-    ],
-    "organizacao": "INDICA",
-    "logoOrganizacao": "/organizacoes/indica.png",
-    "tema": "Influencer economy",
-    "palavrasChave": [
-      "The influencer economy",
-      "Price formation",
-      "Sponsored content",
-      "Reputational stock",
-      "Credibility",
-      "Bargaining"
-    ],
-    "resumo": "Why the price of sponsored content lies above production costs and varies across similar creators. The paper examines reputational stock and bargaining between the creator’s costs and risks and what the advertiser can and wants to pay.",
-    "formato": "Academic paper",
-    "atualizadoEm": "2026-10-29",
-    "secoes": [
-      {
-        "titulo": "Series",
-        "paragrafos": [
-          "The influencer economy"
-        ]
-      },
-      {
-        "titulo": "About this publication",
-        "paragrafos": [
-          "This paper belongs to The influencer economy series. It discusses how credibility, affect and legitimacy enter the price of sponsored content, bargained between a creator’s floor and an advertiser’s ceiling."
-        ]
-      },
-      {
-        "titulo": "Full text",
-        "paragrafos": [
-          "PDFs available in Portuguese (37 pages) and English (36 pages)."
-        ]
-      }
-    ],
-    "arquivos": [
-      {
-        "idioma": "Portuguese",
-        "arquivo": "/materiais/formacao-preco-mercado-influencia-pt.pdf"
-      },
-      {
-        "idioma": "English",
-        "arquivo": "/materiais/formacao-preco-mercado-influencia-en.pdf"
-      }
-    ],
-    "capa": "/materiais/capas/formacao-preco-mercado-influencia-en.png"
-  },
-  {
     "slug": "quem-banca-a-banda-escolhe-a-musica",
     "titulo": "Whoever pays the piper calls the tune",
     "trilha": "criadores",
@@ -169,7 +169,6 @@
       "Cecília Moreyra de Figueiredo"
     ],
     "organizacao": "INDICA",
-    "logoOrganizacao": "/organizacoes/indica.png",
     "tema": "Advertising and regulation",
     "palavrasChave": [
       "Analyses",
@@ -213,6 +212,7 @@
         "arquivo": "/materiais/quem-banca-a-banda-escolhe-a-musica-en.pdf"
       }
     ],
+    "logoOrganizacao": "/organizacoes/indica.png",
     "capa": "/materiais/capas/quem-banca-a-banda-escolhe-a-musica-en.jpg"
   }
 ]

@@ -12,6 +12,7 @@ import { alternativas } from '@/lib/seo';
 import { conteudo } from '@/lib/data';
 import { data } from '@/lib/format';
 import { rota } from '@/lib/rotas';
+import { InscricaoCurso } from './_InscricaoCurso';
 
 export async function generateMetadata({
   params,
@@ -62,24 +63,38 @@ export default async function CursosPage({
           ) : (
             <div className="grade--2">
               {cursos.map((curso) => (
-                <article key={curso.slug} className="cartao">
+                <article key={curso.slug} id={`curso-${curso.slug}`} className="cartao">
                   <div className="linha linha--fim">
                     <Selo idioma={idioma} status={curso.status} />
                     <span className="rotulo">{curso.duracao}</span>
                   </div>
+                  {curso.organizacao ? <p className="rotulo">{curso.organizacao}</p> : null}
                   <h2 className="cartao__titulo">{curso.titulo}</h2>
                   <p className="cartao__texto">{curso.resumo}</p>
+                  {curso.descricao.length || curso.paraQuem.length || curso.modulos.length ? (
+                    <details>
+                      <summary>{t.aprendizado.cursos.modulosTitulo}</summary>
+                      <div className="pilha--p" style={{ marginTop: 16 }}>
+                        {curso.descricao.map((paragrafo, i) => <p key={i}>{paragrafo}</p>)}
+                        {curso.paraQuem.length ? <div>
+                          <h3>{t.aprendizado.cursos.paraQuem}</h3>
+                          <ul>{curso.paraQuem.map((publico, i) => <li key={i}>{publico}</li>)}</ul>
+                        </div> : null}
+                        {curso.modulos.length ? <ol>
+                          {curso.modulos.map((modulo) => <li key={modulo.numero}>
+                            <strong>{modulo.titulo}</strong>
+                            <p>{modulo.descricao}</p>
+                          </li>)}
+                        </ol> : null}
+                        <p>{t.aprendizado.cursos.formato}: {curso.formato}</p>
+                      </div>
+                    </details>
+                  ) : null}
                   <div className="cartao__rodape">
                     <span>
                       {t.aprendizado.cursos.proximaTurma}: {data(curso.proximaTurma, idioma)}
                     </span>
-                    <Botao
-                      href={rota(idioma, `biblioteca/cursos/${curso.slug}`)}
-                      variante="discreto"
-                      tamanho="pequeno"
-                    >
-                      {t.comum.acoes.verCurso}
-                    </Botao>
+                    <InscricaoCurso idioma={idioma} slug={curso.slug} />
                   </div>
                 </article>
               ))}

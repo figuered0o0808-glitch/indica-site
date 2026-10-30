@@ -1,9 +1,7 @@
 'use client';
 
 /**
- * Cursos do painel: as inscricoes feitas neste navegador, cruzadas com o
- * catalogo que a pagina entrega do servidor. So e montado com o cadastro
- * aberto.
+ * Inscrições confirmadas pela API, cruzadas com o catálogo publicado.
  */
 
 import Link from 'next/link';
@@ -14,34 +12,35 @@ import { Selo } from '@/components/Selo';
 import type { Idioma } from '@/i18n/idiomas';
 import { textos } from '@/i18n/strings';
 import { rota } from '@/lib/rotas';
-import type { Course, CursoDoCriador } from '@/lib/types';
+import type { Course, CursoDoCriador, ReciboPublico } from '@/lib/types';
 
-import { BarraProgresso } from './_PainelUI';
 
-export interface CursoDoPainel extends CursoDoCriador {
+export interface CursoDoPainel extends Omit<CursoDoCriador, 'status'> {
+  status: string;
   duracao: string;
   modulos: number;
-  /** Inscricao feita aqui, que por enquanto so existe neste navegador. */
-  inscricaoLocal: boolean;
+  reciboToken?: string;
 }
 
 /** As inscricoes deste navegador, com duracao e modulos vindos do catalogo. */
-export function cursosDoPainel(cursos: Course[], cursosInscritos: string[]): CursoDoPainel[] {
+export function cursosDoPainel(cursos: Course[], cursosInscritos: string[], recibos: ReciboPublico[] = []): CursoDoPainel[] {
   const catalogo = new Map(cursos.map((curso) => [curso.slug, curso]));
   const linhas: CursoDoPainel[] = [];
 
   cursosInscritos.forEach((slug) => {
     const doCatalogo = catalogo.get(slug);
     if (!doCatalogo) return;
+    const recibo = recibos.find((r) => r.tipo.includes('curso') && r.referencia === slug);
+    if (!recibo) return;
     if (linhas.some((linha) => linha.cursoSlug === slug)) return;
     linhas.push({
       cursoSlug: slug,
       titulo: doCatalogo.titulo,
-      status: 'inscrito',
+      status: recibo.estado,
       progresso: 0,
       duracao: doCatalogo.duracao,
       modulos: doCatalogo.modulos.length,
-      inscricaoLocal: true,
+      reciboToken: recibo.reciboToken,
     });
   });
 
@@ -75,20 +74,17 @@ export function Cursos({ idioma, linhas }: { idioma: Idioma; linhas: CursoDoPain
             <Selo idioma={idioma} status={linha.status} />
           </div>
 
-          <BarraProgresso valor={linha.progresso} rotulo={s.cursoProgresso} />
-
-          {linha.inscricaoLocal ? <p className="nota">{s.cursoInscricaoLocal}</p> : null}
-
           <div className="cartao__rodape">
             <span className="texto-mini">
               {[linha.duracao, linha.modulos ? `${linha.modulos} ${s.cursoModulos}` : '']
                 .filter(Boolean)
                 .join(' | ')}
             </span>
-            <Link href={rota(idioma, `biblioteca/cursos/${linha.cursoSlug}`)} className="link-seta">
+            <Link href={rota(idioma, `biblioteca/cursos/#curso-${linha.cursoSlug}`)} className="link-seta">
               {textos(idioma).comum.acoes.verCurso}
             </Link>
           </div>
+          {linha.reciboToken ? <Botao href={rota(idioma, `painel/?recibo=${encodeURIComponent(linha.reciboToken)}`)} variante="secundario" tamanho="pequeno">{textos(idioma).comum.envio.linkComprovante}</Botao> : null}
         </article>
       ))}
     </div>

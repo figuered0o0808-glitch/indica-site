@@ -7,7 +7,6 @@
       "Francisco Figueiredo"
     ],
     "organizacao": "INDICA",
-    "logoOrganizacao": "/organizacoes/indica.png",
     "tema": "Economia da influência",
     "palavrasChave": [
       "A economia dos influenciadores",
@@ -49,7 +48,61 @@
         "arquivo": "/materiais/desenho-economico-mercado-influencia-en.pdf"
       }
     ],
+    "logoOrganizacao": "/organizacoes/indica.png",
     "capa": "/materiais/capas/desenho-economico-mercado-influencia-pt.png"
+  },
+  {
+    "slug": "formacao-preco-mercado-influencia",
+    "titulo": "Formação do preço no mercado de influência",
+    "trilha": "organizacoes",
+    "autoria": [
+      "Francisco Figueiredo"
+    ],
+    "organizacao": "INDICA",
+    "tema": "Economia da influência",
+    "palavrasChave": [
+      "A economia dos influenciadores",
+      "Formação de preços",
+      "Conteúdo patrocinado",
+      "Estoque reputacional",
+      "Credibilidade",
+      "Negociação"
+    ],
+    "resumo": "Por que o preço de um conteúdo patrocinado fica acima do custo de produção e varia entre criadores semelhantes. O artigo analisa o estoque reputacional e a negociação entre os custos e riscos do criador e o que o anunciante pode e quer pagar.",
+    "formato": "Artigo acadêmico",
+    "atualizadoEm": "2026-10-29",
+    "secoes": [
+      {
+        "titulo": "Série",
+        "paragrafos": [
+          "A economia dos influenciadores"
+        ]
+      },
+      {
+        "titulo": "Sobre a publicação",
+        "paragrafos": [
+          "Este artigo integra a série A economia dos influenciadores. Discute como credibilidade, afeto e legitimidade entram no preço do conteúdo patrocinado, negociado entre um piso do criador e um teto do anunciante."
+        ]
+      },
+      {
+        "titulo": "Leitura integral",
+        "paragrafos": [
+          "PDFs disponíveis em português (37 páginas) e inglês (36 páginas)."
+        ]
+      }
+    ],
+    "arquivos": [
+      {
+        "idioma": "Português",
+        "arquivo": "/materiais/formacao-preco-mercado-influencia-pt.pdf"
+      },
+      {
+        "idioma": "English",
+        "arquivo": "/materiais/formacao-preco-mercado-influencia-en.pdf"
+      }
+    ],
+    "logoOrganizacao": "/organizacoes/indica.png",
+    "capa": "/materiais/capas/formacao-preco-mercado-influencia-pt.png"
   },
   {
     "slug": "modelo-economico-redes-algoritmicas",
@@ -108,59 +161,6 @@
     "capa": "/materiais/capas/modelo-economico-redes-algoritmicas-pt.png"
   },
   {
-    "slug": "formacao-preco-mercado-influencia",
-    "titulo": "Formação do preço no mercado de influência",
-    "trilha": "organizacoes",
-    "autoria": [
-      "Francisco Figueiredo"
-    ],
-    "organizacao": "INDICA",
-    "logoOrganizacao": "/organizacoes/indica.png",
-    "tema": "Economia da influência",
-    "palavrasChave": [
-      "A economia dos influenciadores",
-      "Formação de preços",
-      "Conteúdo patrocinado",
-      "Estoque reputacional",
-      "Credibilidade",
-      "Negociação"
-    ],
-    "resumo": "Por que o preço de um conteúdo patrocinado fica acima do custo de produção e varia entre criadores semelhantes. O artigo analisa o estoque reputacional e a negociação entre os custos e riscos do criador e o que o anunciante pode e quer pagar.",
-    "formato": "Artigo acadêmico",
-    "atualizadoEm": "2026-10-29",
-    "secoes": [
-      {
-        "titulo": "Série",
-        "paragrafos": [
-          "A economia dos influenciadores"
-        ]
-      },
-      {
-        "titulo": "Sobre a publicação",
-        "paragrafos": [
-          "Este artigo integra a série A economia dos influenciadores. Discute como credibilidade, afeto e legitimidade entram no preço do conteúdo patrocinado, negociado entre um piso do criador e um teto do anunciante."
-        ]
-      },
-      {
-        "titulo": "Leitura integral",
-        "paragrafos": [
-          "PDFs disponíveis em português (37 páginas) e inglês (36 páginas)."
-        ]
-      }
-    ],
-    "arquivos": [
-      {
-        "idioma": "Português",
-        "arquivo": "/materiais/formacao-preco-mercado-influencia-pt.pdf"
-      },
-      {
-        "idioma": "English",
-        "arquivo": "/materiais/formacao-preco-mercado-influencia-en.pdf"
-      }
-    ],
-    "capa": "/materiais/capas/formacao-preco-mercado-influencia-pt.png"
-  },
-  {
     "slug": "quem-banca-a-banda-escolhe-a-musica",
     "titulo": "Quem banca a banda escolhe a música",
     "trilha": "criadores",
@@ -169,7 +169,6 @@
       "Cecília Moreyra de Figueiredo"
     ],
     "organizacao": "INDICA",
-    "logoOrganizacao": "/organizacoes/indica.png",
     "tema": "Publicidade e regulação",
     "palavrasChave": [
       "Análises",
@@ -213,6 +212,7 @@
         "arquivo": "/materiais/quem-banca-a-banda-escolhe-a-musica-en.pdf"
       }
     ],
+    "logoOrganizacao": "/organizacoes/indica.png",
     "capa": "/materiais/capas/quem-banca-a-banda-escolhe-a-musica-pt.jpg"
   }
 ]

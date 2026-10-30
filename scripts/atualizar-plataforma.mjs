@@ -10,7 +10,9 @@ const fonte = join(agencia, 'plataforma-src');
 const destino = join(agencia, 'plataforma');
 const require = createRequire(join(fonte, 'package.json'));
 const env = { ...process.env, BASE_PATH: '/plataforma', NEXT_PUBLIC_SITE_ORIGIN: 'https://agenciaindica.com',
-  NEXT_TELEMETRY_DISABLED: '1', NEXT_PUBLIC_INDICA_API: '', NEXT_PUBLIC_TILT_API: '' };
+  NEXT_TELEMETRY_DISABLED: '1',
+  NEXT_PUBLIC_INDICA_API: process.env.NEXT_PUBLIC_INDICA_API || 'https://indica-3by7.onrender.com',
+  NEXT_PUBLIC_TILT_API: '' };
 for (const [bin, args] of [['next/dist/bin/next', ['build']]]) {
   const result = spawnSync(process.execPath, [require.resolve(bin), ...args], { cwd: fonte, env, stdio: 'inherit' });
   if (result.status !== 0) process.exit(result.status || 1);

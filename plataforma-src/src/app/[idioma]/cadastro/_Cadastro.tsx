@@ -29,6 +29,7 @@ import type { Idioma } from '@/i18n/idiomas';
 import { textos } from '@/i18n/strings';
 import { PAIS_PADRAO, opcoesDePais } from '@/lib/paises';
 import { telefoneCompleto } from '@/lib/telefone';
+import { motivoDoErro, type MotivoEnvio } from '@/lib/envio';
 import { rota } from '@/lib/rotas';
 import { useApp } from '@/state/AppState';
 
@@ -91,17 +92,19 @@ function Acoes({ idioma }: { idioma: Idioma }) {
  * audiencia somada aparece no pe das redes enquanto a pessoa digita: e a conta
  * que ela mesma faria.
  *
- * O que se envia fica no navegador e, quando ha destino configurado, segue
- * para a INDICA (ver src/lib/envio.ts). Sem destino, fica so no navegador, e
- * se perde quando a pessoa troca de aparelho.
+ * A confirmação só aparece depois de o servidor registrar o cadastro.
+ * Falhas preservam os campos para outra tentativa.
  */
 function CadastroFormulario({ idioma }: { idioma: Idioma }) {
-  const { cadastrado, nome: nomeCadastrado, hidratado, cadastrar } = useApp();
+  const { cadastrado, nome: nomeCadastrado, perfil, hidratado, cadastrar } = useApp();
 
   const t = textos(idioma);
   const tc = t.cadastro;
 
   const [enviado, setEnviado] = useState(false);
+  const [enviando, setEnviando] = useState(false);
+  const [erroEnvio, setErroEnvio] = useState<MotivoEnvio>();
+  const emVoo = useRef(false);
   const confirmacao = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -141,6 +144,16 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
   const [redes, setRedes] = useState<RedeDoCriador[]>([
     { plataforma: '', perfil: '', seguidores: '' },
   ]);
+  const restaurado = useRef(false);
+  useEffect(() => {
+    if (!hidratado || restaurado.current) return;
+    restaurado.current = true;
+    if (!perfil || cadastrado) return;
+    setNome((v) => v || perfil.nome); setEmail((v) => v || perfil.email);
+    setTelefone((v) => v || perfil.telefone); setPais(perfil.pais);
+    setCidade((v) => v || perfil.cidade); setUf(perfil.uf);
+    setNichos(perfil.nichos); if (perfil.redes.length) setRedes(perfil.redes);
+  }, [hidratado, perfil, cadastrado]);
 
   function alterarRede(indice: number, campo: keyof RedeDoCriador, valor: string) {
     setRedes((atuais) =>
@@ -159,8 +172,9 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
   /* Soma dos seguidores ja digitados. Campo vazio nao conta como zero: some. */
   const audiencia = redes.reduce((soma, rede) => soma + (Number(rede.seguidores) || 0), 0);
 
-  function enviar(evento: React.FormEvent) {
+  async function enviar(evento: React.FormEvent) {
     evento.preventDefault();
+    if (emVoo.current) return;
     /*
      * O navegador ja exige o campo; o que ele nao confere e se o numero esta
      * inteiro. A regra depende do pais (ver src/lib/telefone.ts): no Brasil,
@@ -171,7 +185,10 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
       campoTelefone.current?.focus();
       return;
     }
-    cadastrar({
+    emVoo.current = true;
+    setEnviando(true); setErroEnvio(undefined);
+    try {
+      await cadastrar({
       nome,
       email,
       telefone,
@@ -180,8 +197,10 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
       uf,
       nichos,
       redes: redes.filter((rede) => rede.plataforma && rede.perfil),
-    });
-    setEnviado(true);
+      });
+      setEnviado(true);
+    } catch (erro) { setErroEnvio(motivoDoErro(erro)); }
+    finally { emVoo.current = false; setEnviando(false); }
   }
 
   const jaCadastrado = hidratado && cadastrado && !enviado;
@@ -221,7 +240,8 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
               <Acoes idioma={idioma} />
             </section>
           ) : (
-            <form onSubmit={enviar} className="pilha--g">
+            <form onSubmit={enviar} className="pilha--g" aria-busy={enviando}>
+              <fieldset disabled={enviando} className="pilha--g" style={{ border: 0, margin: 0, padding: 0, minWidth: 0 }}>
               {/* A coluna menta da home que continuou: o cadastro mora nela. */}
               <section className="cartao coluna--menta coluna--solta" aria-labelledby="cadastro-dados-titulo">
                 <div className="coluna__cabeca">
@@ -450,9 +470,11 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
                 ) : null}
               </section>
 
-              <Botao type="submit" largo>
-                {tc.acao}
+              {erroEnvio ? <p className="campo__erro" role="alert">{t.comum.envio[erroEnvio]}</p> : null}
+              <Botao type="submit" largo disabled={enviando}>
+                {enviando ? t.comum.envio.enviando : erroEnvio ? t.comum.envio.tentar : tc.acao}
               </Botao>
+              </fieldset>
             </form>
           )}
         </div>

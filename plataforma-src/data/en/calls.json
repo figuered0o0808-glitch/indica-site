@@ -2,12 +2,8 @@
   {
     "slug": "carros-eletricos-no-brasil",
     "titulo": "Electric cars in Brazil: public call for digital communication",
-    "organizacao": "INDICA",
-    "logoOrganizacao": "/organizacoes/indica.png",
     "status": "consulta",
     "tipo": "pauta-especifica",
-    "modalidade": "Public call",
-    "publico": "ambos",
     "resumo": "Selection of scientific, educational and public awareness communication solutions about electric vehicles in Brazil. The call provides for 3 to 14 proposals and a total budget of up to R$ 100 thousand.",
     "proponente": "INDICA",
     "apresentacao": [
@@ -23,7 +19,6 @@
       "Proposals must address one or more themes in the guiding brief: costs and accessibility; public policies and the Mover Program; sustainability and energy transition; myths and facts about electrification."
     ],
     "naoApoiado": [],
-    "criteriosDescricao": "The evaluation committee will conduct a qualitative and technical assessment without assigning numerical scores.",
     "criterios": [
       {
         "titulo": "Thematic alignment and quality of the solution",
@@ -47,7 +42,6 @@
       }
     ],
     "banca": [],
-    "bancaDescricao": "Selection will be carried out by an evaluation committee. The document does not identify its members by name.",
     "distribuicao": [
       {
         "faixa": "Selected proposals",
@@ -61,13 +55,7 @@
       }
     ],
     "valorTotal": 100000,
-    "valorTotalAte": true,
     "faixaApoio": null,
-    "apoioDescricao": "Amount determined per proposal, subject to evaluation and adjustments to scope and budget.",
-    "vagas": {
-      "min": 3,
-      "max": 14
-    },
     "inscricoesAte": "2026-10-31",
     "cronograma": [
       {
@@ -106,9 +94,21 @@
       }
     ],
     "resultado": null,
+    "organizacao": "INDICA",
+    "logoOrganizacao": "/organizacoes/indica.png",
+    "criteriosDescricao": "The evaluation committee will conduct a qualitative and technical assessment without assigning numerical scores.",
+    "bancaDescricao": "Selection will be carried out by an evaluation committee. The document does not identify its members by name.",
+    "valorTotalAte": true,
+    "apoioDescricao": "Amount determined per proposal, subject to evaluation and adjustments to scope and budget.",
+    "modalidade": "Public call",
+    "publico": "ambos",
+    "vagas": {
+      "min": 3,
+      "max": 14
+    },
     "arquivoEdital": {
-      "arquivo": "/editais/carros-eletricos-brasil.pdf",
       "idioma": "pt",
+      "arquivo": "/editais/carros-eletricos-brasil.pdf",
       "paginas": 5
     },
     "secoesComplementares": [
@@ -170,6 +170,7 @@
           "Matters not covered and questions about the call will be resolved by INDICA’s organizing committee."
         ]
       }
-    ]
+    ],
+    "chamadaId": "C01"
   }
 ]

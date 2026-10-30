@@ -13,7 +13,11 @@ O GitHub Pages publica a raiz do repositório pai, com `.nojekyll`, no domínio 
 
 ## Conteúdo e estado
 
-Conteúdo em `data/`, textos em `src/i18n/` e nome em `src/config/program.ts`. Cadastros e candidaturas continuam no navegador; registros locais anteriores são lidos por compatibilidade. A API opcional é configurada por `NEXT_PUBLIC_INDICA_API`; o contrato de rotas anterior foi preservado.
+O sistema administrativo é a fonte do catálogo. `scripts/sincronizar-catalogo.mjs`, no repositório pai, recebe apenas o conteúdo publicado da API e atualiza `data/` por idioma. A rotina de publicação confere alterações periodicamente e também roda em mudanças do fonte. Depois de um build bem-sucedido, atualiza o GitHub Pages. Uma falha de rede ou de validação conserva a versão anterior do site.
+
+Cadastros, candidaturas e inscrições em cursos são enviados à API configurada por `NEXT_PUBLIC_INDICA_API`. A versão de produção usa `https://indica-3by7.onrender.com`. A interface só confirma depois da resposta válida do sistema. Candidaturas recebem protocolo e comprovante individual; o painel consulta o estado real por esse comprovante. O armazenamento local guarda referências e recibos, preserva rascunhos anteriores sem tratá-los como envios confirmados e não persiste CPF/CNPJ. Nenhuma credencial administrativa vai para o site público.
+
+O arquivo público `catalogo-revisao.json` identifica a versão implantada. O painel administrativo compara essa revisão com o catálogo atual para mostrar se o site está atualizado ou aguardando publicação. Uploads de PDFs e capas são servidos e copiados para o site apenas quando aparecem em um documento publicado.
 
 O catálogo contém somente quatro publicações reais da INDICA e o edital Carros elétricos no Brasil, com o PDF original de cinco páginas. Chamadas, resultados, bancas, cursos, artigos e marcas fictícias foram retirados. O edital está no status `consulta`: valores, critérios e cronograma foram transcritos do documento sem alterar datas; a candidatura fica indisponível até a revisão do calendário e abertura do processo. Não há faixa de apoio fixa por proposta: o orçamento global é de até R$ 100 mil, para 3 a 14 propostas. O slug real é `carros-eletricos-no-brasil`, separado do antigo exemplo para não reapresentar candidaturas locais de demonstração. Catálogos vazios de cursos não são promovidos, e a rota antiga do catálogo redireciona à Biblioteca. Ações locais novas usam a data real do navegador; o painel filtra registros pelos catálogos atuais sem apagar o armazenamento anterior.
 

@@ -2,12 +2,8 @@
   {
     "slug": "carros-eletricos-no-brasil",
     "titulo": "Autos eléctricos en Brasil: convocatoria pública de comunicación digital",
-    "organizacao": "INDICA",
-    "logoOrganizacao": "/organizacoes/indica.png",
     "status": "consulta",
     "tipo": "pauta-especifica",
-    "modalidade": "Convocatoria pública",
-    "publico": "ambos",
     "resumo": "Selección de soluciones de comunicación científica, educativa y de concientización social sobre vehículos eléctricos en Brasil. La convocatoria prevé de 3 a 14 propuestas y un presupuesto global de hasta R$ 100 mil.",
     "proponente": "INDICA",
     "apresentacao": [
@@ -23,7 +19,6 @@
       "Las propuestas deben abordar uno o más ejes del briefing orientador: costos y accesibilidad; políticas públicas y Programa Mover; sostenibilidad y transición energética; mitos y hechos de la electrificación."
     ],
     "naoApoiado": [],
-    "criteriosDescricao": "La comisión evaluadora realizará un análisis cualitativo y técnico, sin asignar puntuaciones numéricas.",
     "criterios": [
       {
         "titulo": "Adecuación temática y calidad de la solución",
@@ -47,7 +42,6 @@
       }
     ],
     "banca": [],
-    "bancaDescricao": "La selección estará a cargo de una comisión evaluadora. El documento no identifica nominalmente a sus integrantes.",
     "distribuicao": [
       {
         "faixa": "Propuestas seleccionadas",
@@ -61,13 +55,7 @@
       }
     ],
     "valorTotal": 100000,
-    "valorTotalAte": true,
     "faixaApoio": null,
-    "apoioDescricao": "Monto definido por propuesta, sujeto a evaluación y a ajustes de alcance y presupuesto.",
-    "vagas": {
-      "min": 3,
-      "max": 14
-    },
     "inscricoesAte": "2026-10-31",
     "cronograma": [
       {
@@ -106,9 +94,21 @@
       }
     ],
     "resultado": null,
+    "organizacao": "INDICA",
+    "logoOrganizacao": "/organizacoes/indica.png",
+    "criteriosDescricao": "La comisión evaluadora realizará un análisis cualitativo y técnico, sin asignar puntuaciones numéricas.",
+    "bancaDescricao": "La selección estará a cargo de una comisión evaluadora. El documento no identifica nominalmente a sus integrantes.",
+    "valorTotalAte": true,
+    "apoioDescricao": "Monto definido por propuesta, sujeto a evaluación y a ajustes de alcance y presupuesto.",
+    "modalidade": "Convocatoria pública",
+    "publico": "ambos",
+    "vagas": {
+      "min": 3,
+      "max": 14
+    },
     "arquivoEdital": {
-      "arquivo": "/editais/carros-eletricos-brasil.pdf",
       "idioma": "pt",
+      "arquivo": "/editais/carros-eletricos-brasil.pdf",
       "paginas": 5
     },
     "secoesComplementares": [
@@ -170,6 +170,7 @@
           "Los casos no previstos y las dudas sobre la convocatoria serán resueltos por la comisión organizadora de INDICA."
         ]
       }
-    ]
+    ],
+    "chamadaId": "C01"
   }
 ]

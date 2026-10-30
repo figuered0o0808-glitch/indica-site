@@ -159,7 +159,7 @@ export function Candidaturas({
                 </span>
               </td>
               <td className="num">{moeda(candidatura.valorSolicitado, idioma)}</td>
-              <td>{dataCurta(candidatura.enviadaEm, idioma)}</td>
+              <td>{dataCurta(candidatura.enviadaEm.slice(0, 10), idioma)}</td>
               <td>
                 <Selo idioma={idioma} status={candidatura.status} />
               </td>

@@ -13,11 +13,13 @@ import { textoDaFaixa } from '@/lib/apoio';
 import { data, moeda } from '@/lib/format';
 import { PAIS_PADRAO, nomeDoPais, opcoesDePais } from '@/lib/paises';
 import { rota } from '@/lib/rotas';
+import { novoEnvioId, motivoDoErro, type MotivoEnvio } from '@/lib/envio';
 import type { Candidatura } from '@/lib/types';
 import { useApp } from '@/state/AppState';
 
 export interface EditalResumo {
   slug: string;
+  chamadaId?: string;
   titulo: string;
   /** Nula quando a chamada nao tem faixa de valor: o campo aceita qualquer valor. */
   faixaApoio: { min: number; max: number } | null;
@@ -158,6 +160,10 @@ export function FormularioCandidatura({
   const [dados, setDados] = useState<Dados>(VAZIO);
   const [erros, setErros] = useState<Erros>({});
   const [enviada, setEnviada] = useState<Candidatura | null>(null);
+  const [enviando, setEnviando] = useState(false);
+  const [erroEnvio, setErroEnvio] = useState<MotivoEnvio>();
+  const envioId = useRef<string | null>(null);
+  const emVoo = useRef(false);
   const topo = useRef<HTMLDivElement>(null);
   const tituloDoPasso = useRef<HTMLHeadingElement>(null);
   const tituloDaConfirmacao = useRef<HTMLHeadingElement>(null);
@@ -192,7 +198,7 @@ export function FormularioCandidatura({
     if (enviada) tituloDaConfirmacao.current?.focus();
   }, [enviada]);
 
-  /* O comprovante le a candidatura viva: o protocolo da API chega depois do envio. */
+  /* Só existe comprovante quando a API devolveu protocolo e segredo de consulta. */
   const comprovante = enviada
     ? (candidaturas.find((item) => item.id === enviada.id) ?? enviada)
     : null;
@@ -250,7 +256,8 @@ export function FormularioCandidatura({
     else focarPrimeiroErro(encontrados);
   }
 
-  function enviar() {
+  async function enviar() {
+    if (emVoo.current) return;
     const encontrados = {
       ...validarProponente(dados, tc),
       ...validarProjeto(dados, faixa, tc, idioma),
@@ -264,8 +271,12 @@ export function FormularioCandidatura({
       focarPrimeiroErro(encontrados);
       return;
     }
-    const nova = enviarCandidatura({
+    emVoo.current = true; setEnviando(true); setErroEnvio(undefined);
+    try {
+    envioId.current ??= novoEnvioId();
+    const nova = await enviarCandidatura({
       editalSlug: edital.slug,
+      chamadaId: edital.chamadaId,
       editalTitulo: edital.titulo,
       projeto: dados.projeto.trim(),
       formato: dados.formato,
@@ -282,15 +293,18 @@ export function FormularioCandidatura({
         uf: dados.uf.trim(),
         email: dados.email.trim().toLowerCase(),
       },
-    });
+    }, envioId.current);
+    envioId.current = null;
     setEnviada(nova);
     topo.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (erro) { setErroEnvio(motivoDoErro(erro)); }
+    finally { emVoo.current = false; setEnviando(false); }
   }
 
   function aoSubmeter(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
     if (passo < 2) avancar();
-    else enviar();
+    else void enviar();
   }
 
   /** Candidatar-se depende apenas de estar cadastrado. */
@@ -328,7 +342,7 @@ export function FormularioCandidatura({
             {comprovante.protocolo ? (
               <Item rotulo={tc.confirmacao.protocolo} valor={comprovante.protocolo} />
             ) : null}
-            <Item rotulo={tc.confirmacao.enviadaEm} valor={data(comprovante.enviadaEm, idioma)} />
+            <Item rotulo={tc.confirmacao.enviadaEm} valor={data(comprovante.enviadaEm.slice(0, 10), idioma)} />
             <Item rotulo={tc.confirmacao.edital} valor={comprovante.editalTitulo} />
             <Item rotulo={tc.confirmacao.projeto} valor={comprovante.projeto} />
             <Item rotulo={tc.confirmacao.valor} valor={moeda(comprovante.valorSolicitado, idioma)} />
@@ -341,11 +355,12 @@ export function FormularioCandidatura({
         </section>
 
         <div className="linha">
-          <Botao href={rota(idioma, 'painel')}>{tc.confirmacao.acao}</Botao>
+          <Botao href={rota(idioma, `painel/?recibo=${encodeURIComponent(comprovante.reciboToken!)}`)}>{tc.confirmacao.acao}</Botao>
           <Botao href={rota(idioma, 'oportunidades')} variante="secundario">
             {tc.confirmacao.secundaria}
           </Botao>
         </div>
+        <p className="nota">{t.comum.envio.linkPrivado}</p>
       </div>
     );
   }
@@ -354,7 +369,8 @@ export function FormularioCandidatura({
     <div ref={topo}>
       <Passos passos={tc.passos} atual={passo} />
 
-      <form onSubmit={aoSubmeter} noValidate className="pilha--g">
+      <form onSubmit={aoSubmeter} noValidate className="pilha--g" aria-busy={enviando}>
+        <fieldset disabled={enviando} className="pilha--g" style={{ border: 0, margin: 0, padding: 0, minWidth: 0 }}>
         {passo === 0 ? (
           <section className="pilha">
             <div className="pilha--p">
@@ -588,6 +604,7 @@ export function FormularioCandidatura({
             {tc.erros.resumo}
           </p>
         ) : null}
+        {erroEnvio ? <p className="campo__erro" role="alert">{t.comum.envio[erroEnvio]}</p> : null}
 
         <div className="linha linha--fim">
           <div className="linha">
@@ -602,7 +619,7 @@ export function FormularioCandidatura({
             )}
           </div>
           <div className="linha">
-            <Botao type="submit">{passo < 2 ? t.comum.acoes.avancar : t.comum.acoes.enviar}</Botao>
+            <Botao type="submit" disabled={enviando}>{enviando ? t.comum.envio.enviando : passo < 2 ? t.comum.acoes.avancar : erroEnvio ? t.comum.envio.tentar : t.comum.acoes.enviar}</Botao>
           </div>
         </div>
 
@@ -611,6 +628,7 @@ export function FormularioCandidatura({
             {tc.obrigatorios}
           </p>
         ) : null}
+        </fieldset>
       </form>
     </div>
   );

@@ -23,6 +23,7 @@ export async function generateMetadata({
   /* Area pessoal: o HTML exportado nao tem conteudo, e nao e pagina para buscador. */
   return {
     title: textos(idioma).paineis.olho,
+    referrer: 'no-referrer',
     robots: { index: false, follow: true },
     alternates: alternativas(idioma, 'painel'),
   };

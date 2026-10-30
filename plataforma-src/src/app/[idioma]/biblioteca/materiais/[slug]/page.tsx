@@ -20,10 +20,15 @@ import { ordenarArquivos, vizinhanca } from '../_regras';
 import { EstilosAcervo } from '../_estilos';
 
 /** Um endereco por idioma e por material publicado naquele idioma. */
+export const dynamicParams = false;
+
 export function generateStaticParams() {
-  return IDIOMAS.flatMap((idioma) =>
+  const caminhos = IDIOMAS.flatMap((idioma) =>
     conteudo(idioma).materiais.map((material) => ({ idioma, slug: material.slug })),
   );
+  // Next export exige ao menos um caminho. A sentinela nunca entra no catálogo;
+  // sem documento correspondente, a página usa notFound() normalmente.
+  return caminhos.length ? caminhos : IDIOMAS.map((idioma) => ({ idioma, slug: '__sem-conteudo__' }));
 }
 
 export async function generateMetadata({

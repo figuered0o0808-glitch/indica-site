@@ -17,13 +17,15 @@
  * basta enquanto ele nao tem o que mostrar.
  */
 
-import { useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Botao } from '@/components/Botao';
 import { CabecalhoPagina } from '@/components/CabecalhoPagina';
+import { Selo } from '@/components/Selo';
 import type { Idioma } from '@/i18n/idiomas';
 import { textos } from '@/i18n/strings';
 import { rota } from '@/lib/rotas';
+import { data } from '@/lib/format';
 import type { Call, Course } from '@/lib/types';
 import { useApp } from '@/state/AppState';
 
@@ -95,9 +97,27 @@ export function Painel({
   /** Catalogo de cursos, para cruzar com as inscricoes deste navegador. */
   catalogo: Course[];
 }) {
-  const { candidaturas, cadastrado, cursosInscritos, hidratado, nome } = useApp();
+  const { candidaturas, cadastrado, cursosInscritos, recibos, atualizarRecibos, hidratado, nome } = useApp();
 
   const s = textos(idioma).paineis;
+  const envio = textos(idioma).comum.envio;
+  const [tokenUrl, setTokenUrl] = useState<string>();
+  const [atualizando, setAtualizando] = useState(false);
+  const [consulta, setConsulta] = useState<'ok' | 'erro'>();
+  const atualizar = useCallback(async (token?: string) => {
+    setAtualizando(true); setConsulta(undefined);
+    try { setConsulta(await atualizarRecibos(token) ? 'ok' : 'erro'); }
+    catch { setConsulta('erro'); }
+    finally { setAtualizando(false); }
+  }, [atualizarRecibos]);
+  useEffect(() => {
+    if (!hidratado) return;
+    const token = new URLSearchParams(window.location.search).get('recibo')?.trim() || undefined;
+    setTokenUrl(token);
+    if (token || recibos.length || candidaturas.some((c) => c.reciboToken)) void atualizar(token);
+    // Uma consulta por entrada/hidratação. Resultados não disparam nova consulta.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hidratado, atualizar]);
 
   const candidaturasAtuais = useMemo(
     () => candidaturasDoPainel(catalogoEditais, candidaturas),
@@ -105,24 +125,24 @@ export function Painel({
   );
 
   const linhasCursos = useMemo(
-    () => cursosDoPainel(catalogo, cursosInscritos),
-    [catalogo, cursosInscritos],
+    () => cursosDoPainel(catalogo, cursosInscritos, recibos),
+    [catalogo, cursosInscritos, recibos],
   );
 
   const emAvaliacao = candidaturasAtuais.filter(
-    (candidatura) => candidatura.status === 'em-avaliacao' || candidatura.status === 'enviada',
+    (candidatura) => ['em-avaliacao', 'enviada', 'recebida'].includes(candidatura.status),
   ).length;
-  const aprovadas = candidaturasAtuais.filter((candidatura) => candidatura.status === 'aprovada').length;
+  const aprovadas = candidaturasAtuais.filter((candidatura) => ['aprovada', 'selecionada'].includes(candidatura.status)).length;
 
   // Sem chamada aberta e sem curso com turma aberta nao ha cadastro possivel,
   // e sem cadastro nao ha o que acompanhar.
-  if (!aberto) return <PainelFechado idioma={idioma} />;
-
   // Enquanto o estado nao foi lido do navegador, nada e desenhado: assim a
   // pagina nao pisca entre o convite e o painel.
   if (!hidratado) return <div className="secao" style={{ minHeight: '60vh' }} />;
 
-  if (!cadastrado) return <Convite idioma={idioma} />;
+  const temComprovante = recibos.length > 0 || candidaturas.length > 0 || Boolean(tokenUrl);
+  if (!aberto && !cadastrado && !temComprovante) return <PainelFechado idioma={idioma} />;
+  if (!cadastrado && !temComprovante) return <Convite idioma={idioma} />;
 
   // A faixa de indicadores so aparece quando ha algo para contar: quatro
   // zeros lado a lado nao informam nada.
@@ -139,6 +159,25 @@ export function Painel({
           </Botao>
         }
       />
+
+      {temComprovante ? <SecaoPainel id="comprovantes" titulo={envio.comprovantes} acoes={
+        <Botao onClick={() => void atualizar(tokenUrl)} disabled={atualizando} variante="secundario" tamanho="pequeno">{atualizando ? envio.atualizando : envio.atualizar}</Botao>
+      }>
+        {atualizando ? <p role="status">{envio.consulta}</p> : null}
+        {consulta ? <p role={consulta === 'erro' ? 'alert' : 'status'} className={consulta === 'erro' ? 'campo__erro' : 'nota'}>{consulta === 'erro' ? envio.semAtualizacao : envio.atualizado}</p> : null}
+        {recibos.length ? <div className="pilha">
+          {recibos.map((recibo) => <article className="cartao" key={recibo.reciboToken}>
+            <h3 className="cartao__titulo">{recibo.titulo}</h3>
+            <dl className="definicoes definicoes--2">
+              {recibo.protocolo ? <div><dt>{envio.protocolo}</dt><dd>{recibo.protocolo}</dd></div> : null}
+              <div><dt>{envio.enviadaEm}</dt><dd>{data(recibo.enviadaEm.slice(0, 10), idioma)}</dd></div>
+              <div><dt>{envio.situacao}</dt><dd><Selo idioma={idioma} status={recibo.estado} /></dd></div>
+            </dl>
+            <Botao href={rota(idioma, `painel/?recibo=${encodeURIComponent(recibo.reciboToken)}`)} tamanho="pequeno" variante="secundario">{envio.linkComprovante}</Botao>
+            <p className="nota">{envio.linkPrivado}</p>
+          </article>)}
+        </div> : null}
+      </SecaoPainel> : null}
 
       {temRegistro ? (
         <div className="secao secao--curta">
@@ -157,9 +196,9 @@ export function Painel({
         </div>
       ) : null}
 
-      <SecaoPainel id="candidaturas" titulo={s.candidaturasTitulo}>
+      {cadastrado || candidaturasAtuais.length ? <SecaoPainel id="candidaturas" titulo={s.candidaturasTitulo}>
         <Candidaturas idioma={idioma} candidaturas={candidaturasAtuais} abertas={abertas} />
-      </SecaoPainel>
+      </SecaoPainel> : null}
 
       {catalogo.length > 0 ? (
         <SecaoPainel
