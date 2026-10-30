@@ -263,7 +263,7 @@
     var sibs = [].filter.call(el.parentElement.children, function (c) {
       return c.classList && c.classList.contains('reveal');
     });
-    return Math.min(Math.max(0, sibs.indexOf(el)) * 65, 195);
+    return Math.min(Math.max(0, sibs.indexOf(el)) * 90, 270);
   }
   function revealEl(el, instant) {
     if (!el || el.classList.contains('in')) return;
@@ -274,7 +274,7 @@
     if (revealObserver) revealObserver.unobserve(el);
     var i = pendingReveals.indexOf(el);
     if (i !== -1) pendingReveals.splice(i, 1);
-    if (d) setTimeout(function () { el.style.removeProperty('--reveal-delay'); }, d + 800);
+    if (d) setTimeout(function () { el.style.removeProperty('--reveal-delay'); }, d + 1050);
   }
   function setupReveals() {
     if (revealObserver) revealObserver.disconnect();
@@ -389,7 +389,7 @@
   function paintPlates(time) {
     if (reducedMotion) return false;
     var elapsed = previousFrame ? clamp(time - previousFrame, 8, 50) : 16;
-    var follow = 1 - Math.exp(-elapsed / 105);
+    var follow = 1 - Math.exp(-elapsed / 170);
     var unsettled = false;
     plateGroups.forEach(function (group) {
       if (!group.visible || !group.initialized) return;

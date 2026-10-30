@@ -29,7 +29,7 @@
     function orbitar(estado, agora) {
       estado.quadro = 0;
       if (estado.card.getAttribute('data-motion-run') !== 'true') { estado.ultimo = 0; return; }
-      if (estado.ultimo) estado.fase = (estado.fase + Math.min(64, agora - estado.ultimo) / 11200) % 1;
+      if (estado.ultimo) estado.fase = (estado.fase + Math.min(64, agora - estado.ultimo) / 5200) % 1;
       estado.ultimo = agora;
       var ponto = estado.orbita.getPointAtLength(estado.fase * estado.comprimentoOrbita);
       estado.particula.setAttribute('transform', 'translate(' + ponto.x.toFixed(2) + ' ' + ponto.y.toFixed(2) + ')');
@@ -71,10 +71,10 @@
         if (orbita) {
           var particula = document.createElementNS(SVG_NS, 'circle');
           particula.setAttribute('class', 'eixo-motion__electron');
-          particula.setAttribute('r', '6.5');
+          particula.setAttribute('r', '9');
           particula.setAttribute('fill', '#c2ee5a');
           particula.setAttribute('stroke', '#5cbf1f');
-          particula.setAttribute('stroke-width', '1.5');
+          particula.setAttribute('stroke-width', '2');
           simbolo.appendChild(particula);
           estado.orbita = orbita;
           estado.particula = particula;
@@ -96,14 +96,24 @@
             luz.setAttribute('class', 'eixo-motion__river eixo-motion__river--' + tipo);
             luz.setAttribute('fill', 'none');
             luz.setAttribute('stroke', '#f3fff4');
-            luz.setAttribute('stroke-width', '5');
+            luz.setAttribute('stroke-width', '13');
             luz.setAttribute('stroke-linecap', 'round');
             luz.setAttribute('pathLength', '1000');
-            luz.style.setProperty('--river-delay', (indice * .7) + 's');
-            luz.style.setProperty('--river-period', (8.8 + indice * .45) + 's');
+            luz.style.setProperty('--river-delay', (-indice * .8) + 's');
+            luz.style.setProperty('--river-period', (4.2 + indice * .2) + 's');
             rio.parentNode.insertBefore(luz, rio.nextSibling);
           });
         });
+        // Desenho, recorte e luz se movem juntos; a assinatura branca fica fora.
+        var fluxo = svg.querySelector('[data-layer="river-flow"]');
+        var agua = document.createElementNS(SVG_NS, 'g');
+        agua.setAttribute('class', 'eixo-motion__idle eixo-motion__water');
+        var centroAgua = origem(simbolo, '503 220');
+        agua.style.transformOrigin = centroAgua[0] + 'px ' + centroAgua[1] + 'px';
+        simbolo.parentNode.insertBefore(agua, simbolo);
+        agua.appendChild(simbolo);
+        if (fluxo) agua.appendChild(fluxo);
+        envolver(agua, 'eixo-motion__focus eixo-motion__water-focus', centroAgua);
       }
     }
 

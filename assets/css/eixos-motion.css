@@ -21,71 +21,79 @@
 .eixo__logocard[data-motion-run="true"] .eixo-motion__river { animation-play-state: running !important; }
 .eixo-motion__focus { transition: transform 580ms cubic-bezier(.22,.72,.2,1); }
 
-/* Democracia: uma voz se apresenta, a outra responde; ambas voltam ao acordo. */
-[data-motion-entered="true"] .eixo-motion__voice-in--0 { animation: eixo-voz-entrada 1.25s cubic-bezier(.2,.72,.2,1) both; }
-[data-motion-entered="true"] .eixo-motion__voice-in--1 { animation: eixo-voz-entrada 1.25s .16s cubic-bezier(.2,.72,.2,1) both; }
-[data-motion-entered="true"] .eixo-motion__voice--0 { animation: eixo-voz-esquerda 12.4s 1.65s ease-in-out infinite; }
-[data-motion-entered="true"] .eixo-motion__voice--1 { animation: eixo-voz-direita 12.4s 1.65s ease-in-out infinite; }
-[data-motion-interacting="true"] .eixo-motion__voice-focus--0 { transform: translate(-8px,-5px) scaleY(.94); }
-[data-motion-interacting="true"] .eixo-motion__voice-focus--1 { transform: translate(8px,5px) scaleY(.94); }
+/* Democracia: as duas vozes alternam a fala, sem mover a assinatura branca. */
+[data-motion-entered="true"] .eixo-motion__voice-in--0 { animation: eixo-voz-entrada .95s cubic-bezier(.2,.72,.2,1) both; }
+[data-motion-entered="true"] .eixo-motion__voice-in--1 { animation: eixo-voz-entrada .95s .14s cubic-bezier(.2,.72,.2,1) both; }
+[data-motion-entered="true"] .eixo-motion__voice--0 { animation: eixo-voz-esquerda 4s 1.05s ease-in-out infinite; }
+[data-motion-entered="true"] .eixo-motion__voice--1 { animation: eixo-voz-direita 4s 1.05s ease-in-out infinite; }
+[data-motion-interacting="true"] .eixo-motion__voice-focus--0 { transform: translate(-12px,-6px) scaleY(1.06); }
+[data-motion-interacting="true"] .eixo-motion__voice-focus--1 { transform: translate(12px,6px) scaleY(1.06); }
 @keyframes eixo-voz-entrada {
-  0% { transform: scaleY(.62); }
-  62% { transform: scaleY(1.025); }
+  0% { transform: scaleY(.28); }
+  64% { transform: scaleY(1.08); }
   100% { transform: scaleY(1); }
 }
 @keyframes eixo-voz-esquerda {
-  0%,64%,96%,100% { transform: scaleY(1); }
-  71% { transform: scaleY(.8); }
-  78% { transform: scaleY(.98); }
-  86% { transform: scaleY(.9); }
+  0%,100% { transform: translateY(0) scaleY(1); }
+  15% { transform: translateY(-6px) scaleY(.38); }
+  31% { transform: translateY(2px) scaleY(1.08); }
+  48% { transform: translateY(6px) scaleY(.66); }
+  66% { transform: translateY(0) scaleY(1.02); }
+  82% { transform: translateY(-4px) scaleY(.46); }
 }
 @keyframes eixo-voz-direita {
-  0%,71%,100% { transform: scaleY(1); }
-  79% { transform: scaleY(.84); }
-  88% { transform: scaleY(.96); }
-  94% { transform: scaleY(1); }
+  0%,100% { transform: translateY(0) scaleY(1); }
+  15% { transform: translateY(4px) scaleY(.9); }
+  32% { transform: translateY(6px) scaleY(.42); }
+  49% { transform: translateY(-2px) scaleY(1.08); }
+  67% { transform: translateY(-6px) scaleY(.36); }
+  84% { transform: translateY(0) scaleY(1.04); }
 }
 
-/* Ciência: precessão pequena nas órbitas; a tipografia permanece à frente. */
-[data-motion-entered="true"] .eixo-motion__atom-in { animation: eixo-atomo-entrada 1.6s cubic-bezier(.2,.72,.2,1) both; }
-[data-motion-entered="true"] .eixo-motion__atom { animation: eixo-atomo-precessao 15.6s 1.7s ease-in-out infinite; }
-[data-motion-interacting="true"] .eixo-motion__atom-focus { transform: rotate(4deg) scale(1.025); }
-.eixo-motion__electron { opacity: .94; }
+/* Ciência: órbitas em rotação contínua, atrás das letras imóveis. */
+[data-motion-entered="true"] .eixo-motion__atom-in { animation: eixo-atomo-entrada 1.1s cubic-bezier(.2,.72,.2,1) both; }
+[data-motion-entered="true"] .eixo-motion__atom { animation: eixo-atomo-orbita 11.5s linear infinite; }
+[data-motion-interacting="true"] .eixo-motion__atom-focus { transform: rotate(8deg) scale(1.07); }
+.eixo-motion__electron { opacity: 1; }
 @keyframes eixo-atomo-entrada {
-  0% { transform: rotate(-11deg) scale(.96); }
+  0% { transform: rotate(-28deg) scale(.91); }
   100% { transform: rotate(0) scale(1); }
 }
-@keyframes eixo-atomo-precessao {
-  0%,100% { transform: rotate(0); }
-  24% { transform: rotate(6deg); }
-  53% { transform: rotate(-5deg); }
-  79% { transform: rotate(3.5deg); }
+@keyframes eixo-atomo-orbita {
+  from { transform: rotate(0); }
+  to { transform: rotate(360deg); }
 }
 
-/* Meio ambiente: os pulsos seguem o leito do rio, sob as letras brancas. */
+/* Meio ambiente: a corrente inteira ondula, com luz contínua dentro das margens. */
+[data-motion-entered="true"] .eixo-motion__water { animation: eixo-agua-ondula 4.8s ease-in-out infinite; }
+[data-motion-interacting="true"] .eixo-motion__water-focus { transform: translateY(-6px) rotate(.7deg); }
+@keyframes eixo-agua-ondula {
+  0%,100% { transform: translate(0,0) rotate(0) scaleY(1); }
+  25% { transform: translate(-6px,-12px) rotate(-1.1deg) scaleY(1.035); }
+  50% { transform: translate(0,0) rotate(0) scaleY(1); }
+  75% { transform: translate(6px,12px) rotate(1.1deg) scaleY(.97); }
+}
 .eixo-motion__river {
   fill: none;
   stroke: #f3fff4;
   stroke-linecap: round;
-  stroke-dasharray: 110 1010;
+  stroke-width: 13;
+  stroke-dasharray: 210 790;
   opacity: 0;
-  transition: stroke-width 500ms ease;
+  transition: stroke-width 400ms ease;
 }
 [data-motion-entered="true"] .eixo-motion__river--idle {
-  animation: eixo-rio-fluxo var(--river-period,8.8s) var(--river-delay,0s) linear infinite;
+  animation: eixo-rio-fluxo var(--river-period,4.2s) var(--river-delay,0s) linear infinite;
 }
-[data-motion-interacting="true"] .eixo-motion__river--response { animation: eixo-rio-resposta 2.8s var(--river-delay,0s) linear both; }
-[data-motion-interacting="true"] .eixo-motion__river { stroke-width: 7; }
+[data-motion-interacting="true"] .eixo-motion__river--response { animation: eixo-rio-resposta 2.2s linear both; }
+[data-motion-interacting="true"] .eixo-motion__river { stroke-width: 16; }
 @keyframes eixo-rio-fluxo {
-  0% { stroke-dashoffset: 1120; opacity: 0; }
-  5% { opacity: .5; }
-  44% { stroke-dashoffset: 0; opacity: .5; }
-  51% { stroke-dashoffset: -150; opacity: 0; }
-  100% { stroke-dashoffset: -1120; opacity: 0; }
+  from { stroke-dashoffset: 1000; opacity: .8; }
+  to { stroke-dashoffset: 0; opacity: .8; }
 }
 @keyframes eixo-rio-resposta {
-  0% { stroke-dashoffset: 1120; opacity: 0; }
-  12%,78% { opacity: .6; }
+  0% { stroke-dashoffset: 1000; opacity: 0; }
+  8%,90% { opacity: .9; }
   100% { stroke-dashoffset: 0; opacity: 0; }
 }
 

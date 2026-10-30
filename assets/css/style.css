@@ -207,20 +207,20 @@ b{font-weight:600}
   backface-visibility:hidden}
 .placas.is-tracking .bl{will-change:transform}
 /* Serviços: torre + faixa */
-.pl--s1{right:0;top:4%;width:128px;height:212px;background-image:var(--grad-blue);--de:14px;--ate:-14px;--sway:6;--turn:1.6}
-.pl--s2{right:86px;top:50%;width:164px;height:82px;background-image:var(--grad-pink);--de:36px;--ate:-36px;--sway:-9;--turn:-1.1}
+.pl--s1{right:0;top:4%;width:128px;height:212px;background-image:var(--grad-blue);--de:38px;--ate:-38px;--sway:16;--turn:4.4}
+.pl--s2{right:86px;top:50%;width:164px;height:82px;background-image:var(--grad-pink);--de:88px;--ate:-88px;--sway:-20;--turn:-3.5}
 /* Rede: lombada deitada cruzada por uma haste */
-.pl--r1{right:0;top:30%;width:232px;height:70px;background-image:var(--grad-green);--de:12px;--ate:-12px;--sway:7;--turn:1.1}
-.pl--r2{right:148px;top:2%;width:62px;height:196px;background-image:var(--grad-blue);--de:32px;--ate:-32px;--sway:-8;--turn:-1.7}
+.pl--r1{right:0;top:30%;width:232px;height:70px;background-image:var(--grad-green);--de:34px;--ate:-34px;--sway:18;--turn:3.4}
+.pl--r2{right:148px;top:2%;width:62px;height:196px;background-image:var(--grad-blue);--de:80px;--ate:-80px;--sway:-18;--turn:-4.5}
 /* Produções: quadro + lâmina */
-.pl--p1{right:44px;top:6%;width:150px;height:150px;background-image:var(--grad-green);--de:14px;--ate:-14px;--sway:6;--turn:1.6}
-.pl--p2{right:0;top:22%;width:58px;height:218px;background-image:var(--grad-pink);--de:32px;--ate:-32px;--sway:-8;--turn:-1.7}
+.pl--p1{right:44px;top:6%;width:150px;height:150px;background-image:var(--grad-green);--de:38px;--ate:-38px;--sway:16;--turn:4.4}
+.pl--p2{right:0;top:22%;width:58px;height:218px;background-image:var(--grad-pink);--de:80px;--ate:-80px;--sway:-18;--turn:-4.5}
 /* Publicações: coluna + régua */
-.pl--u1{right:96px;top:0;width:118px;height:224px;background-image:var(--grad-pink);--de:14px;--ate:-14px;--sway:6;--turn:1.6}
-.pl--u2{right:0;top:56%;width:176px;height:74px;background-image:var(--grad-blue);--de:34px;--ate:-34px;--sway:-8;--turn:-1.2}
+.pl--u1{right:96px;top:0;width:118px;height:224px;background-image:var(--grad-pink);--de:38px;--ate:-38px;--sway:16;--turn:4.4}
+.pl--u2{right:0;top:56%;width:176px;height:74px;background-image:var(--grad-blue);--de:84px;--ate:-84px;--sway:-18;--turn:-3.8}
 /* Quem somos: bloco baixo + quadrado */
-.pl--q1{right:34px;top:12%;width:208px;height:94px;background-image:var(--grad-blue);--de:14px;--ate:-14px;--sway:6;--turn:1.6}
-.pl--q2{right:0;top:calc(12% + 64px);width:104px;height:104px;background-image:var(--grad-green);--de:24px;--ate:-24px;--sway:-6;--turn:-1.4}
+.pl--q1{right:34px;top:12%;width:208px;height:94px;background-image:var(--grad-blue);--de:38px;--ate:-38px;--sway:16;--turn:4.4}
+.pl--q2{right:0;top:calc(12% + 64px);width:104px;height:104px;background-image:var(--grad-green);--de:64px;--ate:-64px;--sway:-16;--turn:-4}
 
 /* só aparecem quando o campo à direita do cabeçalho existe de verdade */
 @media(max-width:1179px){ .placas{display:none} }
@@ -368,11 +368,11 @@ body.modal-open{overflow:hidden}
 /* ============ ENTRADAS DE CONTEÚDO ============ */
 /* O texto fica estável e nítido. Só elementos preparados pelo JS aguardam a entrada. */
 .reveal{opacity:1;transform:none;
-  transition:opacity 620ms cubic-bezier(.2,.65,.25,1) var(--reveal-delay,0ms),
-    transform 760ms cubic-bezier(.16,.75,.25,1) var(--reveal-delay,0ms),
+  transition:opacity 650ms cubic-bezier(.2,.65,.25,1) var(--reveal-delay,0ms),
+    transform 900ms cubic-bezier(.16,.75,.25,1) var(--reveal-delay,0ms),
     border-color 240ms ease,background-color 240ms ease}
-.reveal.reveal-pending{opacity:0;transform:translate3d(0,20px,0)}
-.reveal--left.reveal-pending{transform:translate3d(-18px,0,0)}
+.reveal.reveal-pending{opacity:0;transform:translate3d(0,40px,0)}
+.reveal--left.reveal-pending{transform:translate3d(-38px,0,0)}
 .reveal:focus-within{opacity:1;transform:none;transition:none}
 .motion-paused .dots .d,.motion-paused .marquee__track,
 .motion-offscreen .d,.motion-offscreen .marquee__track{animation-play-state:paused}
