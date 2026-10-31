@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Botao } from '@/components/Botao';
 import { CabecalhoPagina } from '@/components/CabecalhoPagina';
 import { Simulacao } from '@/components/conta/Simulacao';
+import styles from '@/components/conta/AppPessoal.module.css';
 import { Chip } from '@/components/Chip';
 import { IDIOMAS, ehIdioma } from '@/i18n/idiomas';
 import { textos } from '@/i18n/strings';
@@ -106,7 +107,7 @@ export default async function PaginaCandidatura({
 
       <div className="secao secao--curta" style={{ paddingBottom: 0 }}>
         <div className="container-estreito">
-          <div className="chips">
+          <div className={`chips ${styles.deadline}`}>
             <Chip vazado>{prazoEmLinha(idioma, edital)}</Chip>
           </div>
         </div>

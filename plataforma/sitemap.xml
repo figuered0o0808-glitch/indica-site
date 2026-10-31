@@ -31,6 +31,11 @@
 <priority>0.6</priority>
 </url>
 <url>
+<loc>https://agenciaindica.com/plataforma/pt/contato/</loc>
+<changefreq>weekly</changefreq>
+<priority>0.6</priority>
+</url>
+<url>
 <loc>https://agenciaindica.com/plataforma/pt/oportunidades/carros-eletricos-no-brasil/</loc>
 <changefreq>weekly</changefreq>
 <priority>0.8</priority>
@@ -90,6 +95,11 @@
 <priority>0.6</priority>
 </url>
 <url>
+<loc>https://agenciaindica.com/plataforma/en/contato/</loc>
+<changefreq>weekly</changefreq>
+<priority>0.6</priority>
+</url>
+<url>
 <loc>https://agenciaindica.com/plataforma/en/oportunidades/carros-eletricos-no-brasil/</loc>
 <changefreq>weekly</changefreq>
 <priority>0.8</priority>
@@ -145,6 +155,11 @@
 </url>
 <url>
 <loc>https://agenciaindica.com/plataforma/es/como-funciona/</loc>
+<changefreq>weekly</changefreq>
+<priority>0.6</priority>
+</url>
+<url>
+<loc>https://agenciaindica.com/plataforma/es/contato/</loc>
 <changefreq>weekly</changefreq>
 <priority>0.6</priority>
 </url>

@@ -1,0 +1,10 @@
+.formulario { max-width: 760px; margin-inline: auto; scroll-margin-top: calc(var(--altura-cabecalho-real, 112px) + 24px); }
+.grade { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.campoOculto { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.recibo { border: 1px solid var(--preto); padding: clamp(24px, 5vw, 48px); display: grid; gap: 24px; }
+.recibo h2,.recibo p { margin: 0; }
+.recibo dl { display: grid; gap: 16px; margin: 0; }
+.recibo dt { font-size: 13px; margin-bottom: 6px; }
+.recibo dd { margin: 0; overflow-wrap: anywhere; font-family: var(--mono); }
+.ajuda { margin-top: 32px; font-size: 15px; overflow-wrap: anywhere; }
+@media (max-width: 600px) { .grade { grid-template-columns: 1fr; gap: 20px; } }

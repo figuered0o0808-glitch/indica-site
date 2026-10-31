@@ -9,7 +9,7 @@ export const dynamic = 'force-static';
 export default function sitemap(): MetadataRoute.Sitemap {
   const urls: MetadataRoute.Sitemap = [];
   for (const idioma of IDIOMAS) {
-    for (const caminho of ['', 'oportunidades', 'biblioteca', 'biblioteca/materiais', 'biblioteca/cursos', 'como-funciona']) {
+    for (const caminho of ['', 'oportunidades', 'biblioteca', 'biblioteca/materiais', 'biblioteca/cursos', 'como-funciona', 'contato']) {
       urls.push({url:enderecoPublico(idioma,caminho),changeFrequency:'weekly',priority:caminho?0.6:0.9});
     }
     const dados=conteudo(idioma);

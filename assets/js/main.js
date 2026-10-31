@@ -105,7 +105,10 @@
     'form.op1': 'Mobilization campaign', 'form.op2': 'Audiovisual production', 'form.op3': 'Social media management',
     'form.op4': 'Press / partnership', 'form.op5': 'Other',
     'form.msg': 'Tell us what you want to communicate', 'form.enviar': 'Send message',
-    'form.ok': 'We got your message. We will get back to you soon. ✓',
+    'form.ok': 'Your message was registered in the INDICA system.',
+    'form.privacidade': 'The INDICA team receives these details to follow up on your message.',
+    'form.protocolo': 'Reference number:', 'form.guarde': 'Keep this number when following up with the team.',
+    'form.nova': 'Send another message', 'form.revisar': 'Review the details',
     'net.kicker': 'Network of communicators',
     'net.h2': "+200 influencers.<br>One <span class='b'>purpose</span>.",
     'net.lead': 'Brazil decides on social media — and our roster of communicators adds up to more than 80 million followers, organized into thematic hubs. We have worked in more than 10 countries, and our network reaches every continent.',
@@ -169,6 +172,7 @@
     });
     try { localStorage.setItem('indica_lang', lang); } catch (e) {}
     if (typeof refreshCounters === 'function') { try { refreshCounters(); } catch (e) {} }
+    if (typeof atualizarContatoIdioma === 'function') atualizarContatoIdioma();
   }
 
   if (langBtn) {
@@ -539,14 +543,75 @@
     });
   }
 
-  /* ---------- Confirmação do formulário ---------- */
-  if (location.search.indexOf('enviado=1') !== -1) {
-    var okMsg = document.getElementById('formOk'), frm = document.getElementById('contatoForm');
-    if (okMsg) okMsg.hidden = false;
-    if (frm) frm.hidden = true;
-    var alvo = document.getElementById('contato');
-    if (alvo) setTimeout(function () { alvo.scrollIntoView(); }, 120);
-    if (history.replaceState) history.replaceState(null, '', location.pathname);
+  /* ---------- Contato: sucesso somente após confirmação do sistema ---------- */
+  var formContato = document.getElementById('contatoForm');
+  var contatoBusy = false, contatoTentativa = null, contatoErro = '';
+  var contatoTextos = {
+    pt: { enviar: 'Enviar mensagem', enviando: 'Enviando…', tentar: 'Tentar enviar novamente',
+      rede: 'Não foi possível confirmar o recebimento. Sua mensagem continua aqui. Tente novamente com os mesmos dados para evitar um envio duplicado.',
+      invalido: 'Confira os campos e tente novamente.', limite: 'Muitas tentativas. Aguarde um pouco e tente novamente.',
+      revisar: 'A tentativa anterior pode ter chegado ao sistema. Antes de iniciar outro envio, confira se você já recebeu um protocolo nesta página.' },
+    en: { enviar: 'Send message', enviando: 'Sending…', tentar: 'Try sending again',
+      rede: 'We could not confirm receipt. Your message is still here. Retry with the same details to avoid a duplicate submission.',
+      invalido: 'Check the fields and try again.', limite: 'Too many attempts. Please wait a little and try again.',
+      revisar: 'The previous attempt may have reached the system. Before starting another submission, check whether this page has already shown a reference number.' }
+  };
+  function atualizarContatoIdioma() {
+    if (!formContato || !contatoTextos) return;
+    var textos = contatoTextos[currentLang], b = formContato.querySelector('[type="submit"]');
+    formContato.querySelector('[name="idioma"]').value = currentLang;
+    formContato.setAttribute('aria-busy', contatoBusy ? 'true' : 'false');
+    formContato.querySelectorAll('input:not([type="hidden"]),select,textarea').forEach(function (el) { el.disabled = contatoBusy || Boolean(contatoTentativa); });
+    b.disabled = contatoBusy;
+    b.textContent = contatoBusy ? textos.enviando : contatoTentativa ? textos.tentar : textos.enviar;
+    var erro = document.getElementById('formErro');
+    erro.hidden = !contatoErro; erro.textContent = textos[contatoErro] || '';
+    document.getElementById('formRevisar').hidden = contatoBusy || !contatoTentativa;
+  }
+  function novoContatoId() {
+    if (window.crypto.randomUUID) return window.crypto.randomUUID();
+    var b = new Uint8Array(16); window.crypto.getRandomValues(b); b[6] = (b[6] & 15) | 64; b[8] = (b[8] & 63) | 128;
+    var h = Array.from(b, function (x) { return x.toString(16).padStart(2, '0'); }).join('');
+    return h.slice(0,8)+'-'+h.slice(8,12)+'-'+h.slice(12,16)+'-'+h.slice(16,20)+'-'+h.slice(20);
+  }
+  if (formContato) {
+    atualizarContatoIdioma();
+    formContato.addEventListener('submit', async function (event) {
+      event.preventDefault(); if (contatoBusy || !formContato.reportValidity()) return;
+      var timer, controller;
+      try {
+        if (!contatoTentativa) {
+          var valor = function (name) { return formContato.elements.namedItem(name).value.trim(); };
+          contatoTentativa = { nome: valor('Nome'), email: valor('E-mail').toLowerCase(), organizacao: valor('Organização'),
+            assunto: valor('Assunto'), mensagem: valor('Mensagem'), honey: valor('_honey'), origem: 'agencia', idioma: currentLang, envioId: novoContatoId() };
+        }
+        contatoBusy = true; contatoErro = ''; atualizarContatoIdioma();
+        controller = new AbortController(); timer = setTimeout(function () { controller.abort(); }, 30000);
+        var destino = formContato.action.replace(/\/formulario\/?$/, '');
+        var resposta = await fetch(destino, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(contatoTentativa), credentials: 'omit', cache: 'no-store', referrerPolicy: 'no-referrer', signal: controller.signal });
+        if (!resposta.ok) {
+          if ([400,409,413,422,429].indexOf(resposta.status) !== -1) { contatoTentativa = null; throw new Error(resposta.status === 429 ? 'limite' : 'invalido'); }
+          throw new Error('rede');
+        }
+        var dados = await resposta.json();
+        if (dados.ok !== true || typeof dados.protocolo !== 'string' || !dados.protocolo || dados.protocolo.length > 100 || typeof dados.recebidaEm !== 'string' || !Number.isFinite(Date.parse(dados.recebidaEm))) throw new Error('rede');
+        contatoTentativa = null; contatoErro = '';
+        document.getElementById('formProtocolo').textContent = dados.protocolo;
+        formContato.reset(); formContato.hidden = true;
+        var ok = document.getElementById('formOk'); ok.hidden = false; ok.focus(); ok.scrollIntoView({ block: 'center' });
+      } catch (error) { contatoErro = error.message === 'invalido' ? 'invalido' : error.message === 'limite' ? 'limite' : 'rede'; }
+      finally { clearTimeout(timer); contatoBusy = false; atualizarContatoIdioma(); }
+    });
+    document.getElementById('formRevisar').addEventListener('click', function () {
+      if (!window.confirm(contatoTextos[currentLang].revisar)) return;
+      contatoTentativa = null; contatoErro = ''; atualizarContatoIdioma(); formContato.querySelector('[name="Nome"]').focus();
+    });
+    document.getElementById('formNova').addEventListener('click', function () {
+      contatoTentativa = null; contatoErro = ''; formContato.hidden = false;
+      document.getElementById('formOk').hidden = true; document.getElementById('formProtocolo').textContent = '';
+      atualizarContatoIdioma(); formContato.querySelector('[name="Nome"]').focus();
+    });
   }
 
   /* ---------- Count-up stats ---------- */

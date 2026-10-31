@@ -443,6 +443,13 @@ body.modal-open{overflow:hidden}
 .form__submit{align-self:flex-start;margin-top:6px;border:0;cursor:pointer;font-family:inherit}
 .form__honey{position:absolute;left:-9999px;opacity:0;height:0;width:0}
 .form__ok{margin-top:22px;font-size:15px;font-weight:600;color:var(--green)}
+.form__note{font-size:13px;color:var(--muted);line-height:1.6;margin:0}
+.form__error{color:#ffb7c3;font-size:15px;line-height:1.6;margin:0}
+.form__ok strong{font-family:var(--mono);overflow-wrap:anywhere}
+.form__ok:focus{outline:2px solid var(--green);outline-offset:8px}
+.form input:disabled,.form textarea:disabled,.form select:disabled{opacity:.7;cursor:wait}
+.form button:disabled{opacity:.6;cursor:wait}
+.form[hidden],.form__ok[hidden],.form__error[hidden],#formRevisar[hidden]{display:none!important}
 
 /* ============ PUBS ============ */
 /* a seção é uma pilha de coleções (série numerada hoje; avulsos amanhã) e o CTA no fim */

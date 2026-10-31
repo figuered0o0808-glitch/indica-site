@@ -25,7 +25,7 @@
 <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/jost-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="canonical" href="https://agenciaindica.com/">
-<link rel="stylesheet" href="assets/css/style.css?v=68">
+<link rel="stylesheet" href="assets/css/style.css?v=69">
 <link rel="stylesheet" href="assets/css/eixos-motion.css?v=2">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization",
@@ -714,18 +714,16 @@
       <a href="mailto:indica.osc@gmail.com" class="btn btn--ghost">indica.osc@gmail.com</a>
       <a href="https://www.instagram.com/indica.cc" target="_blank" rel="noopener" class="btn btn--ghost">@indica.cc</a>
     </div>
-    <form class="form reveal" id="contatoForm" action="https://formsubmit.co/indica.osc@gmail.com" method="POST">
-      <input type="hidden" name="_subject" value="Novo contato pelo site — agenciaindica.com">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_template" value="table">
-      <input type="hidden" name="_next" value="https://agenciaindica.com/?enviado=1">
+    <form class="form reveal" id="contatoForm" action="https://indica-3by7.onrender.com/tilt/publico/contato/formulario" method="POST">
+      <input type="hidden" name="idioma" value="pt">
+      <input type="hidden" name="origem" value="agencia">
       <input type="text" name="_honey" class="form__honey" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="form__row">
-        <label class="form__field"><span data-i18n="form.nome">Nome</span><input type="text" name="Nome" autocomplete="name" required></label>
-        <label class="form__field"><span data-i18n="form.email">E-mail</span><input type="email" name="E-mail" autocomplete="email" required></label>
+        <label class="form__field"><span data-i18n="form.nome">Nome</span><input type="text" name="Nome" autocomplete="name" minlength="2" maxlength="160" required></label>
+        <label class="form__field"><span data-i18n="form.email">E-mail</span><input type="email" name="E-mail" autocomplete="email" maxlength="254" required></label>
       </div>
       <div class="form__row">
-        <label class="form__field"><span data-i18n="form.org">Organização</span><input type="text" name="Organização" autocomplete="organization"></label>
+        <label class="form__field"><span data-i18n="form.org">Organização</span><input type="text" name="Organização" autocomplete="organization" maxlength="200"></label>
         <label class="form__field"><span data-i18n="form.assunto">Assunto</span>
           <select name="Assunto">
             <option data-i18n="form.op1">Campanha de mobilização</option>
@@ -736,10 +734,13 @@
           </select>
         </label>
       </div>
-      <label class="form__field"><span data-i18n="form.msg">Conte o que você quer comunicar</span><textarea name="Mensagem" rows="4" required></textarea></label>
+      <label class="form__field"><span data-i18n="form.msg">Conte o que você quer comunicar</span><textarea name="Mensagem" rows="4" minlength="10" maxlength="10000" required></textarea></label>
+      <p class="form__note" data-i18n="form.privacidade">A equipe da Índica recebe estes dados para acompanhar seu contato.</p>
+      <p class="form__error" id="formErro" role="alert" hidden></p>
       <button type="submit" class="btn btn--solid form__submit" data-i18n="form.enviar">Enviar mensagem</button>
+      <button type="button" class="btn btn--ghost form__submit" id="formRevisar" data-i18n="form.revisar" hidden>Revisar os dados</button>
     </form>
-    <p class="form__ok" id="formOk" hidden data-i18n="form.ok">Recebemos sua mensagem. Retornamos em breve. ✓</p>
+    <div class="form__ok" id="formOk" tabindex="-1" role="status" hidden><p data-i18n="form.ok">Sua mensagem foi registrada no sistema da Índica.</p><p><span data-i18n="form.protocolo">Protocolo:</span> <strong id="formProtocolo"></strong></p><p data-i18n="form.guarde">Guarde este número para mencionar seu contato com a equipe.</p><button type="button" class="btn btn--ghost" id="formNova" data-i18n="form.nova">Enviar outra mensagem</button></div>
   </div>
 </section>
 
@@ -774,7 +775,7 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=68"></script>
+<script src="assets/js/main.js?v=69"></script>
 <script src="assets/js/eixos-motion.js?v=2"></script>
 </body>
 </html>

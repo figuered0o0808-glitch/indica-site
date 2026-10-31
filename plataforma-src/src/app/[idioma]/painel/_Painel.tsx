@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Botao } from '@/components/Botao';
 import { CabecalhoPagina } from '@/components/CabecalhoPagina';
@@ -11,6 +11,7 @@ import { Pagamento } from '@/components/conta/Pagamento';
 import { Oferta } from '@/components/conta/Oferta';
 import { HistoricoProposta, ImprimirComprovante, rotuloEstado } from '@/components/conta/Comprovante';
 import { RecuperarRascunho } from '@/components/conta/RascunhoUI';
+import { ExcluirRascunho } from '@/components/conta/ExcluirRascunho';
 import styles from '@/components/conta/AppPessoal.module.css';
 import type { Idioma } from '@/i18n/idiomas';
 import { textos } from '@/i18n/strings';
@@ -21,14 +22,15 @@ import { useApp } from '@/state/AppState';
 import { Candidaturas } from './_Candidaturas';
 import { Cursos, cursosDoPainel } from './_Cursos';
 import { ResumoPainel, SecaoPainel } from './_PainelUI';
-function RascunhoCard({ idioma, rascunho, chamada, org }: {
+function RascunhoCard({ idioma, rascunho, chamada, org, onExcluido }: {
     idioma: Idioma;
     rascunho: ResumoRascunho;
     chamada?: Call;
     org?: OrganizacaoExecutora;
+    onExcluido: () => void;
 }) {
     const t = textos(idioma), [mostrar, setMostrar] = useState(false);
-    return <article className="cartao"><p className="olho">{t.conta.rascunho}</p><h3>{rascunho.tituloProjeto || t.conta.semTitulo}</h3><p>{rascunho.tituloChamada || chamada?.titulo}</p>{org ? <p className="texto-pequeno">{org.razaoSocial}</p> : null}<dl className="definicoes definicoes--2"><div><dt>{t.conta.atualizadoEm}</dt><dd>{new Date(rascunho.atualizadoEm).toLocaleString(idioma === 'pt' ? 'pt-BR' : idioma)}</dd></div><div><dt>{t.conta.prazo}</dt><dd>{chamada?.inscricoesAte ? data(chamada.inscricoesAte.slice(0, 10), idioma) : t.conta.semPrazo}</dd></div></dl>{rascunho.aceitaEnvio ? <Botao href={rota(idioma, `oportunidades/${rascunho.chamadaSlug}/candidatura/`)}>{t.conta.continuar}</Botao> : <p className="nota">{t.conta.rascunhoFechado}</p>}<details onToggle={e => setMostrar(e.currentTarget.open)}><summary>{t.conta.textoRecuperavel}</summary>{mostrar ? <RecuperarRascunho idioma={idioma} slug={rascunho.chamadaSlug}/> : null}</details></article>;
+    return <article className="cartao"><p className="olho">{t.conta.rascunho}</p><h3>{rascunho.tituloProjeto || t.conta.semTitulo}</h3><p>{rascunho.tituloChamada || chamada?.titulo}</p>{org ? <p className="texto-pequeno">{org.razaoSocial}</p> : null}<dl className="definicoes definicoes--2"><div><dt>{t.conta.atualizadoEm}</dt><dd>{new Date(rascunho.atualizadoEm).toLocaleString(idioma === 'pt' ? 'pt-BR' : idioma)}</dd></div><div><dt>{t.conta.prazo}</dt><dd>{chamada?.inscricoesAte ? data(chamada.inscricoesAte.slice(0, 10), idioma) : t.conta.semPrazo}</dd></div></dl>{rascunho.aceitaEnvio ? <Botao href={rota(idioma, `oportunidades/${rascunho.chamadaSlug}/candidatura/`)}>{t.conta.continuar}</Botao> : <p className="nota">{t.conta.rascunhoFechado}</p>}<details onToggle={e => setMostrar(e.currentTarget.open)}><summary>{t.conta.textoRecuperavel}</summary>{mostrar ? <RecuperarRascunho idioma={idioma} slug={rascunho.chamadaSlug}/> : null}</details><ExcluirRascunho idioma={idioma} rascunho={rascunho} onExcluido={onExcluido}/></article>;
 }
 function EditorPerfil({ idioma, perfil }: {
     idioma: Idioma;
@@ -48,6 +50,8 @@ export function Painel({ idioma, abertas, catalogo, catalogoEditais }: {
     const { candidaturas, cadastrado, cursosInscritos, recibos, organizacoes, perfil, rascunhos, atualizarRecibos, atualizarConta, sair, hidratado, carregandoConta, erroConta, nome } = useApp();
     const t = textos(idioma), s = t.paineis, envio = t.comum.envio, search = useSearchParams(), tokenUrl = search.get('recibo')?.trim() || undefined;
     const [atualizando, setAtualizando] = useState(false), [consulta, setConsulta] = useState<'ok' | 'erro'>();
+    const [exclusoes, setExclusoes] = useState(0), avisoExclusao = useRef<HTMLParagraphElement>(null);
+    useEffect(() => { if (exclusoes) avisoExclusao.current?.focus(); }, [exclusoes]);
     const atualizar = useCallback(async (token?: string) => { setAtualizando(true); setConsulta(undefined); try {
         setConsulta(await atualizarRecibos(token) ? 'ok' : 'erro');
     }
@@ -70,10 +74,10 @@ export function Painel({ idioma, abertas, catalogo, catalogoEditais }: {
     <CabecalhoPagina olho={s.olho} titulo={cadastrado ? nome || s.titulo : s.titulo} acoes={<div className="linha"><Botao href={rota(idioma, 'oportunidades/')} variante="secundario">{s.verOportunidades}</Botao>{cadastrado ? <Botao onClick={() => void sair().catch(() => { })} variante="secundario">{t.conta.sair}</Botao> : null}</div>}/>
     {cadastrado && (prioridadeOferta || prioridadePagamento) ? <section className="secao secao--curta"><div className="container"><div className={styles.notice}><p className="olho">{t.conta.proximoPasso}</p><h2>{prioridadeOferta ? t.conta.estadoAceite : t.conta.pagamentoTitulo}</h2><p>{(prioridadeOferta ?? prioridadePagamento)?.projeto}</p><Botao href={rota(idioma, prioridadeOferta ? `painel/#oferta-${encodeURIComponent(prioridadeOferta.protocolo!)}` : `painel/#pagamento-${encodeURIComponent(prioridadePagamento!.protocolo!)}`)}>{prioridadeOferta ? t.conta.ofertaAbrir : t.conta.pagamentoAbrir}</Botao></div></div></section> : null}
     {erroConta ? <section className="secao secao--curta"><div className="container"><p role="alert" className="campo__erro">{envio[erroConta]}</p><Botao onClick={() => void atualizarConta().catch(() => { })}>{t.conta.atualizar}</Botao></div></section> : null}
-    {!cadastrado ? <section className="secao secao--curta"><div className="container-estreito"><LoginConta idioma={idioma}/></div></section> : null}
+    {!cadastrado ? <section className="secao secao--curta"><div className="container-estreito"><LoginConta idioma={idioma} recibo={tokenUrl}/></div></section> : null}
     {cadastrado ? <>
       <section className="secao secao--curta"><div className="container"><ResumoPainel itens={[{ rotulo: t.conta.rascunhosTitulo, valor: String(rascunhos.length) }, { rotulo: s.resumo.enviadas, valor: String(candidaturas.length) }, { rotulo: s.resumo.emAvaliacao, valor: String(candidaturas.filter(c => ['recebida', 'enviada', 'em-avaliacao'].includes(c.status)).length) }, { rotulo: s.resumo.aprovadas, valor: String(selecionadas.length) }]}/></div></section>
-      {rascunhos.length ? <SecaoPainel id="rascunhos" titulo={t.conta.rascunhosTitulo}><p className="nota">{t.conta.rascunhoAviso}</p><div className={styles.grid}>{rascunhos.map(r => <RascunhoCard key={r.chamadaSlug} idioma={idioma} rascunho={r} chamada={catalogoEditais.find(c => c.slug === r.chamadaSlug)} org={organizacoes.find(o => o.id === r.organizacaoId)}/>)}</div></SecaoPainel> : null}
+      {rascunhos.length || exclusoes ? <SecaoPainel id="rascunhos" titulo={t.conta.rascunhosTitulo}>{exclusoes ? <p role="status" tabIndex={-1} ref={avisoExclusao}>{t.conta.rascunhoExcluido}</p> : null}{rascunhos.length ? <><p className="nota">{t.conta.rascunhoAviso}</p><div className={styles.grid}>{rascunhos.map(r => <RascunhoCard key={r.chamadaSlug} idioma={idioma} rascunho={r} chamada={catalogoEditais.find(c => c.slug === r.chamadaSlug)} org={organizacoes.find(o => o.id === r.organizacaoId)} onExcluido={() => setExclusoes(n => n + 1)}/>)}</div></> : null}</SecaoPainel> : null}
       <SecaoPainel id="candidaturas" titulo={s.candidaturasTitulo}>
         {candidaturas.length ? <div className={styles.list}>{candidaturas.map(c => <article key={c.protocolo} className="cartao"><div className="linha linha--fim"><h3>{c.projeto || c.editalTitulo}</h3><Selo idioma={idioma} status={c.status} rotulo={rotuloEstado(c.status, idioma)}/></div><p>{c.editalTitulo}</p>{c.simulacao ? <p className="nota">{t.conta.simulacaoTitulo}</p> : null}<p className="texto-pequeno">{c.protocolo} · {c.organizacao?.razaoSocial}</p><dl className="definicoes definicoes--2"><div><dt>{envio.enviadaEm}</dt><dd>{data(c.enviadaEm.slice(0, 10), idioma)}</dd></div>{catalogoEditais.find(ch => ch.slug === c.editalSlug)?.inscricoesAte ? <div><dt>{t.conta.prazo}</dt><dd>{data(catalogoEditais.find(ch => ch.slug === c.editalSlug)!.inscricoesAte!.slice(0, 10), idioma)}</dd></div> : null}</dl><p className="rotulo">{t.conta.proximoPasso}</p>{c.status === 'aguardando-aceite' ? <Botao href={rota(idioma, `painel/#oferta-${encodeURIComponent(c.protocolo!)}`)}>{t.conta.ofertaTitulo}</Botao> : c.status === 'selecionada' || c.status === 'aprovada' ? <><p>{c.pagamentoPendente ? t.conta.pagamentoPendente : c.pagamentoStatus === 'recebido' ? t.conta.pagamentoRecebido : t.conta.pagamentoTitulo}</p><Botao href={rota(idioma, `painel/#pagamento-${encodeURIComponent(c.protocolo!)}`)}>{c.pagamentoPendente ? t.conta.pagamentoAbrir : t.conta.pagamentoTitulo}</Botao></> : <p>{c.status === 'suplente' ? t.conta.suplenteAjuda : c.status === 'recusada' ? t.conta.ofertaRecusada : t.conta.aguardar}</p>}<HistoricoProposta idioma={idioma} proposta={c}/>{c.reciboToken ? <Botao href={rota(idioma, `painel/?recibo=${encodeURIComponent(c.reciboToken)}`)} variante="secundario" tamanho="pequeno">{envio.linkComprovante}</Botao> : null}</article>)}</div> : <Candidaturas idioma={idioma} candidaturas={[]} abertas={abertas}/>}
       </SecaoPainel>

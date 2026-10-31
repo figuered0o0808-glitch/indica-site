@@ -7,6 +7,7 @@ import type { Idioma } from '@/i18n/idiomas';
 import { textos } from '@/i18n/strings';
 import { rota } from '@/lib/rotas';
 import { participar } from '@/lib/participar';
+import { contato } from '@/lib/contato';
 
 const AGENCIA = 'https://agenciaindica.com/';
 
@@ -47,6 +48,7 @@ export function SiteFooter({ idioma }: { idioma: Idioma }) {
                 </li>
                 <li><Link href={rota(idioma, 'como-funciona/')}>{participar(idioma).como}</Link></li>
                 <li><Link href={rota(idioma, 'painel/')}>{participar(idioma).painel}</Link></li>
+                <li><Link href={rota(idioma, 'contato/')}>{contato(idioma).titulo}</Link></li>
               </ul>
             </div>
             <div>

@@ -121,5 +121,14 @@ export const conta = {
   "ofertaIndisponivel": "No hay una oferta disponible para responder.",
   "rascunhoNovo": "Empieza tu propuesta. Los cambios se guardarán automáticamente.",
   "ofertaAbrir": "Revisar oferta",
-  "rascunhoVazio": "No hay un borrador guardado para esta convocatoria."
+  "rascunhoVazio": "No hay un borrador guardado para esta convocatoria.",
+  "salvarEContinuarDepois": "Guardar y continuar después",
+  "rascunhoExcluir": "Eliminar borrador",
+  "rascunhoExcluirPergunta": "¿Eliminar este borrador?",
+  "rascunhoExcluirAjuda": "El texto guardado se eliminará y no podrá recuperarse aquí. Las propuestas enviadas no cambiarán. Para conservar una copia, usa «Ver y copiar mi borrador» antes de eliminarlo.",
+  "rascunhoExcluirConfirmar": "Sí, eliminar borrador",
+  "rascunhoExcluindo": "Eliminando borrador…",
+  "rascunhoExcluido": "Borrador eliminado. Tus propuestas enviadas se han conservado.",
+  "rascunhoExcluirConflito": "Este borrador cambió en otro dispositivo. Actualiza la lista y revisa la versión más reciente antes de eliminarlo.",
+  "rascunhosAtualizar": "Actualizar lista de borradores"
 } as const;

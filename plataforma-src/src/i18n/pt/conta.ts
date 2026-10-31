@@ -121,5 +121,14 @@ export const conta = {
   "ofertaIndisponivel": "Nenhuma oferta disponível para responder.",
   "rascunhoNovo": "Comece sua proposta. As alterações serão salvas automaticamente.",
   "ofertaAbrir": "Analisar oferta",
-  "rascunhoVazio": "Nenhum rascunho salvo para esta chamada."
+  "rascunhoVazio": "Nenhum rascunho salvo para esta chamada.",
+  "salvarEContinuarDepois": "Salvar e continuar depois",
+  "rascunhoExcluir": "Excluir rascunho",
+  "rascunhoExcluirPergunta": "Excluir este rascunho?",
+  "rascunhoExcluirAjuda": "O texto salvo será excluído e não poderá ser recuperado aqui. Propostas já enviadas não serão alteradas. Se quiser guardar uma cópia, use “Ver e copiar meu rascunho” antes de excluir.",
+  "rascunhoExcluirConfirmar": "Sim, excluir rascunho",
+  "rascunhoExcluindo": "Excluindo rascunho…",
+  "rascunhoExcluido": "Rascunho excluído. Suas propostas enviadas foram preservadas.",
+  "rascunhoExcluirConflito": "Este rascunho mudou em outro aparelho. Atualize a lista e confira a versão mais recente antes de excluir.",
+  "rascunhosAtualizar": "Atualizar lista de rascunhos"
 } as const;

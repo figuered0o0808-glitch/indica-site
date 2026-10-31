@@ -121,5 +121,14 @@ export const conta = {
   "ofertaIndisponivel": "No offer is available to respond to.",
   "rascunhoNovo": "Start your proposal. Changes will be saved automatically.",
   "ofertaAbrir": "Review offer",
-  "rascunhoVazio": "No saved draft for this call."
+  "rascunhoVazio": "No saved draft for this call.",
+  "salvarEContinuarDepois": "Save and continue later",
+  "rascunhoExcluir": "Delete draft",
+  "rascunhoExcluirPergunta": "Delete this draft?",
+  "rascunhoExcluirAjuda": "The saved text will be deleted and cannot be recovered here. Submitted proposals will stay unchanged. To keep a copy, use “View and copy my draft” before deleting.",
+  "rascunhoExcluirConfirmar": "Yes, delete draft",
+  "rascunhoExcluindo": "Deleting draft…",
+  "rascunhoExcluido": "Draft deleted. Your submitted proposals have been preserved.",
+  "rascunhoExcluirConflito": "This draft changed on another device. Refresh the list and review the latest version before deleting.",
+  "rascunhosAtualizar": "Refresh draft list"
 } as const;
