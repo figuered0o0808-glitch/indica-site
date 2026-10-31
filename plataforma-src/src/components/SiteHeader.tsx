@@ -138,11 +138,11 @@ export function SiteHeader({
             <Link href={rota(idioma, 'painel')} className="btn btn--secundario btn--pequeno">
               {t.comum.navegacao.painel}
             </Link>
-          ) : temInscricoesAbertas ? (
-            <Link href={rota(idioma, 'cadastro')} className="btn btn--primario btn--pequeno">
-              {t.cadastro.entrar}
+          ) : (
+            <Link href={rota(idioma, 'cadastro/?entrar=1')} className="btn btn--primario btn--pequeno">
+              {t.conta.entrar}
             </Link>
-          ) : null}
+          )}
         </div>
       </div>
     </header>

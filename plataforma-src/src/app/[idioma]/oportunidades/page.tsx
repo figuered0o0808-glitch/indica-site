@@ -75,7 +75,7 @@ export default async function PaginaEditais({
   if (!ehIdioma(idioma)) notFound();
 
   const t = textos(idioma);
-  const lista = ordenar(conteudo(idioma).editais);
+  const lista = ordenar(conteudo(idioma).editais.filter(edital=>!edital.simulacao));
 
   const cabecalho = (estreito: boolean) => (
     <CabecalhoPagina

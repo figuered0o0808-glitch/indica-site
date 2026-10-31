@@ -85,7 +85,7 @@ export function Lateral({ idioma, edital }: { idioma: Idioma; edital: Call }) {
                 {t.comum.acoes.candidatarProjeto}
               </Botao>
             ) : (
-              <Botao href={rota(idioma, 'cadastro')} largo>
+              <Botao href={rota(idioma, `cadastro/?retorno=${encodeURIComponent(edital.slug)}`)} largo>
                 {tc.cadastro.acao}
               </Botao>
             )}

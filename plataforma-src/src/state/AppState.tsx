@@ -1,162 +1,110 @@
 'use client';
 
-/** Cache pessoal de confirmações da API; nunca substitui a gravação no servidor. */
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { STORAGE_KEY, LEGACY_STORAGE_KEY } from '@/config/program';
-import type { Candidatura, PerfilCadastro, ReciboPublico, StatusCandidatura } from '@/lib/types';
-import { enviarCadastro, enviarCandidatura as enviarProposta, enviarInscricaoCurso, consultarRecibo, ErroEnvio } from '@/lib/envio';
+import type { Candidatura, PerfilCadastro, ReciboPublico, OrganizacaoExecutora, NovaOrganizacao, DadosPagamento } from '@/lib/types';
+import { cadastrarConta, entrarConta, consultarConta, sairConta, enviarOrganizacao, enviarCandidatura as enviarProposta, enviarInscricaoCurso, consultarRecibo, consultarPagamento, enviarPagamento, ErroEnvio, motivoDoErro, type MotivoEnvio, type ContaRecebida } from '@/lib/envio';
 
+const CHAVE_TOKEN = 'indica:conta-pessoal:token:v1';
 interface Estado {
-  cadastrado: boolean;
-  cadastroConfirmado: boolean;
-  nome: string;
-  perfil: PerfilCadastro | null;
-  candidaturas: Candidatura[];
-  cursosInscritos: string[];
-  recibos: ReciboPublico[];
+  cadastrado: boolean; cadastroConfirmado: boolean; nome: string; perfil: PerfilCadastro | null;
+  organizacoes: OrganizacaoExecutora[]; candidaturas: Candidatura[]; cursosInscritos: string[]; recibos: ReciboPublico[];
 }
-function estadoInicial(): Estado {
-  return { cadastrado: false, cadastroConfirmado: false, nome: '', perfil: null, candidaturas: [], cursosInscritos: [], recibos: [] };
-}
-export type NovaCandidatura = Omit<Candidatura, 'id' | 'enviadaEm' | 'status' | 'protocolo' | 'reciboToken'>;
+const inicial = (): Estado => ({ cadastrado: false, cadastroConfirmado: false, nome: '', perfil: null, organizacoes: [], candidaturas: [], cursosInscritos: [], recibos: [] });
+export type NovaCandidatura = Omit<Candidatura, 'id' | 'enviadaEm' | 'status' | 'protocolo' | 'reciboToken'> & { organizacaoId: number };
 interface ContextoApp extends Estado {
-  hidratado: boolean;
-  cadastrar: (perfil: PerfilCadastro) => Promise<void>;
+  hidratado: boolean; carregandoConta: boolean; erroConta?: MotivoEnvio;
+  cadastrar: (perfil: PerfilCadastro, senha: string, organizacao?: NovaOrganizacao) => Promise<void>;
+  entrar: (email: string, senha: string) => Promise<void>; sair: () => Promise<void>; atualizarConta: () => Promise<void>;
+  salvarOrganizacao: (dados: NovaOrganizacao) => Promise<void>;
   enviarCandidatura: (dados: NovaCandidatura, envioId: string) => Promise<Candidatura>;
   inscreverCurso: (slug: string, envioId: string) => Promise<ReciboPublico>;
   atualizarRecibos: (tokenExtra?: string) => Promise<boolean>;
-  estaInscrito: (slug: string) => boolean;
-  reiniciar: () => void;
+  carregarPagamento: (protocolo: string) => ReturnType<typeof consultarPagamento>;
+  gravarPagamento: (protocolo: string, dados: DadosPagamento) => Promise<void>;
+  estaInscrito: (slug: string) => boolean; reiniciar: () => void;
 }
 const Contexto = createContext<ContextoApp | null>(null);
-
-function perfilValido(valor: unknown): valor is PerfilCadastro {
-  if (!valor || typeof valor !== 'object') return false;
-  const p = valor as PerfilCadastro;
-  return ['nome', 'email', 'telefone', 'pais', 'cidade', 'uf'].every((k) => typeof p[k as keyof PerfilCadastro] === 'string') &&
-    Array.isArray(p.nichos) && p.nichos.every((n) => typeof n === 'string') &&
-    Array.isArray(p.redes) && p.redes.every((r) => r && typeof r.plataforma === 'string' && typeof r.perfil === 'string' && typeof r.seguidores === 'string');
+function perfilValido(p: unknown): p is PerfilCadastro {
+  if (!p || typeof p !== 'object') return false;
+  const v = p as PerfilCadastro;
+  return ['nome','email','telefone','pais','cidade','uf'].every(k => typeof v[k as keyof PerfilCadastro] === 'string') && Array.isArray(v.nichos) && v.nichos.every(x => typeof x === 'string') && Array.isArray(v.redes) && v.redes.every(r => r && typeof r.plataforma === 'string' && typeof r.perfil === 'string' && typeof r.seguidores === 'string');
 }
-function reciboValido(valor: unknown): valor is ReciboPublico {
-  if (!valor || typeof valor !== 'object') return false;
-  const r = valor as ReciboPublico;
-  return (r.protocolo === undefined || typeof r.protocolo === 'string') && ['tipo', 'referencia', 'estado', 'titulo', 'enviadaEm', 'reciboToken'].every((k) => typeof r[k as keyof ReciboPublico] === 'string' && Boolean(r[k as keyof ReciboPublico]));
+function reciboValido(v: unknown): v is ReciboPublico {
+  if (!v || typeof v !== 'object') return false;
+  const r = v as ReciboPublico;
+  return ['tipo','referencia','estado','titulo','enviadaEm','reciboToken'].every(k => typeof r[k as keyof ReciboPublico] === 'string') && (r.protocolo === undefined || typeof r.protocolo === 'string');
 }
-function ler(): Estado | null {
-  try {
-    const bruto = window.localStorage.getItem(STORAGE_KEY) ?? window.localStorage.getItem(LEGACY_STORAGE_KEY);
-    if (!bruto) return null;
-    const registro = JSON.parse(bruto) as Partial<Estado>;
-    if (!registro || typeof registro !== 'object') return null;
-    const perfil = perfilValido(registro.perfil) ? registro.perfil : null;
-    const confirmado = registro.cadastroConfirmado === true && Boolean(perfil);
-    // Registros antigos sem confirmação eram apenas simulações locais. O perfil
-    // continua disponível como rascunho, mas eles não viram comprovantes recebidos.
-    const candidaturas = Array.isArray(registro.candidaturas) ? registro.candidaturas.filter((c): c is Candidatura =>
-      Boolean(c) && ['id', 'protocolo', 'reciboToken', 'editalSlug', 'editalTitulo', 'projeto', 'formato', 'enviadaEm', 'status'].every((k) => typeof c[k as keyof Candidatura] === 'string') && Boolean(c.reciboToken) && typeof c.valorSolicitado === 'number' && Number.isFinite(c.valorSolicitado)) : [];
-    const recibos = Array.isArray(registro.recibos) ? registro.recibos.filter(reciboValido) : [];
-    return {
-      cadastrado: confirmado, cadastroConfirmado: confirmado, perfil, nome: perfil?.nome ?? '', candidaturas, recibos,
-      cursosInscritos: Array.isArray(registro.cursosInscritos) ? registro.cursosInscritos.filter((slug) => typeof slug === 'string' && recibos.some((r) => r.tipo.includes('curso') && r.referencia === slug)) : [],
-    };
-  } catch { return null; }
+function juntar(atuais: ReciboPublico[], novos: ReciboPublico[]) { const m = new Map(atuais.map(r => [r.reciboToken,r])); novos.forEach(r => {const anterior=m.get(r.reciboToken);m.set(r.reciboToken,{...r,simulacao:r.simulacao??anterior?.simulacao,pagamentoPendente:r.pagamentoPendente??anterior?.pagamentoPendente});}); return [...m.values()]; }
+function reciboDaCandidatura(c: Candidatura): ReciboPublico {
+  return { tipo:'candidatura', referencia:c.editalSlug, protocolo:c.protocolo, estado:c.status, titulo:c.editalTitulo, enviadaEm:c.enviadaEm, reciboToken:c.reciboToken!, pagamentoPendente:c.pagamentoPendente, simulacao:c.simulacao };
 }
-function juntarRecibos(atuais: ReciboPublico[], novos: ReciboPublico[]): ReciboPublico[] {
-  const mapa = new Map(atuais.map((r) => [r.reciboToken, r]));
-  novos.forEach((r) => mapa.set(r.reciboToken, r));
-  return [...mapa.values()];
-}
-function statusDaApi(estado: string, anterior: StatusCandidatura): StatusCandidatura {
-  const chave = estado.toLowerCase().replaceAll('_', '-');
-  if (['recebida', 'recebido'].includes(chave)) return 'recebida';
-  if (chave === 'enviada') return 'enviada';
-  if (['em-avaliacao', 'em-analise', 'avaliacao'].includes(chave)) return 'em-avaliacao';
-  if (['aprovada', 'aprovado'].includes(chave)) return 'aprovada';
-  if (chave === 'selecionada') return 'selecionada';
-  if (chave === 'inabilitada') return 'inabilitada';
-  if (['nao-selecionada', 'reprovada', 'recusada'].includes(chave)) return 'nao-selecionada';
-  return anterior;
-}
-
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [estado, setEstado] = useState<Estado>(estadoInicial);
-  const [hidratado, setHidratado] = useState(false);
-  const estadoRef = useRef(estado);
-  estadoRef.current = estado;
+  const [estado,setEstado] = useState<Estado>(inicial);
+  const [hidratado,setHidratado] = useState(false), [carregandoConta,setCarregando] = useState(false), [erroConta,setErroConta] = useState<MotivoEnvio>();
+  const geracaoRef = useRef(0);
+  const tokenRef = useRef<string | null>(null), estadoRef = useRef(estado); estadoRef.current=estado;
+  const limpar = useCallback(() => { geracaoRef.current++;tokenRef.current=null;setCarregando(false);setEstado(inicial());setErroConta(undefined);try { localStorage.removeItem(CHAVE_TOKEN);localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(LEGACY_STORAGE_KEY); } catch {} },[]);
+  const aplicar = useCallback((conta: ContaRecebida) => {
+    setEstado(atual => {
+      const anteriores = conta.inscricoesCursos;
+      return { cadastrado:true,cadastroConfirmado:true,nome:conta.perfil.nome,perfil:conta.perfil,organizacoes:conta.organizacoes,candidaturas:conta.candidaturas,
+        recibos:juntar(anteriores,conta.candidaturas.filter(c=>Boolean(c.reciboToken)).map(reciboDaCandidatura)),cursosInscritos:anteriores.map(r=>r.referencia) };
+    });setErroConta(undefined);
+  },[]);
+  const atualizarConta = useCallback(async () => {
+    const token=tokenRef.current,geracao=geracaoRef.current;if (!token) throw new ErroEnvio('perfil');
+    setCarregando(true);
+    try { const conta=await consultarConta(token);if(tokenRef.current===token&&geracaoRef.current===geracao)aplicar(conta); }
+    catch(e) { if(geracaoRef.current===geracao){if(e instanceof ErroEnvio && e.status===401)limpar();else setErroConta(motivoDoErro(e));}throw e; }
+    finally { if(geracaoRef.current===geracao)setCarregando(false); }
+  },[aplicar,limpar]);
   useEffect(() => {
-    const salvo = ler();
-    if (salvo) setEstado(salvo);
+    try {
+      const salvo=JSON.parse(localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY) ?? 'null');
+      if(salvo && typeof salvo==='object')setEstado(atual=>({...atual,perfil:perfilValido(salvo.perfil)?salvo.perfil:null,recibos:Array.isArray(salvo.recibos)?salvo.recibos.filter(reciboValido):[]}));
+      tokenRef.current=localStorage.getItem(CHAVE_TOKEN);
+    }catch{}
     setHidratado(true);
-  }, []);
+    if(tokenRef.current)void atualizarConta().catch(()=>{});
+  },[atualizarConta]);
   useEffect(() => {
-    if (!hidratado) return;
-    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(estado)); } catch { /* cache opcional */ }
-  }, [estado, hidratado]);
-
-  const cadastrar = useCallback(async (perfil: PerfilCadastro) => {
-    await enviarCadastro(perfil);
-    setEstado((atual) => ({ ...atual, cadastrado: true, cadastroConfirmado: true, nome: perfil.nome.trim(), perfil }));
-  }, []);
-
-  const enviarCandidatura = useCallback(async (dados: NovaCandidatura, envioId: string): Promise<Candidatura> => {
-    const resposta = await enviarProposta({
-      chamadaSlug: dados.editalSlug, chamadaId: dados.chamadaId, envioId,
-      proponente: Object.fromEntries(Object.entries(dados.proponente ?? {}).filter((par): par is [string, string] => typeof par[1] === 'string')),
-      projeto: { titulo: dados.projeto, formato: dados.formato, descricao: dados.descricao ?? '', justificativa: dados.justificativa ?? '', alcance: dados.alcance ?? '', distribuicao: dados.distribuicao ?? '' },
-      valorSolicitado: dados.valorSolicitado,
-    });
-    const enviadaEm = new Date().toISOString();
-    const nova: Candidatura = {
-      ...dados, ...resposta, id: `cand-${envioId}`, enviadaEm, status: 'enviada',
-      proponente: dados.proponente ? { ...dados.proponente, documento: undefined } : undefined,
-    };
-    const recibo: ReciboPublico = { tipo: 'candidatura', referencia: dados.editalSlug, protocolo: resposta.protocolo, estado: 'recebida', titulo: dados.editalTitulo, enviadaEm, reciboToken: resposta.reciboToken };
-    setEstado((atual) => ({ ...atual,
-      candidaturas: [nova, ...atual.candidaturas.filter((c) => c.reciboToken !== resposta.reciboToken)],
-      recibos: juntarRecibos(atual.recibos, [recibo]),
-    }));
+    if(!hidratado)return;
+    // Explicit whitelist: senha, CPF, respostas privadas e pagamento nunca entram no cache.
+    try{localStorage.setItem(STORAGE_KEY,JSON.stringify({perfil:estado.perfil,organizacoes:estado.organizacoes,recibos:estado.recibos}));}catch{}
+  },[estado,hidratado]);
+  const comSessao=useCallback(async<T,>(pedido:Promise<T>):Promise<T>=>{const geracao=geracaoRef.current;try{return await pedido;}catch(e){if(geracaoRef.current===geracao&&e instanceof ErroEnvio&&e.status===401)limpar();throw e;}},[limpar]);
+  const guardarToken = useCallback((token:string)=>{geracaoRef.current++;tokenRef.current=token;try{localStorage.setItem(CHAVE_TOKEN,token);}catch{}},[]);
+  const cadastrar=useCallback(async(perfil:PerfilCadastro,senha:string,org?:NovaOrganizacao)=>{const c=await cadastrarConta(perfil,senha,org);guardarToken(c.token);aplicar(c);},[guardarToken,aplicar]);
+  const entrar=useCallback(async(email:string,senha:string)=>{const c=await entrarConta(email,senha);guardarToken(c.token);const me=await consultarConta(c.token);if(tokenRef.current===c.token)aplicar(me);},[guardarToken,aplicar,atualizarConta]);
+  const sair=useCallback(async()=>{const token=tokenRef.current;try{if(token)await sairConta(token);}finally{limpar();}},[limpar]);
+  const tokenObrigatorio=()=>{if(!tokenRef.current)throw new ErroEnvio('perfil');return tokenRef.current;};
+  const salvarOrganizacao=useCallback(async(dados:NovaOrganizacao)=>{const token=tokenObrigatorio(),orgs=await comSessao(enviarOrganizacao(dados,token));if(tokenRef.current===token)setEstado(a=>({...a,organizacoes:orgs}));},[]);
+  const enviarCandidatura=useCallback(async(dados:NovaCandidatura,envioId:string):Promise<Candidatura>=>{
+    const token=tokenObrigatorio(), org=estadoRef.current.organizacoes.find(o=>o.id===dados.organizacaoId);
+    if(!org)throw new ErroEnvio('perfil');
+    const resposta=await comSessao(enviarProposta({chamadaSlug:dados.editalSlug,chamadaId:dados.chamadaId,organizacaoId:org.id,envioId,projeto:{titulo:dados.projeto,formato:dados.formato,descricao:dados.descricao??'',justificativa:dados.justificativa??'',alcance:dados.alcance??'',distribuicao:dados.distribuicao??''},valorSolicitado:dados.valorSolicitado},token));
+    const nova:Candidatura={...dados,...resposta,id:resposta.protocolo,enviadaEm:new Date().toISOString(),status:'recebida',organizacao:org};
+    if(tokenRef.current===token)setEstado(a=>({...a,candidaturas:[nova,...a.candidaturas.filter(c=>c.protocolo!==nova.protocolo)],recibos:juntar(a.recibos,[reciboDaCandidatura(nova)])}));
     return nova;
-  }, []);
-
-  const inscreverCurso = useCallback(async (slug: string, envioId: string): Promise<ReciboPublico> => {
-    const perfil = estadoRef.current.perfil;
-    if (!estadoRef.current.cadastroConfirmado || !perfil) throw new ErroEnvio('perfil');
-    const resposta = await enviarInscricaoCurso(slug, perfil, envioId);
-    const recibo: ReciboPublico = { tipo: 'curso', referencia: slug, estado: 'inscrito', titulo: slug, enviadaEm: new Date().toISOString(), reciboToken: resposta.reciboToken };
-    setEstado((atual) => ({ ...atual,
-      cursosInscritos: atual.cursosInscritos.includes(slug) ? atual.cursosInscritos : [...atual.cursosInscritos, slug],
-      recibos: juntarRecibos(atual.recibos, [recibo]),
-    }));
-    return recibo;
-  }, []);
-
-  const atualizarRecibos = useCallback(async (tokenExtra?: string): Promise<boolean> => {
-    const atual = estadoRef.current;
-    const tokens = new Set([...atual.recibos.map((r) => r.reciboToken), ...atual.candidaturas.flatMap((c) => c.reciboToken ? [c.reciboToken] : []), ...(tokenExtra ? [tokenExtra] : [])]);
-    if (tokens.size === 0) return true;
-    const respostas = await Promise.allSettled([...tokens].map(consultarRecibo));
-    const recebidos = respostas.flatMap((r) => r.status === 'fulfilled' ? [r.value] : []);
-    if (recebidos.length) setEstado((anterior) => ({ ...anterior,
-      recibos: juntarRecibos(anterior.recibos, recebidos),
-      candidaturas: anterior.candidaturas.map((c) => {
-        const recibo = recebidos.find((r) => r.reciboToken === c.reciboToken);
-        return recibo ? { ...c, protocolo: recibo.protocolo ?? c.protocolo, status: statusDaApi(recibo.estado, c.status), enviadaEm: recibo.enviadaEm } : c;
-      }),
-    }));
-    return respostas.every((r) => r.status === 'fulfilled');
-  }, []);
-
-  const reiniciar = useCallback(() => {
-    setEstado(estadoInicial());
-    try { window.localStorage.removeItem(STORAGE_KEY); window.localStorage.removeItem(LEGACY_STORAGE_KEY); } catch { /* cache opcional */ }
-  }, []);
-  const valor = useMemo<ContextoApp>(() => ({ ...estado, hidratado, cadastrar, enviarCandidatura, inscreverCurso, atualizarRecibos,
-    estaInscrito: (slug) => estado.cursosInscritos.includes(slug), reiniciar,
-  }), [estado, hidratado, cadastrar, enviarCandidatura, inscreverCurso, atualizarRecibos, reiniciar]);
+  },[]);
+  const inscreverCurso=useCallback(async(slug:string,envioId:string)=>{
+    const token=tokenObrigatorio(),perfil=estadoRef.current.perfil;if(!perfil)throw new ErroEnvio('perfil');
+    const r=await comSessao(enviarInscricaoCurso(slug,perfil,envioId,token));
+    const recibo:ReciboPublico={tipo:'curso',referencia:slug,estado:'recebida',titulo:slug,enviadaEm:new Date().toISOString(),reciboToken:r.reciboToken};
+    if(tokenRef.current===token)setEstado(a=>({...a,cursosInscritos:[...new Set([...a.cursosInscritos,slug])],recibos:juntar(a.recibos,[recibo])}));return recibo;
+  },[]);
+  const atualizarRecibos=useCallback(async(tokenExtra?:string)=>{
+    const geracao=geracaoRef.current;
+    let ok=true;if(tokenRef.current)try{await atualizarConta();}catch{ok=false;}
+    if(geracaoRef.current!==geracao)return false;
+    const tokens=[...new Set([...estadoRef.current.recibos.map(r=>r.reciboToken),...(tokenExtra?[tokenExtra]:[])])];
+    const resultados=await Promise.allSettled(tokens.map(consultarRecibo));if(geracaoRef.current!==geracao)return false;const novos=resultados.flatMap(r=>r.status==='fulfilled'?[r.value]:[]);
+    if(novos.length)setEstado(a=>({...a,recibos:juntar(a.recibos,novos)}));return ok&&resultados.every(r=>r.status==='fulfilled');
+  },[atualizarConta]);
+  const carregarPagamento=useCallback((protocolo:string)=>comSessao(consultarPagamento(protocolo,tokenObrigatorio())),[comSessao]);
+  const gravarPagamento=useCallback(async(protocolo:string,dados:DadosPagamento)=>{await comSessao(enviarPagamento(protocolo,dados,tokenObrigatorio()));void atualizarConta().catch(()=>{});},[atualizarConta,comSessao]);
+  const valor=useMemo<ContextoApp>(()=>({...estado,hidratado,carregandoConta,erroConta,cadastrar,entrar,sair,atualizarConta,salvarOrganizacao,enviarCandidatura,inscreverCurso,atualizarRecibos,carregarPagamento,gravarPagamento,estaInscrito:slug=>estado.cursosInscritos.includes(slug),reiniciar:limpar}),[estado,hidratado,carregandoConta,erroConta,cadastrar,entrar,sair,atualizarConta,salvarOrganizacao,enviarCandidatura,inscreverCurso,atualizarRecibos,carregarPagamento,gravarPagamento,limpar]);
   return <Contexto.Provider value={valor}>{children}</Contexto.Provider>;
 }
-export function useApp(): ContextoApp {
-  const contexto = useContext(Contexto);
-  if (!contexto) throw new Error('useApp precisa estar dentro de AppProvider');
-  return contexto;
-}
+export function useApp():ContextoApp{const c=useContext(Contexto);if(!c)throw new Error('useApp precisa estar dentro de AppProvider');return c;}

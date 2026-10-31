@@ -142,21 +142,10 @@ export function materialPorSlug(idioma: Idioma, slug: string): Article | undefin
   return conteudo(idioma).materiais.find((m) => m.slug === slug);
 }
 
-/**
- * Condicao unica que abre o cadastro e, com ele, o painel: haver chamada
- * aceitando inscricao ou curso com turma aberta. Sem nenhum dos dois, um
- * formulario que so guarda o que a pessoa digitou seria pior do que nao ter
- * formulario.
- */
-export function cadastroAberto(idioma: Idioma): boolean {
-  const { editais, cursos } = conteudo(idioma);
-  return (
-    editais.some((edital) => edital.status === 'aberta') ||
-    cursos.some((curso) => curso.status === 'aberto')
-  );
-}
+/** A conta pessoal pode ser criada em qualquer época. */
+export function cadastroAberto(_idioma: Idioma): boolean { return true; }
 
 /** As chamadas que aceitam inscricao agora. */
 export function chamadasAbertas(idioma: Idioma): Call[] {
-  return conteudo(idioma).editais.filter((edital) => edital.status === 'aberta');
+  return conteudo(idioma).editais.filter((edital) => !edital.simulacao && edital.status === 'aberta');
 }

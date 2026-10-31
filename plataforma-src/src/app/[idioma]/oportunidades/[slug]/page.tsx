@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { Avatar } from '@/components/Avatar';
 import { CabecalhoPagina } from '@/components/CabecalhoPagina';
+import { Simulacao } from '@/components/conta/Simulacao';
 import { corDoTema } from '@/components/Chip';
 import { Selo } from '@/components/Selo';
 import { Organizacao } from '@/components/Organizacao';
@@ -47,6 +48,7 @@ export async function generateMetadata({
   return {
     title: edital?.titulo ?? textos(idioma).editais.listaTitulo,
     description: edital?.resumo,
+    ...(edital?.simulacao ? {robots:{index:false,follow:false}} : {}),
     alternates: alternativas(idioma, `oportunidades/${slug}`),
   };
 }
@@ -98,6 +100,7 @@ export default async function PaginaEdital({
 
   return (
     <>
+      {edital.simulacao ? <Simulacao idioma={idioma}/> : null}
       <CabecalhoPagina
         olho={edital.modalidade ? `${edital.modalidade} · ${t.comum.tiposEdital[edital.tipo]}` : t.comum.tiposEdital[edital.tipo]}
         titulo={edital.titulo}

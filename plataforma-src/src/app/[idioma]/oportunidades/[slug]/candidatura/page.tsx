@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { Botao } from '@/components/Botao';
 import { CabecalhoPagina } from '@/components/CabecalhoPagina';
+import { Simulacao } from '@/components/conta/Simulacao';
 import { Chip } from '@/components/Chip';
 import { IDIOMAS, ehIdioma } from '@/i18n/idiomas';
 import { textos } from '@/i18n/strings';
@@ -64,6 +65,7 @@ export default async function PaginaCandidatura({
   if (edital.status !== 'aberta') {
     return (
       <>
+        {edital.simulacao ? <Simulacao idioma={idioma}/> : null}
         <CabecalhoPagina estreito olho={edital.status === 'consulta' ? t.editais.consultaTitulo : t.fluxos.candidatura.titulo} titulo={edital.titulo} />
         <div className="secao">
           <div className="container-estreito">
@@ -89,10 +91,12 @@ export default async function PaginaCandidatura({
     chamadaId: edital.chamadaId,
     titulo: edital.titulo,
     faixaApoio: edital.faixaApoio,
+    simulacao: edital.simulacao,
   };
 
   return (
     <>
+      {edital.simulacao ? <Simulacao idioma={idioma}/> : null}
       <CabecalhoPagina
         estreito
         olho={textos(idioma).fluxos.candidatura.titulo}

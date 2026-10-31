@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
 import { notFound } from 'next/navigation';
 
@@ -39,12 +40,12 @@ export default async function PaginaPainel({
 
   /* O que o painel precisa do conteudo vem daqui, do servidor: o cliente nao carrega os dados. */
   return (
-    <Painel
+    <Suspense fallback={null}><Painel
       idioma={idioma}
       aberto={cadastroAberto(idioma)}
       abertas={chamadasAbertas(idioma)}
       catalogoEditais={conteudo(idioma).editais}
       catalogo={conteudo(idioma).cursos}
-    />
+    /></Suspense>
   );
 }

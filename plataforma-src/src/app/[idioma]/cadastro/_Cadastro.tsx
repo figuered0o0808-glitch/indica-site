@@ -1,6 +1,10 @@
 'use client';
 
 import { CarinhaIndica } from '@/components/CarinhaIndica';
+import { useRouter } from 'next/navigation';
+import { CamposOrganizacao, EMPRESA_VAZIA } from '@/components/conta/Organizacao';
+import { LoginConta } from '@/components/conta/LoginConta';
+import { cnpjValido, normalizarCnpj } from '@/lib/cnpj';
 
 /**
  * Cadastro: publico unico, criadores de conteudo.
@@ -18,7 +22,7 @@ import { CarinhaIndica } from '@/components/CarinhaIndica';
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 
-import type { RedeDoCriador } from '@/lib/types';
+import type { RedeDoCriador, NovaOrganizacao } from '@/lib/types';
 
 import { Botao } from '@/components/Botao';
 import { CabecalhoPagina } from '@/components/CabecalhoPagina';
@@ -96,10 +100,16 @@ function Acoes({ idioma }: { idioma: Idioma }) {
  * Falhas preservam os campos para outra tentativa.
  */
 function CadastroFormulario({ idioma }: { idioma: Idioma }) {
-  const { cadastrado, nome: nomeCadastrado, perfil, hidratado, cadastrar } = useApp();
+  const { cadastrado, nome: nomeCadastrado, perfil, hidratado, carregandoConta, cadastrar } = useApp();
 
   const t = textos(idioma);
   const tc = t.cadastro;
+  const router = useRouter();
+  const [senha,setSenha] = useState(''), [senhaConfirmada,setSenhaConfirmada] = useState('');
+  const [erroSenha,setErroSenha] = useState<string>(),[erroCnpj,setErroCnpj] = useState<string>();
+  const [querPropor,setQuerPropor] = useState(false),[empresa,setEmpresa] = useState<NovaOrganizacao>(EMPRESA_VAZIA);
+  const [retorno,setRetorno] = useState<string>(),[modoLogin,setModoLogin] = useState(false);
+  useEffect(()=>{const q=new URLSearchParams(window.location.search),slug=q.get('retorno');if(slug&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)){setRetorno(slug);setQuerPropor(true);}setModoLogin(q.get('entrar')==='1');},[]);
 
   const [enviado, setEnviado] = useState(false);
   const [enviando, setEnviando] = useState(false);
@@ -175,6 +185,9 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
   async function enviar(evento: React.FormEvent) {
     evento.preventDefault();
     if (emVoo.current) return;
+    if(senha.length<8 || new TextEncoder().encode(senha).length>72 || senha!==senhaConfirmada){setErroSenha(t.conta.senhaErro);return;}
+    if((querPropor||retorno)&&!cnpjValido(empresa.cnpj)){setErroCnpj(t.conta.cnpjErro);return;}
+    setErroSenha(undefined);setErroCnpj(undefined);
     /*
      * O navegador ja exige o campo; o que ele nao confere e se o numero esta
      * inteiro. A regra depende do pais (ver src/lib/telefone.ts): no Brasil,
@@ -197,18 +210,22 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
       uf,
       nichos,
       redes: redes.filter((rede) => rede.plataforma && rede.perfil),
-      });
+      }, senha, querPropor||retorno ? {...empresa,cnpj:normalizarCnpj(empresa.cnpj)} : undefined);
+      setSenha('');setSenhaConfirmada('');
       setEnviado(true);
+      if(retorno)router.push(rota(idioma,`oportunidades/${retorno}/candidatura/`));
     } catch (erro) { setErroEnvio(motivoDoErro(erro)); }
     finally { emVoo.current = false; setEnviando(false); }
   }
 
   const jaCadastrado = hidratado && cadastrado && !enviado;
+  if(!hidratado||(carregandoConta&&!cadastrado))return <section className="secao"><div className="container"><p role="status">{t.conta.carregando}</p></div></section>;
+  if(modoLogin&&!cadastrado)return <><CabecalhoPagina estreito olho={t.conta.entrar} titulo={t.conta.loginTitulo}/><section className="secao"><div className="container-estreito"><LoginConta idioma={idioma} retorno={retorno} criarConta={()=>setModoLogin(false)}/></div></section></>;
 
   return (
     <>
       <EstilosCadastro />
-      <CabecalhoPagina estreito olho={tc.olho} titulo={tc.titulo} descricao={tc.descricao} />
+      <CabecalhoPagina estreito olho={tc.olho} titulo={t.conta.criar} descricao={tc.descricao} />
 
       <div className="secao">
         <div className="container-estreito">
@@ -217,11 +234,12 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
               <div className="destaque" role="status" tabIndex={-1} ref={confirmacao}>
                 <div className="confirmacao-indica">
                   <CarinhaIndica expressao="01" cor="verde" estado="confirmacao" />
-                  <div><p className="destaque__titulo">{tc.confirmacaoTitulo}</p>
-                  <p className="destaque__texto">{tc.confirmacaoTexto}</p></div>
+                  <div><p className="destaque__titulo">{t.conta.contaCriada}</p>
+                  <p className="destaque__texto">{t.conta.contaTexto}</p></div>
                 </div>
               </div>
               <Acoes idioma={idioma} />
+              {retorno?<Botao href={rota(idioma,`oportunidades/${retorno}/candidatura/`)}>{t.fluxos.candidatura.voltarEdital}</Botao>:null}
             </div>
           ) : jaCadastrado ? (
             <section className="cartao" aria-labelledby="cadastro-existente-titulo">
@@ -229,7 +247,7 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
                 <Selo idioma={idioma} status="aberta" rotulo={tc.jaCadastradoSelo} />
               </div>
               <h2 className="cartao__titulo" id="cadastro-existente-titulo">
-                {tc.jaCadastradoTitulo}
+                {t.conta.contaExistente}
               </h2>
               {nomeCadastrado ? (
                 <div className="registro">
@@ -238,10 +256,12 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
                 </div>
               ) : null}
               <Acoes idioma={idioma} />
+              {retorno?<Botao href={rota(idioma,`oportunidades/${retorno}/candidatura/`)}>{t.fluxos.candidatura.voltarEdital}</Botao>:null}
             </section>
           ) : (
             <form onSubmit={enviar} className="pilha--g" aria-busy={enviando}>
               <fieldset disabled={enviando} className="pilha--g" style={{ border: 0, margin: 0, padding: 0, minWidth: 0 }}>
+              <div className="linha"><Botao onClick={()=>setModoLogin(true)} variante="secundario">{t.conta.entrar}</Botao></div>
               {/* A coluna menta da home que continuou: o cadastro mora nela. */}
               <section className="cartao coluna--menta coluna--solta" aria-labelledby="cadastro-dados-titulo">
                 <div className="coluna__cabeca">
@@ -288,6 +308,8 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
                     autoComplete="tel"
                     required
                   />
+                  <CampoTexto idioma={idioma} id="cadastro-senha" type="password" rotulo={t.conta.senha} ajuda={t.conta.senhaAjuda} erro={erroSenha} value={senha} onChange={e=>{setSenha(e.target.value);setErroSenha(undefined);}} autoComplete="new-password" minLength={8} maxLength={72} required/>
+                  <CampoTexto idioma={idioma} id="cadastro-senha-confirma" type="password" rotulo={t.conta.confirmarSenha} value={senhaConfirmada} onChange={e=>{setSenhaConfirmada(e.target.value);setErroSenha(undefined);}} autoComplete="new-password" minLength={8} maxLength={72} required/>
                   <CampoSelecao
                     idioma={idioma}
                     id="cadastro-pais"
@@ -383,6 +405,8 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
                 </fieldset>
               </section>
 
+              <section className="cartao"><h2 className="cartao__titulo">{t.conta.executora}</h2><label className="linha"><input type="checkbox" checked={querPropor||Boolean(retorno)} disabled={Boolean(retorno)} onChange={e=>setQuerPropor(e.target.checked)}/>{t.conta.vouPropor}</label><p>{t.conta.empresaAjuda}</p>{querPropor||retorno?<CamposOrganizacao idioma={idioma} dados={empresa} onChange={d=>{setEmpresa(d);setErroCnpj(undefined);}} erroCnpj={erroCnpj} prefixo="cadastro-org"/>:null}</section>
+
               {/* As redes sao o peso do cadastro: em branco, sobre a menta de cima, e o que se destaca. */}
               <section className="cartao" aria-labelledby="cadastro-redes-titulo">
                 <h2 className="cartao__titulo" id="cadastro-redes-titulo">
@@ -472,7 +496,7 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
 
               {erroEnvio ? <p className="campo__erro" role="alert">{t.comum.envio[erroEnvio]}</p> : null}
               <Botao type="submit" largo disabled={enviando}>
-                {enviando ? t.comum.envio.enviando : erroEnvio ? t.comum.envio.tentar : tc.acao}
+                {enviando ? t.comum.envio.enviando : erroEnvio ? t.comum.envio.tentar : t.conta.criar}
               </Botao>
               </fieldset>
             </form>
@@ -484,5 +508,5 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
 }
 
 export function Cadastro({ idioma, aberto }: { idioma: Idioma; aberto: boolean }) {
-  return aberto ? <CadastroFormulario idioma={idioma} /> : <CadastroFechado idioma={idioma} />;
+  return <CadastroFormulario idioma={idioma} />;
 }

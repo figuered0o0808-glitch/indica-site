@@ -13,6 +13,7 @@ import { editais as ptEditais } from '@/i18n/pt/editais';
 import { aprendizado as ptAprendizado } from '@/i18n/pt/aprendizado';
 import { paineis as ptPaineis } from '@/i18n/pt/paineis';
 import { fluxos as ptFluxos } from '@/i18n/pt/fluxos';
+import { conta as ptConta } from '@/i18n/pt/conta';
 import { cadastro as ptCadastro } from '@/i18n/pt/cadastro';
 
 import { comum as enComum } from '@/i18n/en/comum';
@@ -21,6 +22,7 @@ import { editais as enEditais } from '@/i18n/en/editais';
 import { aprendizado as enAprendizado } from '@/i18n/en/aprendizado';
 import { paineis as enPaineis } from '@/i18n/en/paineis';
 import { fluxos as enFluxos } from '@/i18n/en/fluxos';
+import { conta as enConta } from '@/i18n/en/conta';
 import { cadastro as enCadastro } from '@/i18n/en/cadastro';
 
 import { comum as esComum } from '@/i18n/es/comum';
@@ -29,6 +31,7 @@ import { editais as esEditais } from '@/i18n/es/editais';
 import { aprendizado as esAprendizado } from '@/i18n/es/aprendizado';
 import { paineis as esPaineis } from '@/i18n/es/paineis';
 import { fluxos as esFluxos } from '@/i18n/es/fluxos';
+import { conta as esConta } from '@/i18n/es/conta';
 import { cadastro as esCadastro } from '@/i18n/es/cadastro';
 
 const pt = {
@@ -39,6 +42,7 @@ const pt = {
   paineis: ptPaineis,
   fluxos: ptFluxos,
   cadastro: ptCadastro,
+  conta: ptConta,
 };
 
 const en = {
@@ -49,6 +53,7 @@ const en = {
   paineis: enPaineis,
   fluxos: enFluxos,
   cadastro: enCadastro,
+  conta: enConta,
 };
 
 const es = {
@@ -59,6 +64,7 @@ const es = {
   paineis: esPaineis,
   fluxos: esFluxos,
   cadastro: esCadastro,
+  conta: esConta,
 };
 
 /**

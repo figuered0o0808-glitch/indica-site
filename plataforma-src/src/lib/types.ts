@@ -54,6 +54,7 @@ export interface Call {
   slug: string;
   /** Identificador da operação; o slug público também pode resolver a chamada. */
   chamadaId?: string;
+  simulacao?: boolean;
   titulo: string;
   /** Quem opera a chamada. A marca aparece na pagina. */
   organizacao?: string;
@@ -106,6 +107,7 @@ export interface ModuloCurso {
 
 export interface Course {
   slug: string;
+  simulacao?: boolean;
   titulo: string;
   organizacao?: string;
   status: 'aberto' | 'em-breve';
@@ -171,6 +173,11 @@ export interface Candidatura {
   chamadaId?: string;
   /** Segredo restrito ao navegador que recebeu o comprovante. */
   reciboToken?: string;
+  organizacaoId?: number;
+  organizacao?: OrganizacaoExecutora;
+  pagamentoPendente?: boolean;
+  pagamentoStatus?: string;
+  simulacao?: boolean;
   editalSlug: string;
   editalTitulo: string;
   projeto: string;
@@ -186,7 +193,7 @@ export interface Candidatura {
   /** Quem assinou. O documento vai para a API e nao fica no navegador. */
   proponente?: {
     nome: string;
-    documento?: string;
+    telefone?: string;
     pais: string;
     cidade: string;
     uf: string;
@@ -210,6 +217,33 @@ export interface ReciboPublico {
   titulo: string;
   enviadaEm: string;
   reciboToken: string;
+  pagamentoPendente?: boolean;
+  simulacao?: boolean;
+}
+
+export interface OrganizacaoExecutora {
+  id: number;
+  cnpj: string;
+  razaoSocial: string;
+  nomeFantasia?: string;
+  email?: string;
+  telefone?: string;
+  cidade: string;
+  uf: string;
+}
+export type NovaOrganizacao = Omit<OrganizacaoExecutora, 'id'> & { id?: number };
+export interface DadosPagamento {
+  titular: string;
+  cnpj: string;
+  tipo: 'pix' | 'bancaria';
+  pixTipo?: 'cnpj' | 'email' | 'telefone' | 'aleatoria';
+  pixChave?: string;
+  banco?: string;
+  agencia?: string;
+  agenciaDigito?: string;
+  conta?: string;
+  contaDigito?: string;
+  tipoConta?: 'corrente' | 'poupanca';
 }
 
 

@@ -263,9 +263,9 @@ export default async function Home({ params }: { params: Promise<{ idioma: strin
   const { editais, materiais } = conteudo(idioma);
 
   /* A coluna rosa passa pelas chamadas abertas; a amarela, pelos materiais, do mais novo ao mais antigo. */
-  const chamadas = editais.filter((item) => item.status === 'aberta' || item.status === 'consulta');
-  const aceitaCadastro = editais.some((item) => item.status === 'aberta');
-  const documento = editais.find((item) => item.arquivoEdital);
+  const chamadas = editais.filter((item) => !item.simulacao && (item.status === 'aberta' || item.status === 'consulta'));
+  const aceitaCadastro = true;
+  const documento = editais.find((item) => !item.simulacao && item.arquivoEdital);
   const recentes = ordenar(materiais, 'atualizacao').slice(0, RECENTES);
 
   return (
