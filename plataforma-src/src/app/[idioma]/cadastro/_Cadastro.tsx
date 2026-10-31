@@ -412,7 +412,7 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
                 <h2 className="cartao__titulo" id="cadastro-redes-titulo">
                   {tc.redes.titulo}
                 </h2>
-                <p className="cartao__texto">{tc.redes.ajuda}</p>
+                <p className="cartao__texto">{tc.redes.ajuda}</p><p className="nota">{t.conta.redesOpcionais}</p>
 
                 <div>
                   {redes.map((rede, indice) => (
@@ -446,7 +446,7 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
                           onChange={(evento) =>
                             alterarRede(indice, 'plataforma', evento.target.value)
                           }
-                          required={indice === 0}
+                          required={false}
                         />
                         <CampoTexto
                           idioma={idioma}
@@ -456,7 +456,7 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
                           value={rede.perfil}
                           onChange={(evento) => alterarRede(indice, 'perfil', evento.target.value)}
                           autoComplete="off"
-                          required={indice === 0}
+                          required={false}
                         />
                         <CampoTexto
                           idioma={idioma}

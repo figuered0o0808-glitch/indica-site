@@ -1,0 +1,81 @@
+import type { Idioma } from '@/i18n/idiomas';
+
+const textos = {
+  pt: {
+    olho: 'Participar da Índica', titulo: 'Sua ideia tem um caminho.',
+    descricao: 'Prepare a proposta com calma e acompanhe cada etapa na sua conta.',
+    como: 'Como funciona', criar: 'Criar minha conta', painel: 'Acompanhar minhas propostas',
+    passos: [
+      ['Faça seu cadastro', 'Crie sua conta pessoal. Para propor um projeto, cadastre também a empresa ou organização executora com CNPJ.'],
+      ['Desenvolva sua proposta', 'Escolha uma chamada aberta e prepare a ideia, o público, a distribuição e o orçamento. Seu rascunho fica salvo na conta.'],
+      ['Envie e acompanhe', 'Revise as respostas e confirme o envio. O protocolo comprova a inscrição; a situação fica disponível na sua conta.'],
+      ['Confira o resultado', 'Acompanhe a classificação e os próximos passos. Se o valor aprovado mudar, você decide se aceita a oferta.'],
+    ],
+    perguntasTitulo: 'Antes de começar',
+    perguntas: [
+      ['Quem pode participar?', 'Criadores e pessoas que representam empresas ou organizações podem se cadastrar. Cada chamada informa o público e os requisitos para participar.'],
+      ['Preciso de CNPJ?', 'O envio de propostas exige uma empresa ou organização executora com CNPJ. O cadastro pessoal, a leitura dos materiais e a participação em cursos não exigem uma executora. Confira também as regras de cada atividade.'],
+      ['Posso continuar a proposta depois?', 'Sim. O rascunho fica na sua conta e pode ser retomado em outro aparelho após entrar com e-mail e senha. Um rascunho não é uma inscrição: é preciso confirmar o envio e receber o protocolo dentro do prazo.'],
+      ['Como funciona a avaliação?', 'A equipe organiza a análise conforme as regras da chamada. Ela pode usar pareceres, notas, critérios com pesos ou classificação por posição. O resultado publicado apresenta selecionados e suplentes.'],
+      ['E se o valor aprovado for diferente do solicitado?', 'A oferta aparece na sua conta com o valor e as condições. Você pode aceitar ou recusar. Quando o aceite é necessário, a seleção e a etapa de pagamento só são liberadas depois da sua confirmação.'],
+      ['O que significa ficar como suplente?', 'Sua proposta fica na lista de espera da chamada. A equipe pode convocá-la se houver uma vaga ou uma alteração na seleção. Acompanhe a situação na sua conta.'],
+      ['Onde acompanho os avisos?', 'Na sua conta ficam o protocolo, a situação e o histórico da proposta. Os avisos de seleção são direcionados ao e-mail da pessoa responsável pelo cadastro. Mantenha seus contatos atualizados.'],
+      ['Quem vê meus dados de pagamento?', 'A conta responsável e a equipe autorizada da Índica. Contas bancárias e chaves Pix ficam fora da classificação pública e das exportações gerais de inscrições.'],
+    ],
+    biblioteca: 'Explorar a biblioteca', oportunidades: 'Ver chamadas', contato: 'Precisa de ajuda?',
+    contatoTexto: 'Fale com a equipe e, se já tiver uma inscrição, informe o protocolo. Não envie senhas nem dados bancários por e-mail.',
+    prazo: 'Cada chamada tem seu prazo. Salvar um rascunho não reserva uma vaga nem garante a inscrição.',
+  },
+  en: {
+    olho: 'Participate in INDICA', titulo: 'Give your idea a path forward.',
+    descricao: 'Prepare your proposal at your own pace and follow each step in your account.',
+    como: 'How it works', criar: 'Create my account', painel: 'Track my proposals',
+    passos: [
+      ['Create your account', 'Create a personal account. To submit a project, also register the company or organization responsible for delivery, with a Brazilian CNPJ.'],
+      ['Develop your proposal', 'Choose an open call and prepare the idea, audience, distribution plan and budget. Your draft is saved to your account.'],
+      ['Submit and track', 'Review your answers and confirm submission. Your reference number confirms registration; the status is available in your account.'],
+      ['Check the results', 'Follow the published ranking and next steps. If the approved amount changes, you decide whether to accept the offer.'],
+    ],
+    perguntasTitulo: 'Before you start',
+    perguntas: [
+      ['Who can participate?', 'Creators and people representing companies or organizations can register. Each call specifies its intended audience and participation requirements.'],
+      ['Do I need a CNPJ?', 'Submitting a proposal requires a company or executing organization with a Brazilian CNPJ. A personal account, reading materials and course participation do not require an organization. Also check the rules of each activity.'],
+      ['Can I continue a proposal later?', 'Yes. Your draft is saved in your account and can be resumed on another device after signing in. A draft is not a submission: you must confirm submission and receive a reference number before the deadline.'],
+      ['How are proposals evaluated?', 'The team organizes the review according to the call rules. Methods can include written reviews, overall scores, weighted criteria or ranking. Published results identify selected and reserve proposals.'],
+      ['What if the approved amount differs from my request?', 'Your account shows the offer amount and conditions. You can accept or decline. When acceptance is required, selection and payment details are only enabled after you confirm.'],
+      ['What does reserve status mean?', 'Your proposal is on the call’s waiting list. The team may invite it if a place becomes available or the selection changes. Follow the status in your account.'],
+      ['Where do I find updates?', 'Your reference number, status and proposal history are in your account. Selection notices are sent to the email of the person responsible for registration. Keep your contact details up to date.'],
+      ['Who can see my payment details?', 'The responsible account and the authorized INDICA team. Bank accounts and Pix keys are excluded from public rankings and general registration exports.'],
+    ],
+    biblioteca: 'Explore the library', oportunidades: 'Browse calls', contato: 'Need help?',
+    contatoTexto: 'Contact the team and include your reference number if you have already submitted a proposal. Do not send passwords or bank details by email.',
+    prazo: 'Each call has its own deadline. Saving a draft does not reserve a place or confirm submission.',
+  },
+  es: {
+    olho: 'Participar en Índica', titulo: 'Tu idea tiene un camino.',
+    descricao: 'Prepara tu propuesta con calma y sigue cada etapa en tu cuenta.',
+    como: 'Cómo funciona', criar: 'Crear mi cuenta', painel: 'Seguir mis propuestas',
+    passos: [
+      ['Crea tu cuenta', 'Crea una cuenta personal. Para presentar un proyecto, registra también la empresa u organización ejecutora con CNPJ brasileño.'],
+      ['Desarrolla tu propuesta', 'Elige una convocatoria abierta y prepara la idea, el público, la distribución y el presupuesto. El borrador se guarda en tu cuenta.'],
+      ['Envía y acompaña', 'Revisa las respuestas y confirma el envío. El número de protocolo acredita la inscripción; el estado está disponible en tu cuenta.'],
+      ['Consulta el resultado', 'Sigue la clasificación publicada y los próximos pasos. Si cambia el importe aprobado, tú decides si aceptas la oferta.'],
+    ],
+    perguntasTitulo: 'Antes de empezar',
+    perguntas: [
+      ['¿Quién puede participar?', 'Pueden registrarse creadores y personas que representan empresas u organizaciones. Cada convocatoria informa su público y los requisitos de participación.'],
+      ['¿Necesito un CNPJ?', 'La presentación de propuestas requiere una empresa u organización ejecutora con CNPJ brasileño. La cuenta personal, la lectura de materiales y los cursos no exigen una ejecutora. Consulta también las reglas de cada actividad.'],
+      ['¿Puedo continuar la propuesta después?', 'Sí. El borrador queda en tu cuenta y puedes retomarlo en otro dispositivo al iniciar sesión. Un borrador no es una inscripción: debes confirmar el envío y recibir el protocolo dentro del plazo.'],
+      ['¿Cómo se evalúan las propuestas?', 'El equipo organiza el análisis según las reglas de la convocatoria. Puede utilizar comentarios, notas generales, criterios ponderados o clasificación por posición. El resultado identifica propuestas seleccionadas y suplentes.'],
+      ['¿Y si el importe aprobado es distinto al solicitado?', 'La oferta aparece en tu cuenta con el importe y las condiciones. Puedes aceptarla o rechazarla. Cuando se requiere aceptación, la selección y los datos de pago se habilitan después de tu confirmación.'],
+      ['¿Qué significa quedar como suplente?', 'Tu propuesta queda en la lista de espera. El equipo puede convocarla si hay una plaza disponible o un cambio en la selección. Sigue el estado en tu cuenta.'],
+      ['¿Dónde consulto los avisos?', 'En tu cuenta están el protocolo, el estado y el historial de la propuesta. Los avisos de selección se dirigen al correo de la persona responsable del registro. Mantén tus contactos actualizados.'],
+      ['¿Quién ve mis datos de pago?', 'La cuenta responsable y el equipo autorizado de Índica. Las cuentas bancarias y claves Pix no aparecen en la clasificación pública ni en las exportaciones generales.'],
+    ],
+    biblioteca: 'Explorar la biblioteca', oportunidades: 'Ver convocatorias', contato: '¿Necesitas ayuda?',
+    contatoTexto: 'Contacta al equipo e indica el protocolo si ya tienes una inscripción. No envíes contraseñas ni datos bancarios por correo.',
+    prazo: 'Cada convocatoria tiene su plazo. Guardar un borrador no reserva una plaza ni garantiza la inscripción.',
+  },
+} as const;
+
+export function participar(idioma: Idioma) { return textos[idioma]; }

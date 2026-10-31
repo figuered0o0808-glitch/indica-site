@@ -40,7 +40,7 @@ export interface Apoiado {
   projeto: string;
   formato: string;
   uf: string;
-  valor: number;
+  valor?: number;
 }
 
 export interface ResultadoEdital {
@@ -157,6 +157,9 @@ export interface Article {
 }
 
 export type StatusCandidatura =
+  | 'aguardando-aceite'
+  | 'suplente'
+  | 'recusada'
   | 'recebida'
   | 'selecionada'
   | 'inabilitada'
@@ -177,6 +180,8 @@ export interface Candidatura {
   organizacao?: OrganizacaoExecutora;
   pagamentoPendente?: boolean;
   pagamentoStatus?: string;
+  historico?: { estado: string; em: string }[];
+  oferta?: OfertaProposta;
   simulacao?: boolean;
   editalSlug: string;
   editalTitulo: string;
@@ -232,6 +237,48 @@ export interface OrganizacaoExecutora {
   uf: string;
 }
 export type NovaOrganizacao = Omit<OrganizacaoExecutora, 'id'> & { id?: number };
+
+export interface DadosRascunho {
+  projeto: string;
+  descricao: string;
+  formato: string;
+  valor: string;
+  justificativa: string;
+  alcance: string;
+  distribuicao: string;
+}
+
+export interface RascunhoProposta {
+  chamadaSlug: string;
+  envioId: string;
+  organizacaoId: number | null;
+  dados: DadosRascunho;
+  passo: number;
+  versao: number;
+  atualizadoEm: string;
+}
+
+export interface ResumoRascunho {
+  chamadaSlug: string;
+  tituloChamada: string;
+  tituloProjeto: string;
+  atualizadoEm: string;
+  versao: number;
+  envioId: string;
+  organizacaoId: number | null;
+  aceitaEnvio: boolean;
+}
+
+export interface OfertaProposta {
+  id: string | number;
+  estado: 'pendente' | 'aceita' | 'recusada';
+  valorSolicitado: number;
+  valorOfertado: number;
+  ressalva: string;
+  criadaEm: string;
+  respondidaEm?: string;
+  versao: number;
+}
 export interface DadosPagamento {
   titular: string;
   cnpj: string;

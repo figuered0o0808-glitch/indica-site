@@ -2,13 +2,14 @@ import type { Idioma } from '@/i18n/idiomas';
 import { textos } from '@/i18n/strings';
 import { data, numero } from '@/lib/format';
 import type { ResultadoEdital } from '@/lib/types';
+import { ClassificacaoPublica, type LinhaClassificacao } from './_Classificacao';
 
 /** Par de numero do resultado. As cores vao inline por causa do fundo preto. */
 function Numero({ rotulo, valor }: { rotulo: string; valor: string }) {
   return (
     <div>
       <dt style={{ color: 'rgba(255, 255, 255, 0.6)' }}>{rotulo}</dt>
-      <dd style={{ color: 'var(--branco)' }}>
+      <dd style={{ color: 'var(--preto)' }}>
         <span className="numero-grande">{valor}</span>
       </dd>
     </div>
@@ -24,7 +25,7 @@ export function Resultado({
   resultado,
 }: {
   idioma: Idioma;
-  resultado: ResultadoEdital;
+  resultado: ResultadoEdital & { classificacao?: LinhaClassificacao[] | null };
 }) {
   const t = textos(idioma);
 
@@ -63,6 +64,7 @@ export function Resultado({
           />
         </dl>
 
+        {resultado.classificacao?.length ? <ClassificacaoPublica idioma={idioma} itens={resultado.classificacao.map(i=>({posicao:i.posicao,protocolo:i.protocolo,situacao:i.situacao,...(['selecionada','suplente'].includes(i.situacao)?{nome:i.nome,projeto:i.projeto,formato:i.formato,uf:i.uf}:{})}))}/> : <>
         <h3 style={{ marginBottom: 14 }}>{t.editais.resultadoTabelaTitulo}</h3>
 
         <div className="tabela-rolagem">
@@ -88,6 +90,7 @@ export function Resultado({
             </tbody>
           </table>
         </div>
+        </>}
       </div>
     </section>
   );

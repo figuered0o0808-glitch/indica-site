@@ -74,6 +74,7 @@ export default async function PaginaCandidatura({
                 {edital.status === 'consulta' ? t.editais.consultaAviso : edital.status === 'encerrada' ? t.editais.encerradaAviso : t.editais.emAvaliacaoAviso}
               </p>
               {edital.status === 'consulta' ? <DocumentoEdital idioma={idioma} edital={edital} /> : null}
+              <FormularioCandidatura idioma={idioma} edital={{slug:edital.slug,chamadaId:edital.chamadaId,titulo:edital.titulo,faixaApoio:edital.faixaApoio,simulacao:edital.simulacao,aceitaEnvio:false}}/>
               <div className="linha">
                 <Botao href={rota(idioma, `oportunidades/${edital.slug}`)} variante="secundario">
                   {t.fluxos.candidatura.voltarEdital}

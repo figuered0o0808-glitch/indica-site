@@ -44,7 +44,7 @@ export async function generateMetadata({
   return {
     title: material?.titulo ?? r.titulo,
     description: material?.resumo ?? r.descricao,
-    alternates: alternativas(idioma, `biblioteca/materiais/${slug}`),
+    alternates: alternativas(idioma, `biblioteca/materiais/${slug}`, IDIOMAS.filter(i=>Boolean(materialPorSlug(i,slug)))),
   };
 }
 

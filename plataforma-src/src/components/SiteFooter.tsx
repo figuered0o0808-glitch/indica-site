@@ -6,11 +6,13 @@ import { PROGRAM_NAME, EXECUTORAS, LOGO_INDICA } from '@/config/program';
 import type { Idioma } from '@/i18n/idiomas';
 import { textos } from '@/i18n/strings';
 import { rota } from '@/lib/rotas';
+import { participar } from '@/lib/participar';
 
 const AGENCIA = 'https://agenciaindica.com/';
 
 export function SiteFooter({ idioma }: { idioma: Idioma }) {
   const t = textos(idioma);
+  const agencia = idioma === 'en' ? `${AGENCIA}en/` : AGENCIA;
 
   /* A cor do site mora nas colunas; o pe fecha com o fio preto, sem faixa. */
   return (
@@ -19,7 +21,7 @@ export function SiteFooter({ idioma }: { idioma: Idioma }) {
           <div className="rodape__grade">
             <div>
               <p className="rodape__marca">
-                <a href={AGENCIA} aria-label={t.comum.navegacao.inicioAgencia}>
+                <a href={agencia} aria-label={t.comum.navegacao.inicioAgencia}>
                   <LogoIndica altura={26} rotulo={PROGRAM_NAME} />
                 </a>
               </p>
@@ -41,8 +43,10 @@ export function SiteFooter({ idioma }: { idioma: Idioma }) {
                   <Link href={rota(idioma, 'biblioteca')}>{t.comum.navegacao.biblioteca}</Link>
                 </li>
                 <li>
-                  <a href={AGENCIA}>{t.comum.rodape.voltarAgencia}</a>
+                  <a href={agencia}>{t.comum.rodape.voltarAgencia}</a>
                 </li>
+                <li><Link href={rota(idioma, 'como-funciona/')}>{participar(idioma).como}</Link></li>
+                <li><Link href={rota(idioma, 'painel/')}>{participar(idioma).painel}</Link></li>
               </ul>
             </div>
             <div>

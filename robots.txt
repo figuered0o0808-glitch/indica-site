@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://agenciaindica.com/sitemap.xml
+Sitemap: https://agenciaindica.com/plataforma/sitemap.xml

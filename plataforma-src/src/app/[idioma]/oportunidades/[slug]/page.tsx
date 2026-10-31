@@ -49,7 +49,7 @@ export async function generateMetadata({
     title: edital?.titulo ?? textos(idioma).editais.listaTitulo,
     description: edital?.resumo,
     ...(edital?.simulacao ? {robots:{index:false,follow:false}} : {}),
-    alternates: alternativas(idioma, `oportunidades/${slug}`),
+    alternates: alternativas(idioma, `oportunidades/${slug}`, IDIOMAS.filter(i=>Boolean(editalPorSlug(i,slug)))),
   };
 }
 

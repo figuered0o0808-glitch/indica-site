@@ -16,7 +16,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { idioma } = await params;
   if (!ehIdioma(idioma)) return {};
-  return { title: textos(idioma).cadastro.olho, alternates: alternativas(idioma, 'cadastro') };
+  return { title: textos(idioma).cadastro.olho, robots: { index: false, follow: false }, alternates: alternativas(idioma, 'cadastro') };
 }
 
 /**

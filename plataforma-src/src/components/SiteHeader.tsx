@@ -55,6 +55,7 @@ export function SiteHeader({
   const caminho = usePathname();
   const { cadastrado, hidratado } = useApp();
   const t = textos(idioma);
+  const agencia = idioma === 'en' ? `${AGENCIA}en/` : AGENCIA;
 
   const inicio = rota(idioma);
   const ehHome = caminho === inicio || caminho === `${inicio}/`;
@@ -67,6 +68,18 @@ export function SiteHeader({
    */
   const [marcaVisivel, setMarcaVisivel] = useState(marcaFixa);
   const cabecalhoRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el=cabecalhoRef.current;if(!el)return;
+    let cancelado=false,frame=0;
+    const medir=()=>document.documentElement.style.setProperty('--altura-cabecalho-real',`${Math.ceil(el.getBoundingClientRect().height)}px`);
+    const ajustarAncora=()=>{if(cancelado||!location.hash)return;let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}const alvo=document.getElementById(id);if(!alvo)return;const topo=alvo.getBoundingClientRect().top;if(topo>=0&&topo<el.getBoundingClientRect().height+8)alvo.scrollIntoView({block:'start'});};
+    medir();frame=requestAnimationFrame(ajustarAncora);
+    const observer=typeof ResizeObserver==='undefined'?null:new ResizeObserver(medir);observer?.observe(el);
+    window.addEventListener('resize',medir);
+    void document.fonts?.ready.then(()=>{if(!cancelado){medir();ajustarAncora();}});
+    return()=>{cancelado=true;cancelAnimationFrame(frame);observer?.disconnect();window.removeEventListener('resize',medir);};
+  },[caminho]);
 
   useEffect(() => {
     if (marcaFixa) {
@@ -107,7 +120,7 @@ export function SiteHeader({
     <header className="cabecalho" ref={cabecalhoRef}>
       <div className="container cabecalho__interno">
         <a
-          href={AGENCIA}
+          href={agencia}
           className={marcaVisivel ? 'cabecalho__marca' : 'cabecalho__marca cabecalho__marca--oculta'}
           aria-label={t.comum.navegacao.inicioAgencia}
           aria-hidden={marcaVisivel ? undefined : true}
@@ -117,7 +130,7 @@ export function SiteHeader({
         </a>
 
         <nav className="cabecalho__nav" aria-label={t.comum.navegacao.principal}>
-          <a href={AGENCIA} className="cabecalho__link">
+          <a href={agencia} className="cabecalho__link">
             {t.comum.navegacao.agencia}
           </a>
           {abas.map((aba) => (
@@ -136,7 +149,7 @@ export function SiteHeader({
           <SeletorIdioma />
           {hidratado && cadastrado ? (
             <Link href={rota(idioma, 'painel')} className="btn btn--secundario btn--pequeno">
-              {t.comum.navegacao.painel}
+              {{pt:'Minha conta',en:'My account',es:'Mi cuenta'}[idioma]}
             </Link>
           ) : (
             <Link href={rota(idioma, 'cadastro/?entrar=1')} className="btn btn--primario btn--pequeno">

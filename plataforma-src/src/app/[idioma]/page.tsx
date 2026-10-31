@@ -9,6 +9,7 @@ import { MascoteIndica } from '@/components/MascoteIndica';
 import { Marcador } from '@/components/Marcador';
 import { NumerosChamada } from '@/components/NumerosChamada';
 import { Organizacao } from '@/components/Organizacao';
+import { Participar } from '@/components/Participar';
 import { Selo } from '@/components/Selo';
 import { ehIdioma, type Idioma } from '@/i18n/idiomas';
 import { textos } from '@/i18n/strings';
@@ -289,6 +290,7 @@ export default async function Home({ params }: { params: Promise<{ idioma: strin
         {aceitaCadastro ? <ColunaCadastro idioma={idioma} /> : documento ? <ColunaDocumento idioma={idioma} edital={documento} /> : null}
         <ColunaBiblioteca idioma={idioma} materiais={recentes} />
       </section>
+      <Participar idioma={idioma}/>
     </>
   );
 }

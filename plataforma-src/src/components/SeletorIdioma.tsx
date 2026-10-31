@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { IDIOMAS, NOME_DO_IDIOMA, SIGLA_DO_IDIOMA, type Idioma } from '@/i18n/idiomas';
 import { textos } from '@/i18n/strings';
@@ -14,6 +14,7 @@ import { idiomaDoCaminho } from '@/lib/rotas';
  */
 export function SeletorIdioma() {
   const caminho = usePathname();
+  const router = useRouter();
   const atual = idiomaDoCaminho(caminho);
 
   function equivalente(idioma: Idioma): string {
@@ -23,7 +24,7 @@ export function SeletorIdioma() {
   }
 
   return (
-    <nav className="seletor-idioma" aria-label={textos(atual).comum.rotulos.idioma}>
+    <><nav className="seletor-idioma" aria-label={textos(atual).comum.rotulos.idioma}>
       {IDIOMAS.map((idioma) => (
         <Link
           key={idioma}
@@ -36,6 +37,6 @@ export function SeletorIdioma() {
           {SIGLA_DO_IDIOMA[idioma]}
         </Link>
       ))}
-    </nav>
+    </nav><label className="seletor-idioma-movel"><span className="sr-only">{textos(atual).comum.rotulos.idioma}</span><select value={atual} onChange={e=>router.push(equivalente(e.target.value as Idioma))}>{IDIOMAS.map(i=><option value={i} key={i}>{SIGLA_DO_IDIOMA[i]}</option>)}</select></label></>
   );
 }

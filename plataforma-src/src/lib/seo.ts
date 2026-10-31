@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import type { Idioma } from '@/i18n/idiomas';
+import { IDIOMAS, type Idioma } from '@/i18n/idiomas';
 import { rota } from '@/lib/rotas';
 
 /**
@@ -28,14 +28,14 @@ export function enderecoDeArquivo(caminho: string): string {
 }
 
 /** canonical e hreflang de uma pagina que existe nos tres idiomas. */
-export function alternativas(idioma: Idioma, caminho = ''): Metadata['alternates'] {
+export function alternativas(idioma: Idioma, caminho = '', disponiveis: readonly Idioma[] = IDIOMAS): Metadata['alternates'] {
+  const idiomas = disponiveis.length ? disponiveis : [idioma];
+  const tags: Record<Idioma,string> = { pt:'pt-BR', en:'en', es:'es' };
   return {
     canonical: enderecoPublico(idioma, caminho),
     languages: {
-      'pt-BR': enderecoPublico('pt', caminho),
-      en: enderecoPublico('en', caminho),
-      es: enderecoPublico('es', caminho),
-      'x-default': enderecoPublico('pt', caminho),
+      ...Object.fromEntries(idiomas.map(i=>[tags[i],enderecoPublico(i,caminho)])),
+      'x-default': enderecoPublico(idiomas.includes('pt')?'pt':idiomas[0], caminho),
     },
   };
 }

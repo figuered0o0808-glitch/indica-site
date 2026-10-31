@@ -152,7 +152,7 @@ table { border-collapse: collapse; width: 100%; }
 img, svg { max-width: 100%; }
 
 /* Ancora sob cabecalho fixo: o titulo nao fica escondido atras da barra. */
-:target { scroll-margin-top: calc(var(--cabecalho-altura) + var(--esp-16)); }
+:target { scroll-margin-top: calc(var(--altura-cabecalho-real, var(--cabecalho-altura)) + var(--esp-16)); }
 
 /* ---------- Estrutura ---------- */
 
@@ -1085,7 +1085,7 @@ main:focus { outline: none; }
   line-height: var(--entrelinha-rotulo); color: var(--tinta-suave);
 }
 
-.lateral { position: sticky; top: calc(var(--cabecalho-altura) + var(--esp-24)); display: flex; flex-direction: column; gap: var(--esp-16); }
+.lateral { position: sticky; top: calc(var(--altura-cabecalho-real, var(--cabecalho-altura)) + var(--esp-24)); display: flex; flex-direction: column; gap: var(--esp-16); }
 
 .ilustracao { color: var(--preto); display: block; }
 
@@ -1383,3 +1383,18 @@ body { background: #000; }
 }
 @media (prefers-reduced-motion: reduce) { .indica-caminhos__seta { transition: none; } }
 @media print { .indica-caminhos__carinha { display: none; } .indica-caminhos { display: block; } .indica-rosto { filter: none; mix-blend-mode: normal; } }
+
+/* A conta e o idioma cabem na primeira linha; os caminhos públicos vêm abaixo. */
+.seletor-idioma-movel { display:none; }
+@media(max-width:760px){
+  .cabecalho__interno { display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:2px 10px;min-height:0;padding-top:8px;padding-bottom:8px; }
+  .cabecalho__interno::before { content:none; }
+  .cabecalho__marca { grid-column:1;grid-row:1;order:0;margin:0; }
+  .cabecalho__acoes { display:contents; }
+  .cabecalho__acoes .seletor-idioma { display:none; }
+  .seletor-idioma-movel { display:inline-flex;grid-column:2;grid-row:1; }
+  .seletor-idioma-movel select { width:60px;min-height:44px;border:1px solid var(--linha);border-radius:999px;padding:8px;background:#111;color:#fff;font-size:13px; }
+  .cabecalho__acoes .btn { grid-column:3;grid-row:1;margin:0;min-height:44px;padding:8px 12px;font-size:11px; }
+  .cabecalho__nav { grid-column:1/-1;grid-row:2;order:0;display:flex;justify-content:space-between;flex-wrap:nowrap;width:100%;gap:8px;border-top:1px solid var(--linha);padding-top:4px; }
+  .cabecalho__link { min-height:44px;font-size:13px;padding:0;letter-spacing:0;flex-shrink:0; }
+}
