@@ -172,5 +172,47 @@
       }
     ],
     "chamadaId": "C01"
+  },
+  {
+    "slug": "demonstracao-inscricoes-completas",
+    "simulacao": true,
+    "titulo": "SIMULAÇÃO — Demonstração de inscrições completas",
+    "status": "aberta",
+    "tipo": "tema-amplo",
+    "resumo": "Ambiente de demonstração. Pessoas, organizações, ideias e valores são fictícios. Não envie uma proposta real.",
+    "proponente": "Índica — demonstração",
+    "apresentacao": [
+      "Esta chamada existe apenas para conferir o funcionamento de cadastros, propostas, seleção e informações de pagamento. Nenhum pagamento será realizado."
+    ],
+    "escopo": [
+      "Projetos fictícios de comunicação e ciência usados na verificação do sistema."
+    ],
+    "naoApoiado": [
+      "Inscrições reais. Esta não é uma oportunidade de financiamento."
+    ],
+    "criterios": [
+      {
+        "titulo": "Clareza e consistência da proposta",
+        "descricao": "Critério fictício para verificar o fluxo.",
+        "peso": 1
+      }
+    ],
+    "banca": [],
+    "distribuicao": [],
+    "valorTotal": 60000,
+    "faixaApoio": {
+      "min": 1000,
+      "max": 30000
+    },
+    "inscricoesAte": "2026-11-06",
+    "cronograma": [],
+    "resultado": null,
+    "organizacao": "Índica — demonstração",
+    "publico": "organizacoes",
+    "vagas": {
+      "min": 1,
+      "max": 3
+    },
+    "chamadaId": "C02"
   }
 ]
