@@ -158,6 +158,7 @@ function ColunaCadastro({ idioma }: { idioma: Idioma }) {
         <Botao href={destino} largo>
           {tc.cadastroAcao}
         </Botao>
+        <Link href={rota(idioma, 'cadastro/?banco=1')} style={{display:'block',marginTop:16,fontWeight:600,textDecoration:'underline',lineHeight:1.5}}>{textos(idioma).conta.verBanco}</Link>
       </div>
     </div>
   );

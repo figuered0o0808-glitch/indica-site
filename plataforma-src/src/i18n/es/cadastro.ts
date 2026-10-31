@@ -12,13 +12,13 @@ export const cadastro = {
   entrar: 'Crear cuenta',
 
   fechado: {
-    titulo: 'El registro abre cuando las convocatorias aceptan postulaciones',
+    titulo: 'Puedes crear tu cuenta en cualquier momento',
     descricao:
-      'Sirve para postularse a las convocatorias abiertas. Es gratuito y no exige un número mínimo de seguidores. Las publicaciones se pueden leer sin cuenta.',
+      'La cuenta es gratuita para personas físicas y jurídicas. Participar en el banco de creadores es opcional. Cada convocatoria informa si exige CNPJ brasileño.',
   },
 
   titulo: 'Crear tu cuenta',
-  descricao: 'Gratuito y sin exigencia de un número mínimo de seguidores.',
+  descricao: 'Cuenta gratuita para personas físicas o jurídicas. Participar en el banco de creadores es una opción independiente.',
 
   formularioTitulo: 'Tus datos',
   campos: {

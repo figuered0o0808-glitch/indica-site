@@ -2,9 +2,10 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { STORAGE_KEY, LEGACY_STORAGE_KEY } from '@/config/program';
 import type { Candidatura, PerfilCadastro, ReciboPublico, OrganizacaoExecutora, NovaOrganizacao, DadosPagamento, ResumoRascunho, RascunhoProposta, OfertaProposta } from '@/lib/types';
-import { cadastrarConta, entrarConta, consultarConta, sairConta, enviarOrganizacao, enviarCandidatura as enviarProposta, enviarInscricaoCurso, consultarRecibo, consultarPagamento, enviarPagamento, ErroEnvio, motivoDoErro, type MotivoEnvio, type ContaRecebida, type EnvioRascunho, consultarRascunho, enviarRascunho, excluirRascunho, atualizarPerfil, consultarOferta, responderOferta } from '@/lib/envio';
+import { cadastrarConta, entrarConta, consultarConta, sairConta, enviarOrganizacao, enviarCandidatura as enviarProposta, enviarInscricaoCurso, consultarRecibo, consultarPagamento, enviarPagamento, ErroEnvio, motivoDoErro, type MotivoEnvio, type ContaRecebida, type EnvioRascunho, consultarRascunho, enviarRascunho, excluirRascunho, atualizarPerfil, consultarOferta, responderOferta, alterarParticipacaoBanco } from '@/lib/envio';
 const CHAVE_TOKEN = 'indica:conta-pessoal:token:v1';
 interface Estado {
+    participaBanco: boolean;
     cadastrado: boolean;
     cadastroConfirmado: boolean;
     nome: string;
@@ -15,20 +16,21 @@ interface Estado {
     recibos: ReciboPublico[];
     rascunhos: ResumoRascunho[];
 }
-const inicial = (): Estado => ({ cadastrado: false, cadastroConfirmado: false, nome: '', perfil: null, organizacoes: [], candidaturas: [], cursosInscritos: [], recibos: [], rascunhos: [] });
+const inicial = (): Estado => ({ participaBanco: false, cadastrado: false, cadastroConfirmado: false, nome: '', perfil: null, organizacoes: [], candidaturas: [], cursosInscritos: [], recibos: [], rascunhos: [] });
 export type NovaCandidatura = Omit<Candidatura, 'id' | 'enviadaEm' | 'status' | 'protocolo' | 'reciboToken'> & {
-    organizacaoId: number;
+    organizacaoId: number | null;
 };
 interface ContextoApp extends Estado {
     sessaoId: number;
     hidratado: boolean;
     carregandoConta: boolean;
     erroConta?: MotivoEnvio;
-    cadastrar: (perfil: PerfilCadastro, senha: string, organizacao?: NovaOrganizacao) => Promise<void>;
+    cadastrar: (perfil: PerfilCadastro, senha: string, organizacao?: NovaOrganizacao, participaBanco?: boolean) => Promise<void>;
     entrar: (email: string, senha: string) => Promise<void>;
     sair: () => Promise<void>;
     atualizarConta: () => Promise<void>;
     salvarPerfil: (perfil: PerfilCadastro) => Promise<void>;
+    definirParticipacaoBanco: (participar: boolean) => Promise<void>;
     carregarRascunho: (slug: string) => ReturnType<typeof consultarRascunho>;
     salvarRascunho: (slug: string, dados: EnvioRascunho) => Promise<RascunhoProposta>;
     apagarRascunho: (slug: string, envioId: string, versao: number) => Promise<void>;
@@ -48,7 +50,7 @@ function perfilValido(p: unknown): p is PerfilCadastro {
     if (!p || typeof p !== 'object')
         return false;
     const v = p as PerfilCadastro;
-    return ['nome', 'email', 'telefone', 'pais', 'cidade', 'uf'].every(k => typeof v[k as keyof PerfilCadastro] === 'string') && Array.isArray(v.nichos) && v.nichos.every(x => typeof x === 'string') && Array.isArray(v.redes) && v.redes.every(r => r && typeof r.plataforma === 'string' && typeof r.perfil === 'string' && typeof r.seguidores === 'string');
+    return (v.tipoCadastro === undefined || v.tipoCadastro === 'pf' || v.tipoCadastro === 'pj') && ['nome', 'email', 'telefone', 'pais', 'cidade', 'uf'].every(k => typeof v[k as keyof PerfilCadastro] === 'string') && Array.isArray(v.nichos) && v.nichos.every(x => typeof x === 'string') && Array.isArray(v.redes) && v.redes.every(r => r && typeof r.plataforma === 'string' && typeof r.perfil === 'string' && typeof r.seguidores === 'string');
 }
 function reciboValido(v: unknown): v is ReciboPublico {
     if (!v || typeof v !== 'object')
@@ -77,7 +79,7 @@ export function AppProvider({ children }: {
     const aplicar = useCallback((conta: ContaRecebida) => {
         setEstado(atual => {
             const anteriores = conta.inscricoesCursos;
-            return { cadastrado: true, cadastroConfirmado: true, nome: conta.perfil.nome, perfil: conta.perfil, organizacoes: conta.organizacoes, candidaturas: conta.candidaturas, rascunhos: conta.rascunhos.filter(r => !finalizadosRef.current.has(`${r.chamadaSlug}:${r.envioId}`)),
+            return { participaBanco: conta.participaBanco, cadastrado: true, cadastroConfirmado: true, nome: conta.perfil.nome, perfil: conta.perfil, organizacoes: conta.organizacoes, candidaturas: conta.candidaturas, rascunhos: conta.rascunhos.filter(r => !finalizadosRef.current.has(`${r.chamadaSlug}:${r.envioId}`)),
                 recibos: juntar(anteriores, conta.candidaturas.filter(c => Boolean(c.reciboToken)).map(reciboDaCandidatura)), cursosInscritos: anteriores.map(r => r.referencia) };
         });
         setErroConta(undefined);
@@ -142,7 +144,7 @@ export function AppProvider({ children }: {
         localStorage.setItem(CHAVE_TOKEN, token);
     }
     catch { } }, []);
-    const cadastrar = useCallback(async (perfil: PerfilCadastro, senha: string, org?: NovaOrganizacao) => { const geracao = geracaoRef.current; const c = await cadastrarConta(perfil, senha, org); if (geracaoRef.current !== geracao)
+    const cadastrar = useCallback(async (perfil: PerfilCadastro, senha: string, org?: NovaOrganizacao, participaBanco = false) => { const geracao = geracaoRef.current; const c = await cadastrarConta(perfil, senha, org, participaBanco); if (geracaoRef.current !== geracao)
         throw new ErroEnvio('perfil'); guardarToken(c.token); aplicar(c); }, [guardarToken, aplicar]);
     const entrar = useCallback(async (email: string, senha: string) => { const geracao = geracaoRef.current; const c = await entrarConta(email, senha); if (geracaoRef.current !== geracao)
         throw new ErroEnvio('perfil'); guardarToken(c.token); const me = await comSessao(consultarConta(c.token)); if (tokenRef.current === c.token)
@@ -162,12 +164,12 @@ export function AppProvider({ children }: {
     } }, []);
     const enviarCandidatura = useCallback(async (dados: NovaCandidatura, envioId: string): Promise<Candidatura> => {
         const token = tokenObrigatorio(), org = estadoRef.current.organizacoes.find(o => o.id === dados.organizacaoId);
-        if (!org)
+        if (dados.organizacaoId != null && !org)
             throw new ErroEnvio('perfil');
-        const resposta = await comSessao(enviarProposta({ chamadaSlug: dados.editalSlug, chamadaId: dados.chamadaId, organizacaoId: org.id, envioId, projeto: { titulo: dados.projeto, formato: dados.formato, descricao: dados.descricao ?? '', justificativa: dados.justificativa ?? '', alcance: dados.alcance ?? '', distribuicao: dados.distribuicao ?? '' }, valorSolicitado: dados.valorSolicitado }, token));
+        const resposta = await comSessao(enviarProposta({ chamadaSlug: dados.editalSlug, chamadaId: dados.chamadaId, organizacaoId: org?.id ?? null, envioId, projeto: { titulo: dados.projeto, formato: dados.formato, descricao: dados.descricao ?? '', justificativa: dados.justificativa ?? '', alcance: dados.alcance ?? '', distribuicao: dados.distribuicao ?? '' }, valorSolicitado: dados.valorSolicitado }, token));
         mutacaoRef.current++;
         finalizadosRef.current.add(`${dados.editalSlug}:${envioId}`);
-        const nova: Candidatura = { ...dados, ...resposta, id: resposta.protocolo, enviadaEm: new Date().toISOString(), status: 'recebida', organizacao: org };
+        const nova: Candidatura = { ...dados, ...resposta, id: resposta.protocolo, enviadaEm: new Date().toISOString(), status: 'recebida', organizacao: org, proponente: estadoRef.current.perfil ?? undefined };
         if (tokenRef.current === token)
             setEstado(a => ({ ...a, rascunhos: a.rascunhos.filter(r => !(r.chamadaSlug === dados.editalSlug && r.envioId === envioId)), candidaturas: [nova, ...a.candidaturas.filter(c => c.protocolo !== nova.protocolo)], recibos: juntar(a.recibos, [reciboDaCandidatura(nova)]) }));
         return nova;
@@ -211,6 +213,11 @@ export function AppProvider({ children }: {
         mutacaoRef.current++;
         setEstado(a => ({ ...a, perfil: novo, nome: novo.nome }));
     }, [comSessao]);
+    const definirParticipacaoBanco = useCallback(async (participar: boolean) => {
+        const participaBanco = await comSessao(alterarParticipacaoBanco(participar, tokenObrigatorio()));
+        mutacaoRef.current++;
+        setEstado(a => ({ ...a, participaBanco }));
+    }, [comSessao]);
     const carregarRascunho = useCallback((slug: string) => comSessao(consultarRascunho(slug, tokenObrigatorio())), [comSessao]);
     const salvarRascunho = useCallback(async (slug: string, dados: EnvioRascunho) => {
         const r = await comSessao(enviarRascunho(slug, dados, tokenObrigatorio()));
@@ -233,7 +240,7 @@ export function AppProvider({ children }: {
         void atualizarConta().catch(() => { });
         return r;
     }, [comSessao, atualizarConta]);
-    const valor = useMemo<ContextoApp>(() => ({ ...estado, sessaoId: geracaoRef.current, salvarPerfil, carregarRascunho, salvarRascunho, apagarRascunho, carregarOferta, decidirOferta, hidratado, carregandoConta, erroConta, cadastrar, entrar, sair, atualizarConta, salvarOrganizacao, enviarCandidatura, inscreverCurso, atualizarRecibos, carregarPagamento, gravarPagamento, estaInscrito: slug => estado.cursosInscritos.includes(slug), reiniciar: limpar }), [estado, salvarPerfil, carregarRascunho, salvarRascunho, apagarRascunho, carregarOferta, decidirOferta, hidratado, carregandoConta, erroConta, cadastrar, entrar, sair, atualizarConta, salvarOrganizacao, enviarCandidatura, inscreverCurso, atualizarRecibos, carregarPagamento, gravarPagamento, limpar]);
+    const valor = useMemo<ContextoApp>(() => ({ ...estado, sessaoId: geracaoRef.current, definirParticipacaoBanco, salvarPerfil, carregarRascunho, salvarRascunho, apagarRascunho, carregarOferta, decidirOferta, hidratado, carregandoConta, erroConta, cadastrar, entrar, sair, atualizarConta, salvarOrganizacao, enviarCandidatura, inscreverCurso, atualizarRecibos, carregarPagamento, gravarPagamento, estaInscrito: slug => estado.cursosInscritos.includes(slug), reiniciar: limpar }), [estado, definirParticipacaoBanco, salvarPerfil, carregarRascunho, salvarRascunho, apagarRascunho, carregarOferta, decidirOferta, hidratado, carregandoConta, erroConta, cadastrar, entrar, sair, atualizarConta, salvarOrganizacao, enviarCandidatura, inscreverCurso, atualizarRecibos, carregarPagamento, gravarPagamento, limpar]);
     return <Contexto.Provider value={valor}>{children}</Contexto.Provider>;
 }
 export function useApp(): ContextoApp { const c = useContext(Contexto); if (!c)

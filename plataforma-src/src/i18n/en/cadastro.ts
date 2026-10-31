@@ -13,13 +13,13 @@ export const cadastro = {
   entrar: 'Create account',
 
   fechado: {
-    titulo: 'Sign-up opens when calls accept applications',
+    titulo: 'Create your account at any time',
     descricao:
-      'Use it to apply to open calls. It is free and requires no minimum follower count. Publications can be read without an account.',
+      'Accounts are free for individuals and organizations. Joining the creator database is optional. Each call states whether it requires a Brazilian CNPJ.',
   },
 
   titulo: 'Create your account',
-  descricao: 'Free and with no minimum follower count required.',
+  descricao: 'A free account for individuals or organizations. Joining the creator database is a separate choice.',
 
   formularioTitulo: 'Your details',
   campos: {

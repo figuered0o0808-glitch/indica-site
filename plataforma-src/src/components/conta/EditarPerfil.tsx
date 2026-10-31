@@ -13,9 +13,9 @@ export function EditarPerfil({ idioma, perfil }: {
     idioma: Idioma;
     perfil: PerfilCadastro;
 }) {
-    const t = textos(idioma), { salvarPerfil } = useApp();
+    const t = textos(idioma), { salvarPerfil, participaBanco } = useApp();
     const [dados, setDados] = useState<PerfilCadastro>(() => ({ ...perfil, redes: perfil.redes.map(r => ({ ...r })) }));
-    const [busy, setBusy] = useState(false), [erro, setErro] = useState<MotivoEnvio>(), [salvo, setSalvo] = useState(false), [erroTelefone, setErroTelefone] = useState(false);
+    const [busy, setBusy] = useState(false), [erro, setErro] = useState<MotivoEnvio>(), [salvo, setSalvo] = useState(false), [erroTelefone, setErroTelefone] = useState(false), [erroBanco, setErroBanco] = useState(false);
     function campo(chave: 'nome' | 'telefone' | 'cidade' | 'uf', valor: string) { setDados(a => ({ ...a, [chave]: valor })); setSalvo(false); setErroTelefone(false); }
     async function enviar(evento: FormEvent) {
         evento.preventDefault();
@@ -25,6 +25,8 @@ export function EditarPerfil({ idioma, perfil }: {
             setErroTelefone(true);
             return;
         }
+        if(participaBanco && !dados.redes.some(r=>r.plataforma.trim()&&r.perfil.trim())) {setErroBanco(true);return;}
+        setErroBanco(false);
         setBusy(true);
         setErro(undefined);
         setSalvo(false);
@@ -42,6 +44,7 @@ export function EditarPerfil({ idioma, perfil }: {
     return <form className="pilha" onSubmit={enviar} aria-busy={busy}>
     <p>{t.conta.snapshotAjuda}</p>
     <fieldset className="pilha" disabled={busy} style={{ border: 0, margin: 0, padding: 0, minWidth: 0 }}>
+      <CampoSelecao idioma={idioma} id="perfil-tipo" rotulo={t.conta.tipoCadastro} value={dados.tipoCadastro ?? 'pf'} opcoes={[{valor:'pf',rotulo:t.conta.pessoaFisica},{valor:'pj',rotulo:t.conta.pessoaJuridica}]} onChange={e=>{setDados(a=>({...a,tipoCadastro:e.target.value as 'pf'|'pj'}));setSalvo(false);}}/>
       <CampoTexto idioma={idioma} id="perfil-nome" rotulo={t.cadastro.campos.nome} value={dados.nome} maxLength={120} required onChange={e => campo('nome', e.target.value)}/>
       <CampoTexto idioma={idioma} id="perfil-email" rotulo={t.conta.email} value={perfil.email} ajuda={t.conta.emailImutavel} readOnly/>
       <CampoTexto idioma={idioma} id="perfil-telefone" type="tel" rotulo={t.conta.telefone} value={dados.telefone} required erro={erroTelefone ? t.cadastro.telefoneConfira : undefined} onChange={e => campo('telefone', e.target.value)}/>
@@ -50,6 +53,7 @@ export function EditarPerfil({ idioma, perfil }: {
       <p className="nota">{t.conta.redesOpcionais}</p>
       {dados.redes.map((rede, i) => <div className="cartao" key={i}><CampoSelecao idioma={idioma} id={`perfil-rede-${i}`} rotulo={t.cadastro.redes.plataforma} value={rede.plataforma} vazio={t.cadastro.redes.escolhaPlataforma} opcoes={t.cadastro.redes.plataformas.map(p => ({ valor: p, rotulo: p }))} onChange={e => { setDados(a => ({ ...a, redes: a.redes.map((r, n) => n === i ? { ...r, plataforma: e.target.value } : r) })); setSalvo(false); }} required={Boolean(rede.perfil)}/><CampoTexto idioma={idioma} id={`perfil-rede-perfil-${i}`} rotulo={t.cadastro.redes.perfil} value={rede.perfil} required={Boolean(rede.plataforma)} onChange={e => { setDados(a => ({ ...a, redes: a.redes.map((r, n) => n === i ? { ...r, perfil: e.target.value } : r) })); setSalvo(false); }}/><CampoTexto idioma={idioma} id={`perfil-rede-seguidores-${i}`} rotulo={t.cadastro.redes.seguidores} inputMode="numeric" value={rede.seguidores} opcional onChange={e => { setDados(a => ({ ...a, redes: a.redes.map((r, n) => n === i ? { ...r, seguidores: e.target.value.replace(/\D/g, '') } : r) })); setSalvo(false); }}/><Botao variante="discreto" tamanho="pequeno" onClick={() => { setDados(a => ({ ...a, redes: a.redes.filter((_, n) => n !== i) })); setSalvo(false); }}>{t.cadastro.redes.remover}</Botao></div>)}
       {dados.redes.length < 20 ? <Botao variante="secundario" tamanho="pequeno" onClick={() => setDados(a => ({ ...a, redes: [...a.redes, { plataforma: '', perfil: '', seguidores: '' }] }))}>{t.cadastro.redes.acrescentar}</Botao> : null}
+      {erroBanco ? <p role="alert" className="campo__erro">{t.conta.bancoManterRede}</p> : null}
       {erro ? <p role="alert" className="campo__erro">{t.comum.envio[erro]}</p> : null}{salvo ? <p role="status">{t.conta.perfilSalvo}</p> : null}
       <Botao type="submit" disabled={busy}>{busy ? t.comum.envio.enviando : t.conta.salvar}</Botao>
     </fieldset>

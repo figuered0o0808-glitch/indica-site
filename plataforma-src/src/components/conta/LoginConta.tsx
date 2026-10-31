@@ -8,10 +8,11 @@ import { textos } from '@/i18n/strings';
 import { ErroEnvio, motivoDoErro, type MotivoEnvio } from '@/lib/envio';
 import { rota } from '@/lib/rotas';
 import { useApp } from '@/state/AppState';
-export function LoginConta({ idioma, retorno, recibo, criarConta }: {
+export function LoginConta({ idioma, retorno, recibo, banco, criarConta }: {
     idioma: Idioma;
     retorno?: string;
     recibo?: string;
+    banco?: boolean;
     criarConta?: () => void;
 }) {
     const t = textos(idioma), router = useRouter(), { entrar } = useApp();
@@ -20,7 +21,7 @@ export function LoginConta({ idioma, retorno, recibo, criarConta }: {
         return; setBusy(true); setErro(undefined); try {
         await entrar(email, senha);
         setSenha('');
-        router.push(rota(idioma, retorno ? `oportunidades/${retorno}/candidatura/` : `painel/${recibo ? `?recibo=${encodeURIComponent(recibo)}#comprovantes` : ''}`));
+        router.push(rota(idioma, retorno ? `oportunidades/${retorno}/candidatura/` : `painel/${recibo ? `?recibo=${encodeURIComponent(recibo)}#comprovantes` : banco ? '#banco' : ''}`));
     }
     catch (e) {
         setErro(e instanceof ErroEnvio && e.status === 401 ? 'login' : motivoDoErro(e));

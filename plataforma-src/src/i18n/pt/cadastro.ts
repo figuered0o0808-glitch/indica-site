@@ -12,13 +12,13 @@ export const cadastro = {
   entrar: 'Criar cadastro',
 
   fechado: {
-    titulo: 'O cadastro abre quando houver chamadas com inscrição aberta',
+    titulo: 'Você pode criar sua conta a qualquer momento',
     descricao:
-      'Ele serve para se candidatar às chamadas abertas. É gratuito e não exige número mínimo de seguidores. As publicações podem ser lidas sem cadastro.',
+      'A conta é gratuita para pessoas físicas e jurídicas. Participar do banco de influenciadores é opcional. Cada chamada define se exige CNPJ.',
   },
 
   titulo: 'Criar seu cadastro',
-  descricao: 'Gratuito e sem exigência de número mínimo de seguidores.',
+  descricao: 'Conta gratuita para pessoa física ou jurídica. A participação no banco de influenciadores é uma escolha separada.',
 
   formularioTitulo: 'Seus dados',
   campos: {

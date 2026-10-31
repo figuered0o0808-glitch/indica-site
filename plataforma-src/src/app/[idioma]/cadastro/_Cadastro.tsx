@@ -36,6 +36,8 @@ import { telefoneCompleto } from '@/lib/telefone';
 import { motivoDoErro, type MotivoEnvio } from '@/lib/envio';
 import { rota } from '@/lib/rotas';
 import { useApp } from '@/state/AppState';
+import { BancoInfluenciadores } from '@/components/conta/BancoInfluenciadores';
+import styles from '@/components/conta/AppPessoal.module.css';
 
 import { EstilosCadastro } from './_estilos';
 
@@ -108,8 +110,9 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
   const [senha,setSenha] = useState(''), [senhaConfirmada,setSenhaConfirmada] = useState('');
   const [erroSenha,setErroSenha] = useState<string>(),[erroCnpj,setErroCnpj] = useState<string>();
   const [querPropor,setQuerPropor] = useState(false),[empresa,setEmpresa] = useState<NovaOrganizacao>(EMPRESA_VAZIA);
+  const [tipoCadastro,setTipoCadastro] = useState<'pf'|'pj'>('pf'), [participaBanco,setParticipaBanco] = useState(false), [destaqueBanco,setDestaqueBanco] = useState(false), [erroBanco,setErroBanco] = useState(false);
   const [retorno,setRetorno] = useState<string>(),[modoLogin,setModoLogin] = useState(false);
-  useEffect(()=>{const q=new URLSearchParams(window.location.search),slug=q.get('retorno');if(slug&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)){setRetorno(slug);setQuerPropor(true);}setModoLogin(q.get('entrar')==='1');},[]);
+  useEffect(()=>{const q=new URLSearchParams(window.location.search),slug=q.get('retorno');if(slug&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)){setRetorno(slug);}setModoLogin(q.get('entrar')==='1');setDestaqueBanco(q.get('banco')==='1');},[]);
 
   const [enviado, setEnviado] = useState(false);
   const [enviando, setEnviando] = useState(false);
@@ -159,6 +162,7 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
     if (!hidratado || restaurado.current) return;
     restaurado.current = true;
     if (!perfil || cadastrado) return;
+    setTipoCadastro(perfil.tipoCadastro ?? 'pf');
     setNome((v) => v || perfil.nome); setEmail((v) => v || perfil.email);
     setTelefone((v) => v || perfil.telefone); setPais(perfil.pais);
     setCidade((v) => v || perfil.cidade); setUf(perfil.uf);
@@ -166,6 +170,7 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
   }, [hidratado, perfil, cadastrado]);
 
   function alterarRede(indice: number, campo: keyof RedeDoCriador, valor: string) {
+    setErroBanco(false);
     setRedes((atuais) =>
       atuais.map((rede, i) => (i === indice ? { ...rede, [campo]: valor } : rede)),
     );
@@ -186,8 +191,9 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
     evento.preventDefault();
     if (emVoo.current) return;
     if(senha.length<8 || new TextEncoder().encode(senha).length>72 || senha!==senhaConfirmada){setErroSenha(t.conta.senhaErro);return;}
-    if((querPropor||retorno)&&!cnpjValido(empresa.cnpj)){setErroCnpj(t.conta.cnpjErro);return;}
-    setErroSenha(undefined);setErroCnpj(undefined);
+    if(querPropor&&!cnpjValido(empresa.cnpj)){setErroCnpj(t.conta.cnpjErro);return;}
+    if(participaBanco&&!redes.some(r=>r.plataforma.trim()&&r.perfil.trim())){setErroBanco(true);document.getElementById('cadastro-redes-titulo')?.scrollIntoView({block:'center'});return;}
+    setErroSenha(undefined);setErroCnpj(undefined);setErroBanco(false);
     /*
      * O navegador ja exige o campo; o que ele nao confere e se o numero esta
      * inteiro. A regra depende do pais (ver src/lib/telefone.ts): no Brasil,
@@ -202,6 +208,7 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
     setEnviando(true); setErroEnvio(undefined);
     try {
       await cadastrar({
+      tipoCadastro,
       nome,
       email,
       telefone,
@@ -210,7 +217,7 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
       uf,
       nichos,
       redes: redes.filter((rede) => rede.plataforma && rede.perfil),
-      }, senha, querPropor||retorno ? {...empresa,cnpj:normalizarCnpj(empresa.cnpj)} : undefined);
+      }, senha, querPropor ? {...empresa,cnpj:normalizarCnpj(empresa.cnpj)} : undefined, participaBanco);
       setSenha('');setSenhaConfirmada('');
       setEnviado(true);
       if(retorno)router.push(rota(idioma,`oportunidades/${retorno}/candidatura/`));
@@ -220,7 +227,7 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
 
   const jaCadastrado = hidratado && cadastrado && !enviado;
   if(!hidratado||(carregandoConta&&!cadastrado))return <section className="secao"><div className="container"><p role="status">{t.conta.carregando}</p></div></section>;
-  if(modoLogin&&!cadastrado)return <><CabecalhoPagina estreito olho={t.conta.entrar} titulo={t.conta.loginTitulo}/><section className="secao"><div className="container-estreito"><LoginConta idioma={idioma} retorno={retorno} criarConta={()=>setModoLogin(false)}/></div></section></>;
+  if(modoLogin&&!cadastrado)return <><CabecalhoPagina estreito olho={t.conta.entrar} titulo={t.conta.loginTitulo}/><section className="secao"><div className="container-estreito"><LoginConta idioma={idioma} retorno={retorno} banco={destaqueBanco} criarConta={()=>setModoLogin(false)}/></div></section></>;
 
   return (
     <>
@@ -239,6 +246,7 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
                 </div>
               </div>
               <Acoes idioma={idioma} />
+              {destaqueBanco ? <section className="pilha"><h2>{t.conta.bancoTitulo}</h2><BancoInfluenciadores idioma={idioma}/></section> : null}
               {retorno?<Botao href={rota(idioma,`oportunidades/${retorno}/candidatura/`)}>{t.fluxos.candidatura.voltarEdital}</Botao>:null}
             </div>
           ) : jaCadastrado ? (
@@ -256,6 +264,7 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
                 </div>
               ) : null}
               <Acoes idioma={idioma} />
+              {destaqueBanco ? <section className="pilha"><h2>{t.conta.bancoTitulo}</h2><BancoInfluenciadores idioma={idioma}/></section> : null}
               {retorno?<Botao href={rota(idioma,`oportunidades/${retorno}/candidatura/`)}>{t.fluxos.candidatura.voltarEdital}</Botao>:null}
             </section>
           ) : (
@@ -272,6 +281,7 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
                 </div>
 
                 <div className="pilha">
+                  <CampoSelecao idioma={idioma} id="cadastro-tipo" rotulo={t.conta.tipoCadastro} ajuda={t.conta.tipoCadastroAjuda} value={tipoCadastro} opcoes={[{valor:'pf',rotulo:t.conta.pessoaFisica},{valor:'pj',rotulo:t.conta.pessoaJuridica}]} onChange={e=>{setTipoCadastro(e.target.value as 'pf'|'pj');if(e.target.value==='pf')setQuerPropor(false);}}/>
                   <CampoTexto
                     idioma={idioma}
                     id="cadastro-nome"
@@ -405,7 +415,7 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
                 </fieldset>
               </section>
 
-              <section className="cartao"><h2 className="cartao__titulo">{t.conta.executora}</h2><label className="linha"><input type="checkbox" checked={querPropor||Boolean(retorno)} disabled={Boolean(retorno)} onChange={e=>setQuerPropor(e.target.checked)}/>{t.conta.vouPropor}</label><p>{t.conta.empresaAjuda}</p>{querPropor||retorno?<CamposOrganizacao idioma={idioma} dados={empresa} onChange={d=>{setEmpresa(d);setErroCnpj(undefined);}} erroCnpj={erroCnpj} prefixo="cadastro-org"/>:null}</section>
+              <section className="cartao"><h2 className="cartao__titulo">{t.conta.executora}</h2><p>{t.conta.empresaAjuda}</p>{tipoCadastro === 'pj' ? <label className={styles.choice}><input type="checkbox" checked={querPropor} onChange={e=>setQuerPropor(e.target.checked)}/><span>{t.conta.organizacaoAgora}</span></label> : null}{querPropor?<CamposOrganizacao idioma={idioma} dados={empresa} onChange={d=>{setEmpresa(d);setErroCnpj(undefined);}} erroCnpj={erroCnpj} prefixo="cadastro-org"/>:null}</section>
 
               {/* As redes sao o peso do cadastro: em branco, sobre a menta de cima, e o que se destaca. */}
               <section className="cartao" aria-labelledby="cadastro-redes-titulo">
@@ -413,6 +423,7 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
                   {tc.redes.titulo}
                 </h2>
                 <p className="cartao__texto">{tc.redes.ajuda}</p><p className="nota">{t.conta.redesOpcionais}</p>
+                <div className={destaqueBanco ? styles.notice : 'pilha'}><h3>{t.conta.bancoTitulo}</h3><p>{t.conta.bancoIntro}</p>{destaqueBanco ? <p className="nota">{t.conta.bancoCadastroAviso}</p> : null}<label className={styles.choice}><input id="cadastro-banco" type="checkbox" checked={participaBanco} onChange={e=>{setParticipaBanco(e.target.checked);setErroBanco(false);}}/><span>{t.conta.bancoOptin}</span></label>{erroBanco ? <p role="alert" className="campo__erro">{t.conta.bancoRedeNecessaria}</p> : null}</div>
 
                 <div>
                   {redes.map((rede, indice) => (
@@ -495,8 +506,8 @@ function CadastroFormulario({ idioma }: { idioma: Idioma }) {
               </section>
 
               {erroEnvio ? <p className="campo__erro" role="alert">{t.comum.envio[erroEnvio]}</p> : null}
-              <Botao type="submit" largo disabled={enviando}>
-                {enviando ? t.comum.envio.enviando : erroEnvio ? t.comum.envio.tentar : t.conta.criar}
+              <Botao type="submit" largo className={styles.wrapButton} disabled={enviando}>
+                {enviando ? t.comum.envio.enviando : erroEnvio ? t.comum.envio.tentar : participaBanco ? t.conta.criarContaBanco : t.conta.criar}
               </Botao>
               </fieldset>
             </form>

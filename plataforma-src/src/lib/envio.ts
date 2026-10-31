@@ -60,6 +60,7 @@ function identificador(valor: unknown): string {
 }
 export function perfilParaEnvio(perfil: PerfilCadastro) {
     return {
+        tipoCadastro: perfil.tipoCadastro ?? 'pf',
         nome: perfil.nome.trim(), email: perfil.email.trim().toLowerCase(),
         telefone: normalizarTelefone(perfil.telefone, perfil.pais), pais: perfil.pais,
         cidade: perfil.cidade.trim(), uf: perfil.uf.trim(), nichos: perfil.nichos,
@@ -78,7 +79,7 @@ export async function enviarCandidatura(dados: {
     chamadaSlug: string;
     chamadaId?: string;
     envioId: string;
-    organizacaoId: number;
+    organizacaoId: number | null;
     projeto: Record<string, string | number>;
     valorSolicitado: number;
 }, token: string): Promise<{
@@ -116,7 +117,7 @@ function perfilRecebido(v: unknown): PerfilCadastro {
     const p = objeto(v);
     if (!texto(p.nome) || !texto(p.email))
         throw new ErroEnvio('resposta');
-    return { nome: texto(p.nome), email: texto(p.email), telefone: texto(p.telefone), pais: texto(p.pais), cidade: texto(p.cidade), uf: texto(p.uf),
+    return { tipoCadastro: p.tipoCadastro === 'pj' ? 'pj' : 'pf', nome: texto(p.nome), email: texto(p.email), telefone: texto(p.telefone), pais: texto(p.pais), cidade: texto(p.cidade), uf: texto(p.uf),
         nichos: Array.isArray(p.nichos) ? p.nichos.filter((x): x is string => typeof x === 'string') : [],
         redes: Array.isArray(p.redes) ? p.redes.map((v) => { const r = objeto(v); return { plataforma: texto(r.plataforma), perfil: texto(r.perfil), seguidores: identificador(r.seguidores) }; }) : [],
     };
@@ -128,6 +129,7 @@ function organizacaoRecebida(v: unknown): OrganizacaoExecutora {
     return { id, cnpj: texto(o.cnpj), razaoSocial: texto(o.razaoSocial), nomeFantasia: texto(o.nomeFantasia), cidade: texto(o.cidade), uf: texto(o.uf), email: texto(o.email), telefone: texto(o.telefone) };
 }
 export interface ContaRecebida {
+    participaBanco: boolean;
     perfil: PerfilCadastro;
     organizacoes: OrganizacaoExecutora[];
     candidaturas: Candidatura[];
@@ -145,18 +147,18 @@ function contaRecebida(r: Record<string, unknown>): ContaRecebida {
             editalSlug: texto(c.editalSlug) || texto(c.referencia), editalTitulo: texto(c.editalTitulo) || texto(c.titulo),
             projeto: texto(p.titulo), formato: texto(p.formato), descricao: texto(p.descricao), justificativa: texto(p.justificativa), alcance: texto(p.alcance), distribuicao: texto(p.distribuicao),
             valorSolicitado: Number(c.valorSolicitado) || 0, status: texto(c.estado) as Candidatura['status'], enviadaEm: texto(c.enviadaEm),
-            organizacaoId: Number(c.organizacaoId), organizacao: c.organizacao ? organizacaoRecebida({ ...objeto(c.organizacao), id: objeto(c.organizacao).id ?? c.organizacaoId }) : organizacoes.find((o) => o.id === Number(c.organizacaoId)),
-            proponente: { nome: texto(responsavel.nome) || perfil.nome, email: texto(responsavel.email) || perfil.email, telefone: texto(responsavel.telefone) || perfil.telefone, pais: perfil.pais, cidade: perfil.cidade, uf: perfil.uf },
+            organizacaoId: c.organizacaoId == null ? null : Number(c.organizacaoId), organizacao: texto(objeto(c.organizacao).cnpj) ? organizacaoRecebida({ ...objeto(c.organizacao), id: objeto(c.organizacao).id ?? c.organizacaoId }) : c.organizacaoId == null ? undefined : organizacoes.find((o) => o.id === Number(c.organizacaoId)),
+            proponente: { nome: texto(responsavel.nome) || perfil.nome, email: texto(responsavel.email) || perfil.email, telefone: texto(responsavel.telefone) || perfil.telefone, pais: texto(responsavel.pais) || perfil.pais, cidade: texto(responsavel.cidade) || perfil.cidade, uf: texto(responsavel.uf) || perfil.uf },
             pagamentoPendente: c.pagamentoPendente === true, pagamentoStatus: texto(c.pagamentoStatus), simulacao: c.simulacao === true,
             historico: Array.isArray(c.historico) ? c.historico.map(v => { const h = objeto(v); return { estado: texto(h.estado), em: texto(h.em) }; }).filter(h => h.estado && h.em) : [],
             oferta: c.oferta ? ofertaRecebida(c.oferta) : undefined };
     }) : [];
     const inscricoesCursos: ReciboPublico[] = Array.isArray(r.inscricoesCursos) ? r.inscricoesCursos.map(v => { const c = objeto(v); return { tipo: 'curso', referencia: texto(c.cursoSlug) || texto(c.referencia), titulo: texto(c.titulo), estado: texto(c.estado), enviadaEm: texto(c.enviadaEm), reciboToken: texto(c.reciboToken) }; }) : [];
     const rascunhos: ResumoRascunho[] = Array.isArray(r.rascunhos) ? r.rascunhos.map(v => { const d = objeto(v); return { chamadaSlug: texto(d.chamadaSlug), tituloChamada: texto(d.tituloChamada), tituloProjeto: texto(d.tituloProjeto), atualizadoEm: texto(d.atualizadoEm), versao: Number(d.versao), envioId: texto(d.envioId), organizacaoId: d.organizacaoId == null ? null : Number(d.organizacaoId), aceitaEnvio: d.aceitaEnvio === true }; }) : [];
-    return { perfil, organizacoes, candidaturas, inscricoesCursos, rascunhos };
+    return { perfil, organizacoes, candidaturas, inscricoesCursos, rascunhos, participaBanco: r.participaBanco === true };
 }
-export async function cadastrarConta(perfil: PerfilCadastro, senha: string, organizacao?: NovaOrganizacao) {
-    const r = await requisitar('/tilt/publico/conta/cadastro', { perfil: { ...perfil, email: perfil.email.trim().toLowerCase(), telefone: normalizarTelefone(perfil.telefone, perfil.pais) }, senha, ...(organizacao ? { organizacao } : {}) });
+export async function cadastrarConta(perfil: PerfilCadastro, senha: string, organizacao?: NovaOrganizacao, participaBanco = false) {
+    const r = await requisitar('/tilt/publico/conta/cadastro', { perfil: { ...perfil, tipoCadastro: perfil.tipoCadastro ?? 'pf', email: perfil.email.trim().toLowerCase(), telefone: normalizarTelefone(perfil.telefone, perfil.pais) }, senha, participaBanco, ...(organizacao ? { organizacao } : {}) });
     if (r.ok !== true || !texto(r.token))
         throw new ErroEnvio('resposta');
     return { ...contaRecebida(r), token: texto(r.token) };
@@ -179,12 +181,15 @@ export async function consultarPagamento(protocolo: string, token: string): Prom
     habilitado: boolean;
     recebido: boolean;
     dados?: DadosPagamento;
+    titular: string;
+    cnpj?: string;
+    tipoPessoa: 'pf' | 'pj';
 }> {
     const r = await requisitar(`/tilt/publico/conta/propostas/${encodeURIComponent(protocolo)}/pagamento`, undefined, token);
-    if (typeof r.habilitado !== 'boolean' || typeof r.recebido !== 'boolean')
+    if (typeof r.habilitado !== 'boolean' || typeof r.recebido !== 'boolean' || !texto(r.titular) || !['pf', 'pj'].includes(texto(r.tipoPessoa)) || (r.tipoPessoa === 'pj' && !texto(r.cnpj)))
         throw new ErroEnvio('resposta');
     // Apenas o formulário mantém estes dados em memória; nunca entram no contexto/cache.
-    return { habilitado: r.habilitado, recebido: r.recebido, dados: r.dados ? objeto(r.dados) as unknown as DadosPagamento : undefined };
+    return { habilitado: r.habilitado, recebido: r.recebido, titular: texto(r.titular), cnpj: texto(r.cnpj) || undefined, tipoPessoa: r.tipoPessoa as 'pf' | 'pj', dados: r.dados ? objeto(r.dados) as unknown as DadosPagamento : undefined };
 }
 export async function enviarPagamento(protocolo: string, dados: DadosPagamento, token: string) {
     const r = await requisitar(`/tilt/publico/conta/propostas/${encodeURIComponent(protocolo)}/pagamento`, dados, token);
@@ -243,4 +248,11 @@ export async function responderOferta(protocolo: string, oferta: OfertaProposta,
     if (r.ok !== true || !texto(r.estadoProposta))
         throw new ErroEnvio('resposta');
     return { oferta: ofertaRecebida(r.oferta), estadoProposta: texto(r.estadoProposta) };
+}
+
+export async function alterarParticipacaoBanco(participar: boolean, token: string): Promise<boolean> {
+    const r = await requisitar('/tilt/publico/conta/banco', { participar }, token);
+    if (r.ok !== true || typeof r.participaBanco !== 'boolean' || r.participaBanco !== participar)
+        throw new ErroEnvio('resposta');
+    return r.participaBanco;
 }

@@ -55,6 +55,7 @@ export interface Call {
   /** Identificador da operação; o slug público também pode resolver a chamada. */
   chamadaId?: string;
   simulacao?: boolean;
+  exigeCnpj?: boolean;
   titulo: string;
   /** Quem opera a chamada. A marca aparece na pagina. */
   organizacao?: string;
@@ -176,7 +177,7 @@ export interface Candidatura {
   chamadaId?: string;
   /** Segredo restrito ao navegador que recebeu o comprovante. */
   reciboToken?: string;
-  organizacaoId?: number;
+  organizacaoId?: number | null;
   organizacao?: OrganizacaoExecutora;
   pagamentoPendente?: boolean;
   pagamentoStatus?: string;
@@ -281,7 +282,7 @@ export interface OfertaProposta {
 }
 export interface DadosPagamento {
   titular: string;
-  cnpj: string;
+  cnpj?: string;
   tipo: 'pix' | 'bancaria';
   pixTipo?: 'cnpj' | 'email' | 'telefone' | 'aleatoria';
   pixChave?: string;
@@ -303,6 +304,7 @@ export interface RedeDoCriador {
 
 /** O que o cadastro coleta. Curto de proposito: o peso esta nas redes. */
 export interface PerfilCadastro {
+  tipoCadastro?: 'pf' | 'pj';
   nome: string;
   email: string;
   /** Como a pessoa digitou, com DDD ou codigo do pais. Normaliza-se so na saida. */

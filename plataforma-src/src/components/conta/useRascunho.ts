@@ -45,7 +45,7 @@ export function useRascunho(slug: string, aberta: boolean, orgPadrao?: number) {
             if (!montado.current || ciclo.current !== chamada)
                 return;
             const r = resposta.rascunho;
-            const novo: Editor = { dono: sessaoId, dados: r?.dados ?? { ...DADOS_RASCUNHO_VAZIOS }, organizacaoId: r?.organizacaoId ?? orgInicial.current ?? null, passo: r?.passo ?? 0, envioId: r?.envioId ?? novoEnvioId(), versao: r?.versao ?? null, atualizadoEm: r?.atualizadoEm ?? '', aceitaEnvio: aberta && resposta.aceitaEnvio };
+            const novo: Editor = { dono: sessaoId, dados: r?.dados ?? { ...DADOS_RASCUNHO_VAZIOS }, organizacaoId: r ? r.organizacaoId : orgInicial.current ?? null, passo: r?.passo ?? 0, envioId: r?.envioId ?? novoEnvioId(), versao: r?.versao ?? null, atualizadoEm: r?.atualizadoEm ?? '', aceitaEnvio: aberta && resposta.aceitaEnvio };
             atual.current = novo;
             ultimaAssinatura.current = assinatura(novo);
             conflito.current = false;
@@ -166,7 +166,7 @@ export function useRascunho(slug: string, aberta: boolean, orgPadrao?: number) {
     const retomar = useCallback(() => { pausa.current = false; setPausado(false); }, []);
     return { editor, pronto: Boolean(editor && editor.dono === sessaoId), status, carregar, salvar, pausar, retomar,
         campo: (nome: keyof DadosRascunho, valor: string) => alterar(e => ({ ...e, dados: { ...e.dados, [nome]: valor } })),
-        organizacao: (id: number) => alterar(e => ({ ...e, organizacaoId: id || null })),
+        organizacao: (id: number | null) => alterar(e => ({ ...e, organizacaoId: id || null })),
         passo: (passo: number) => alterar(e => ({ ...e, passo: Math.max(0, Math.min(2, passo)) })),
     };
 }

@@ -6,7 +6,7 @@ const textos = {
     descricao: 'Prepare a proposta com calma e acompanhe cada etapa na sua conta.',
     como: 'Como funciona', criar: 'Criar minha conta', painel: 'Acompanhar minhas propostas',
     passos: [
-      ['Faça seu cadastro', 'Crie sua conta pessoal. Para propor um projeto, cadastre também a empresa ou organização executora com CNPJ.'],
+      ['Faça seu cadastro', 'Crie uma conta como pessoa física ou jurídica. Participar do banco de influenciadores é opcional e não depende de enviar uma proposta.'],
       ['Desenvolva sua proposta', 'Escolha uma chamada aberta e prepare a ideia, o público, a distribuição e o orçamento. Seu rascunho fica salvo na conta.'],
       ['Envie e acompanhe', 'Revise as respostas e confirme o envio. O protocolo comprova a inscrição; a situação fica disponível na sua conta.'],
       ['Confira o resultado', 'Acompanhe a classificação e os próximos passos. Se o valor aprovado mudar, você decide se aceita a oferta.'],
@@ -14,7 +14,8 @@ const textos = {
     perguntasTitulo: 'Antes de começar',
     perguntas: [
       ['Quem pode participar?', 'Criadores e pessoas que representam empresas ou organizações podem se cadastrar. Cada chamada informa o público e os requisitos para participar.'],
-      ['Preciso de CNPJ?', 'O envio de propostas exige uma empresa ou organização executora com CNPJ. O cadastro pessoal, a leitura dos materiais e a participação em cursos não exigem uma executora. Confira também as regras de cada atividade.'],
+      ['A conta e o banco de influenciadores são a mesma coisa?', 'Não. Você pode criar conta, fazer cursos e enviar propostas sem participar do banco. A adesão é opcional, exige ao menos um perfil de rede e pode ser encerrada no painel sem cancelar suas propostas.'],
+      ['Preciso de CNPJ?', 'Para criar conta ou entrar no banco de influenciadores, não. Cada chamada informa se aceita pessoa física ou exige uma empresa ou organização com CNPJ. A chamada Carros elétricos no Brasil exige CNPJ.'],
       ['Posso continuar a proposta depois?', 'Sim. O rascunho fica na sua conta e pode ser retomado em outro aparelho após entrar com e-mail e senha. Um rascunho não é uma inscrição: é preciso confirmar o envio e receber o protocolo dentro do prazo.'],
       ['Como funciona a avaliação?', 'A equipe organiza a análise conforme as regras da chamada. Ela pode usar pareceres, notas, critérios com pesos ou classificação por posição. O resultado publicado apresenta selecionados e suplentes.'],
       ['E se o valor aprovado for diferente do solicitado?', 'A oferta aparece na sua conta com o valor e as condições. Você pode aceitar ou recusar. Quando o aceite é necessário, a seleção e a etapa de pagamento só são liberadas depois da sua confirmação.'],
@@ -31,7 +32,7 @@ const textos = {
     descricao: 'Prepare your proposal at your own pace and follow each step in your account.',
     como: 'How it works', criar: 'Create my account', painel: 'Track my proposals',
     passos: [
-      ['Create your account', 'Create a personal account. To submit a project, also register the company or organization responsible for delivery, with a Brazilian CNPJ.'],
+      ['Create your account', 'Create an individual or organization account. Joining the creator database is optional and does not require submitting a proposal.'],
       ['Develop your proposal', 'Choose an open call and prepare the idea, audience, distribution plan and budget. Your draft is saved to your account.'],
       ['Submit and track', 'Review your answers and confirm submission. Your reference number confirms registration; the status is available in your account.'],
       ['Check the results', 'Follow the published ranking and next steps. If the approved amount changes, you decide whether to accept the offer.'],
@@ -39,7 +40,8 @@ const textos = {
     perguntasTitulo: 'Before you start',
     perguntas: [
       ['Who can participate?', 'Creators and people representing companies or organizations can register. Each call specifies its intended audience and participation requirements.'],
-      ['Do I need a CNPJ?', 'Submitting a proposal requires a company or executing organization with a Brazilian CNPJ. A personal account, reading materials and course participation do not require an organization. Also check the rules of each activity.'],
+      ['Is an account the same as joining the creator database?', 'No. You can have an account, take courses and submit proposals without joining the database. Joining is optional, requires at least one social profile, and can be ended from your panel without cancelling proposals.'],
+      ['Do I need a CNPJ?', 'Not to create an account or join the creator database. Each call states whether it accepts individuals or requires an organization with a Brazilian CNPJ. The Electric cars in Brazil call requires a CNPJ.'],
       ['Can I continue a proposal later?', 'Yes. Your draft is saved in your account and can be resumed on another device after signing in. A draft is not a submission: you must confirm submission and receive a reference number before the deadline.'],
       ['How are proposals evaluated?', 'The team organizes the review according to the call rules. Methods can include written reviews, overall scores, weighted criteria or ranking. Published results identify selected and reserve proposals.'],
       ['What if the approved amount differs from my request?', 'Your account shows the offer amount and conditions. You can accept or decline. When acceptance is required, selection and payment details are only enabled after you confirm.'],
@@ -56,7 +58,7 @@ const textos = {
     descricao: 'Prepara tu propuesta con calma y sigue cada etapa en tu cuenta.',
     como: 'Cómo funciona', criar: 'Crear mi cuenta', painel: 'Seguir mis propuestas',
     passos: [
-      ['Crea tu cuenta', 'Crea una cuenta personal. Para presentar un proyecto, registra también la empresa u organización ejecutora con CNPJ brasileño.'],
+      ['Crea tu cuenta', 'Crea una cuenta como persona física o jurídica. Participar en el banco de creadores es opcional y no depende de presentar una propuesta.'],
       ['Desarrolla tu propuesta', 'Elige una convocatoria abierta y prepara la idea, el público, la distribución y el presupuesto. El borrador se guarda en tu cuenta.'],
       ['Envía y acompaña', 'Revisa las respuestas y confirma el envío. El número de protocolo acredita la inscripción; el estado está disponible en tu cuenta.'],
       ['Consulta el resultado', 'Sigue la clasificación publicada y los próximos pasos. Si cambia el importe aprobado, tú decides si aceptas la oferta.'],
@@ -64,7 +66,8 @@ const textos = {
     perguntasTitulo: 'Antes de empezar',
     perguntas: [
       ['¿Quién puede participar?', 'Pueden registrarse creadores y personas que representan empresas u organizaciones. Cada convocatoria informa su público y los requisitos de participación.'],
-      ['¿Necesito un CNPJ?', 'La presentación de propuestas requiere una empresa u organización ejecutora con CNPJ brasileño. La cuenta personal, la lectura de materiales y los cursos no exigen una ejecutora. Consulta también las reglas de cada actividad.'],
+      ['¿La cuenta y el banco de creadores son lo mismo?', 'No. Puedes tener cuenta, hacer cursos y presentar propuestas sin participar en el banco. La adhesión es opcional, requiere al menos un perfil de red y se puede cancelar en el panel sin cancelar tus propuestas.'],
+      ['¿Necesito un CNPJ?', 'No para crear una cuenta o participar en el banco de creadores. Cada convocatoria informa si acepta personas físicas o exige una organización con CNPJ brasileño. La convocatoria Autos eléctricos en Brasil exige CNPJ.'],
       ['¿Puedo continuar la propuesta después?', 'Sí. El borrador queda en tu cuenta y puedes retomarlo en otro dispositivo al iniciar sesión. Un borrador no es una inscripción: debes confirmar el envío y recibir el protocolo dentro del plazo.'],
       ['¿Cómo se evalúan las propuestas?', 'El equipo organiza el análisis según las reglas de la convocatoria. Puede utilizar comentarios, notas generales, criterios ponderados o clasificación por posición. El resultado identifica propuestas seleccionadas y suplentes.'],
       ['¿Y si el importe aprobado es distinto al solicitado?', 'La oferta aparece en tu cuenta con el importe y las condiciones. Puedes aceptarla o rechazarla. Cuando se requiere aceptación, la selección y los datos de pago se habilitan después de tu confirmación.'],
