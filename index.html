@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>INDICA — Agência de comunicação e marketing de influência</title>
-<meta name="description" content="A INDICA é uma agência de comunicação e marketing de influência. Através do mercado de influência, defendemos a ciência, a democracia e o meio ambiente. Campanhas, produção audiovisual e uma rede de +200 influenciadores.">
-<meta property="og:title" content="INDICA — Agência de comunicação e marketing de influência">
-<meta property="og:description" content="Através do mercado de influência, defendemos a ciência, a democracia e o meio ambiente.">
+<title>Agência INDICA | Comunicação e marketing de influência</title>
+<meta name="description" content="A Agência INDICA conecta comunicação, marketing de influência e produção audiovisual em campanhas pela ciência, democracia e meio ambiente. Conheça nossos projetos.">
+<meta property="og:site_name" content="Agência INDICA">
+<meta property="og:title" content="Agência INDICA | Comunicação e marketing de influência">
+<meta property="og:description" content="Comunicação, marketing de influência e produção audiovisual em campanhas pela ciência, democracia e meio ambiente. Conheça os projetos da Agência INDICA.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://agenciaindica.com/">
 <meta property="og:image" content="https://agenciaindica.com/assets/img/og.png">
@@ -18,6 +19,7 @@
 <meta name="theme-color" content="#000000">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/img/favicon-48.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16.png">
 <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
@@ -28,15 +30,33 @@
 <link rel="stylesheet" href="assets/css/style.css?v=69">
 <link rel="stylesheet" href="assets/css/eixos-motion.css?v=2">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Organization",
-"name":"INDICA","alternateName":"Agência INDICA",
-"url":"https://agenciaindica.com/",
-"logo":"https://agenciaindica.com/assets/img/og.png",
-"email":"indica.osc@gmail.com",
-"foundingDate":"2024",
-"description":"Agência de comunicação e marketing de influência. Democracia, Ciência e Meio Ambiente.",
-"sameAs":["https://www.instagram.com/indica.cc"],
-"address":{"@type":"PostalAddress","addressCountry":"BR"}}
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://agenciaindica.com/#organizacao",
+      "name": "Agência INDICA",
+      "alternateName": ["INDICA", "Agência Índica", "Índica"],
+      "url": "https://agenciaindica.com/",
+      "logo": "https://agenciaindica.com/assets/img/logo-master-dark.png",
+      "email": "indica.osc@gmail.com",
+      "foundingDate": "2024",
+      "description": "Agência de comunicação, marketing de influência e produção audiovisual com atuação em ciência, democracia e meio ambiente.",
+      "sameAs": ["https://www.instagram.com/indica.cc"],
+      "address": {"@type": "PostalAddress", "addressCountry": "BR"}
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://agenciaindica.com/#website",
+      "url": "https://agenciaindica.com/",
+      "name": "Agência INDICA",
+      "alternateName": ["INDICA", "Agência Índica"],
+      "inLanguage": "pt-BR",
+      "publisher": {"@id": "https://agenciaindica.com/#organizacao"}
+    }
+  ]
+}
 </script>
 </head>
 <body>
@@ -77,7 +97,7 @@
 <section class="hero">
   <div class="hero__inner">
     <div class="dots" aria-hidden="true"><i class="d d--b"></i><i class="d d--g"></i><i class="d d--p"></i></div>
-    <h1 class="hero__h1"><img src="assets/img/logo-master.png" alt="INDICA — Agência de comunicação e marketing de influência" class="hero__logo" width="3228" height="968"></h1>
+    <h1 class="hero__h1"><img src="assets/img/logo-master.png" alt="Agência INDICA — Comunicação e marketing de influência" class="hero__logo" width="3228" height="968"></h1>
     <a href="/plataforma/pt/" class="hero__platform" data-href-pt="/plataforma/pt/" data-href-en="/plataforma/en/">
       <span class="hero__platform-label" data-i18n="hero.platform.label">Para criadores e organizações</span>
       <span class="hero__platform-title" data-i18n="hero.platform.title">Plataforma INDICA</span>
@@ -579,7 +599,7 @@
       <span class="kicker" data-i18n="about.kicker">Quem somos</span>
       <h2 class="display" data-i18n="about.h2">Uma agência nascida<br>nas redes, movida por <span class="b">causas</span>.</h2>
       <p class="sec-lead" data-i18n="about.lead">
-        Fundada em 2024, a INDICA desenvolve estratégias de comunicação voltadas à produção de
+        Fundada em 2024, a Agência INDICA desenvolve estratégias de comunicação voltadas à produção de
         conteúdos relevantes e ao engajamento de diferentes públicos. Unimos repertório de
         influência, leitura de dados e produção audiovisual para transformar pautas complexas
         em narrativas que circulam.
@@ -775,7 +795,7 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=69"></script>
+<script src="assets/js/main.js?v=70"></script>
 <script src="assets/js/eixos-motion.js?v=2"></script>
 </body>
 </html>

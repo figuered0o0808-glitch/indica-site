@@ -161,7 +161,21 @@
     });
     currentLang = lang;
     document.documentElement.lang = (lang === 'en') ? 'en' : 'pt-BR';
-    document.title = (lang === 'en') ? 'INDICA — Communication and influencer marketing agency' : 'INDICA — Agência de comunicação e marketing de influência';
+    document.title = (lang === 'en') ? 'INDICA Agency | Communication and influencer marketing' : 'Agência INDICA | Comunicação e marketing de influência';
+    var description = document.querySelector('meta[name="description"]');
+    if (description) description.setAttribute('content', (lang === 'en')
+      ? 'INDICA Agency combines communication, influencer marketing and audiovisual production in campaigns for science, democracy and the environment. Explore our projects.'
+      : 'A Agência INDICA conecta comunicação, marketing de influência e produção audiovisual em campanhas pela ciência, democracia e meio ambiente. Conheça nossos projetos.');
+    var ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', document.title);
+    var ogDescription = document.querySelector('meta[property="og:description"]');
+    if (ogDescription) ogDescription.setAttribute('content', (lang === 'en')
+      ? 'Communication, influencer marketing and audiovisual production in campaigns for science, democracy and the environment. Explore INDICA Agency projects.'
+      : 'Comunicação, marketing de influência e produção audiovisual em campanhas pela ciência, democracia e meio ambiente. Conheça os projetos da Agência INDICA.');
+    var ogLocale = document.querySelector('meta[property="og:locale"]');
+    if (ogLocale) ogLocale.setAttribute('content', (lang === 'en') ? 'en_US' : 'pt_BR');
+    var ogAlternate = document.querySelector('meta[property="og:locale:alternate"]');
+    if (ogAlternate) ogAlternate.setAttribute('content', (lang === 'en') ? 'pt_BR' : 'en_US');
     document.querySelectorAll('[data-i18n-aria]').forEach(function (el) {
       if (!ptCache.has(el)) ptCache.set(el, el.getAttribute('aria-label'));
       var k = el.getAttribute('data-i18n-aria');
@@ -185,9 +199,9 @@
   if (saved === 'en' || saved === 'pt') {
     applyLang(saved);
   } else {
-    // primeira visita: detecta o idioma do navegador (não-PT => inglês)
-    var navLang = (navigator.language || 'pt').toLowerCase();
-    applyLang(navLang.indexOf('pt') === 0 ? 'pt' : 'en');
+    // A URL principal tem conteúdo em português, inclusive após a renderização.
+    // A opção EN continua disponível e a escolha do visitante fica salva.
+    applyLang('pt');
   }
 
   /* ---------- Capítulos dos eixos: índice fixo que acompanha a rolagem ---------- */
