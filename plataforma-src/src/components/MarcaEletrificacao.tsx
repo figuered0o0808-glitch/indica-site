@@ -1,4 +1,5 @@
 import { arquivoPublico } from '@/lib/format';
+import { eletrificacaoJa } from '@/lib/eletrificacao';
 
 import styles from './MarcaEletrificacao.module.css';
 
@@ -9,10 +10,10 @@ export function MarcaEletrificacao({ className }: { className?: string }) {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         className={styles.marca}
-        src={arquivoPublico('/campanhas/eletrificacao-ja/marca.svg')}
+        src={arquivoPublico(eletrificacaoJa.marca.arquivo)}
         alt="Eletrificação Já"
-        width={882}
-        height={139}
+        width={eletrificacaoJa.marca.largura}
+        height={eletrificacaoJa.marca.altura}
       />
     </div>
   );

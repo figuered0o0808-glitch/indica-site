@@ -18,7 +18,7 @@
       "O documento inclui MEI, EIRELI e sociedades limitadas entre as pessoas jurídicas elegíveis.",
       "Propostas técnicas e financeiras de comunicação científica, educativa e de conscientização social sobre os veículos elétricos no Brasil.",
       "Soluções digitais em vídeo, áudio, texto, carrosséis educativos e outros formatos; ações presenciais são admitidas quando integradas aos canais digitais.",
-      "As propostas devem abordar um ou mais eixos do briefing orientador: custos e acessibilidade; políticas públicas e Programa Mover; sustentabilidade e transição energética; mitos e fatos da eletrificação."
+      "Os eixos do briefing são sugestões, não requisitos obrigatórios: custos e acessibilidade; políticas públicas e Programa Mover; sustentabilidade e transição energética; mitos e fatos da eletrificação. Outras abordagens relacionadas à mobilidade elétrica no Brasil e aos objetivos da chamada também são aceitas."
     ],
     "naoApoiado": [],
     "criterios": [
@@ -109,8 +109,8 @@
     },
     "arquivoEdital": {
       "idioma": "pt",
-      "arquivo": "/arquivos/e499b24c47c180d60bb3efdd464c49aca46d616ececaa338f4d54dd437c925e1/edital-carros-eletricos-brasil.pdf",
-      "paginas": 7
+      "arquivo": "/arquivos/8da823a3a0eae50350275b6cea7d5838ff3693d85e34c5744c0b01fc36a68d99/edital-carros-eletricos-brasil.pdf",
+      "paginas": 8
     },
     "secoesComplementares": [
       {
@@ -153,7 +153,9 @@
         "titulo": "Anexo I — briefing orientador",
         "paragrafos": [
           "A comunicação deve considerar os desafios econômicos e estruturais da mobilidade elétrica no Brasil, incluindo o custo de aquisição e a infraestrutura necessária à adoção pelo consumidor.",
-          "As propostas devem abordar um ou mais dos eixos abaixo. Podem combinar vídeos curtos, Reels ou TikTok, vídeos longos para YouTube, podcasts, carrosséis educativos, artigos e threads. Ações presenciais são opcionais e devem gerar conteúdo e engajamento para as plataformas digitais."
+          "Os eixos abaixo são sugestões para orientar a elaboração das propostas. Não é obrigatório seguir algum deles; outras abordagens são aceitas, desde que relacionadas à mobilidade elétrica no Brasil e aos objetivos da chamada.",
+          "As propostas podem combinar vídeos curtos, Reels ou TikTok, vídeos longos para YouTube, podcasts, carrosséis educativos, artigos e threads. Ações presenciais são opcionais e devem gerar conteúdo e engajamento para as plataformas digitais.",
+          "O site Eletrificação Já e a cartilha da campanha reúnem dados e referências para apoiar a elaboração da proposta e a produção dos conteúdos."
         ],
         "itens": [
           "Eixo A — Custos e acessibilidade: compra, manutenção, abastecimento ou recarga e depreciação em comparação com veículos a combustão.",

@@ -18,7 +18,7 @@
       "El documento incluye MEI, EIRELI y sociedades de responsabilidad limitada entre las personas jurídicas elegibles.",
       "Propuestas técnicas y financieras de comunicación científica, educativa y de concientización social sobre los vehículos eléctricos en Brasil.",
       "Soluciones digitales en video, audio, texto, carruseles educativos y otros formatos; se admiten actividades presenciales cuando estén integradas en los canales digitales.",
-      "Las propuestas deben abordar uno o más ejes del briefing orientador: costos y accesibilidad; políticas públicas y Programa Mover; sostenibilidad y transición energética; mitos y hechos de la electrificación."
+      "Los ejes del briefing son sugerencias, no requisitos obligatorios: costos y accesibilidad; políticas públicas y Programa Mover; sostenibilidad y transición energética; mitos y hechos de la electrificación. También se aceptan otros enfoques relacionados con la movilidad eléctrica en Brasil y los objetivos de la convocatoria."
     ],
     "naoApoiado": [],
     "criterios": [
@@ -109,8 +109,8 @@
     },
     "arquivoEdital": {
       "idioma": "pt",
-      "arquivo": "/arquivos/e499b24c47c180d60bb3efdd464c49aca46d616ececaa338f4d54dd437c925e1/edital-carros-eletricos-brasil.pdf",
-      "paginas": 7
+      "arquivo": "/arquivos/8da823a3a0eae50350275b6cea7d5838ff3693d85e34c5744c0b01fc36a68d99/edital-carros-eletricos-brasil.pdf",
+      "paginas": 8
     },
     "secoesComplementares": [
       {
@@ -153,7 +153,9 @@
         "titulo": "Anexo I — briefing orientador",
         "paragrafos": [
           "La comunicación debe considerar los desafíos económicos y estructurales de la movilidad eléctrica en Brasil, incluidos el costo de adquisición y la infraestructura necesaria para su adopción por el consumidor.",
-          "Las propuestas deben abordar uno o más de los ejes siguientes. Pueden combinar videos cortos, Reels o TikTok, videos largos para YouTube, podcasts, carruseles educativos, artículos e hilos. Las actividades presenciales son opcionales y deben generar contenido e interacción para las plataformas digitales."
+          "Los ejes siguientes son sugerencias para orientar la elaboración de las propuestas. No es obligatorio seguir ninguno de ellos; se aceptan otros enfoques, siempre que estén relacionados con la movilidad eléctrica en Brasil y los objetivos de la convocatoria.",
+          "Las propuestas pueden combinar videos cortos, Reels o TikTok, videos largos para YouTube, podcasts, carruseles educativos, artículos e hilos. Las actividades presenciales son opcionales y deben generar contenido e interacción para las plataformas digitales.",
+          "El sitio Eletrificação Já y la guía de la campaña reúnen datos y referencias para apoyar la elaboración de la propuesta y la producción de contenidos."
         ],
         "itens": [
           "Eje A — Costos y accesibilidad: compra, mantenimiento, abastecimiento o recarga y depreciación en comparación con vehículos de combustión.",

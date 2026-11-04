@@ -24,7 +24,7 @@ import { Compartilhar } from './_Compartilhar';
 import { FormatosProjeto } from './_FormatosProjeto';
 import { Lateral } from './_Lateral';
 import { Resultado } from './_Resultado';
-import { EletrificacaoAbertura } from './_EletrificacaoJa';
+import { EletrificacaoAbertura, EletrificacaoReferencias } from './_EletrificacaoJa';
 import eletrificacaoStyles from './_EletrificacaoJa.module.css';
 
 /** Cada idioma gera apenas as chamadas publicadas nele. */
@@ -341,6 +341,7 @@ export default async function PaginaEdital({
                       <ul>{secao.itens.map((item, indice) => <li key={`${secao.id}-item-${indice}`}>{item}</li>)}</ul>
                     ) : null}
                   </div>
+                  {eletrificacao && secao.id === 'briefing' ? <EletrificacaoReferencias idioma={idioma} /> : null}
                 </Secao>
               ))}
 
