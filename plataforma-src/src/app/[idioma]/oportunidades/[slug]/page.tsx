@@ -21,6 +21,7 @@ import { enderecoDaChamada } from '../_endereco';
 import { prazoDaChamada } from '../_prazo';
 
 import { Compartilhar } from './_Compartilhar';
+import { FormatosProjeto } from './_FormatosProjeto';
 import { Lateral } from './_Lateral';
 import { Resultado } from './_Resultado';
 
@@ -204,6 +205,8 @@ export default async function PaginaEdital({
                   ))}
                 </div>
               </Secao>
+
+              {edital.slug === 'carros-eletricos-no-brasil' ? <FormatosProjeto idioma={idioma} /> : null}
 
               {edital.escopo.length > 0 ? (
               <Secao id="escopo" titulo={t.editais.secoes.escopo}>

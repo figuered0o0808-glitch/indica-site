@@ -31,6 +31,7 @@ function ancoras(idioma: Idioma, edital: Call): { id: string; rotulo: string }[]
   }
   itens.push(
     { id: 'apresentacao', rotulo: secoes.apresentacao },
+    ...(edital.slug === 'carros-eletricos-no-brasil' ? [{ id: 'formatos-projeto', rotulo: { pt: 'Formatos de projeto', en: 'Project formats', es: 'Formatos de proyecto' }[idioma] }] : []),
     ...(edital.escopo.length > 0 ? [{ id: 'escopo', rotulo: secoes.escopo }] : []),
     ...(edital.naoApoiado.length > 0 ? [{ id: 'nao-apoiado', rotulo: secoes.naoApoiado }] : []),
     ...(edital.criterios.length > 0 || edital.criteriosDescricao ? [{ id: 'criterios', rotulo: secoes.criterios }] : []),
