@@ -10,9 +10,9 @@
     60000: [8000, 8000, 8000, 4000, 4000, 4000, 2000, 2000, 2000, 2000, 2000, 2000]
   };
   var STRATEGIES = {
-    large: { title: 'Projetos maiores', description: 'Financiamentos de R$ 8.000 para concentrar recursos em produções mais robustas.' },
-    many: { title: 'Mais projetos', description: 'Financiamentos de R$ 4.000 para apoiar um número maior de criadores e iniciativas.' },
-    flex: { title: 'Financiamento flexível', description: 'Combine projetos entre R$ 2.000 e R$ 8.000, conforme a qualidade e as necessidades das propostas.' }
+    large: { title: 'Projetos maiores', description: 'Financiamentos de R$ 8.000 por projeto.' },
+    many: { title: 'Mais projetos', description: 'Financiamentos de R$ 4.000 por projeto.' },
+    flex: { title: 'Financiamento flexível', description: 'Financiamentos individuais entre R$ 2.000 e R$ 8.000.' }
   };
 
   function assertBudget(budget) {
