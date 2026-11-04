@@ -1,6 +1,6 @@
 /** Canal público da INDICA. Só a confirmação do servidor autoriza um sucesso. */
 import { normalizarTelefone } from '@/lib/telefone';
-import type { PerfilCadastro, ReciboPublico, Candidatura, OrganizacaoExecutora, NovaOrganizacao, DadosPagamento, RascunhoProposta, ResumoRascunho, DadosRascunho, OfertaProposta } from '@/lib/types';
+import type { PerfilCadastro, ReciboPublico, Candidatura, OrganizacaoExecutora, NovaOrganizacao, DadosPagamento, RascunhoProposta, ResumoRascunho, DadosRascunho, OfertaProposta, AnexoCandidatura, CategoriaAnexo, ConsultaAnexos } from '@/lib/types';
 const DESTINO = (process.env.NEXT_PUBLIC_INDICA_API || process.env.NEXT_PUBLIC_TILT_API || '').replace(/\/+$/, '');
 const LIMITE_MS = 30000;
 export type MotivoEnvio = 'indisponivel' | 'rede' | 'recusado' | 'resposta' | 'perfil';
@@ -25,17 +25,19 @@ export function novoEnvioId(): string {
 async function requisitar(caminho: string, corpo?: unknown, token?: string, opcoes: {
     method?: 'PUT' | 'DELETE';
     keepalive?: boolean;
+    timeoutMs?: number;
 } = {}): Promise<Record<string, unknown>> {
     if (!canalAberto())
         throw new ErroEnvio('indisponivel');
     const controle = new AbortController();
-    const relogio = setTimeout(() => controle.abort(), LIMITE_MS);
+    const multipart = typeof FormData !== 'undefined' && corpo instanceof FormData;
+    const relogio = setTimeout(() => controle.abort(), opcoes.timeoutMs ?? LIMITE_MS);
     try {
         const resposta = await fetch(`${DESTINO}${caminho}`, {
             method: opcoes.method ?? (corpo === undefined ? 'GET' : 'POST'),
-            keepalive: Boolean(opcoes.keepalive && (corpo === undefined || new TextEncoder().encode(JSON.stringify(corpo)).length < 60000)),
-            headers: { ...(corpo === undefined ? {} : { 'Content-Type': 'application/json' }), ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-            ...(corpo === undefined ? {} : { body: JSON.stringify(corpo) }),
+            keepalive: Boolean(!multipart && opcoes.keepalive && (corpo === undefined || new TextEncoder().encode(JSON.stringify(corpo)).length < 60000)),
+            headers: { ...(corpo === undefined || multipart ? {} : { 'Content-Type': 'application/json' }), ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+            ...(corpo === undefined ? {} : { body: multipart ? corpo as FormData : JSON.stringify(corpo) }),
             signal: controle.signal, cache: 'no-store', referrerPolicy: 'no-referrer',
         });
         if (!resposta.ok)
@@ -82,6 +84,7 @@ export async function enviarCandidatura(dados: {
     organizacaoId: number | null;
     projeto: Record<string, string | number>;
     valorSolicitado: number;
+    anexos?: string[];
 }, token: string): Promise<{
     protocolo: string;
     chamadaId: string;
@@ -145,7 +148,7 @@ function contaRecebida(r: Record<string, unknown>): ContaRecebida {
             throw new ErroEnvio('resposta');
         return { id: protocolo, protocolo, chamadaId: identificador(c.chamadaId), reciboToken: texto(c.reciboToken) || undefined,
             editalSlug: texto(c.editalSlug) || texto(c.referencia), editalTitulo: texto(c.editalTitulo) || texto(c.titulo),
-            projeto: texto(p.titulo), formato: texto(p.formato), descricao: texto(p.descricao), justificativa: texto(p.justificativa), alcance: texto(p.alcance), distribuicao: texto(p.distribuicao),
+            projeto: texto(p.titulo), formato: texto(p.formato), descricao: texto(p.descricao), justificativa: texto(p.justificativa), alcance: texto(p.alcance), distribuicao: texto(p.distribuicao), linksPortfolio: texto(p.linksPortfolio),
             valorSolicitado: Number(c.valorSolicitado) || 0, status: texto(c.estado) as Candidatura['status'], enviadaEm: texto(c.enviadaEm),
             organizacaoId: c.organizacaoId == null ? null : Number(c.organizacaoId), organizacao: texto(objeto(c.organizacao).cnpj) ? organizacaoRecebida({ ...objeto(c.organizacao), id: objeto(c.organizacao).id ?? c.organizacaoId }) : c.organizacaoId == null ? undefined : organizacoes.find((o) => o.id === Number(c.organizacaoId)),
             proponente: { nome: texto(responsavel.nome) || perfil.nome, email: texto(responsavel.email) || perfil.email, telefone: texto(responsavel.telefone) || perfil.telefone, pais: texto(responsavel.pais) || perfil.pais, cidade: texto(responsavel.cidade) || perfil.cidade, uf: texto(responsavel.uf) || perfil.uf },
@@ -203,7 +206,7 @@ export async function atualizarPerfil(perfil: PerfilCadastro, token: string): Pr
     return perfilRecebido(r.perfil);
 }
 export const DADOS_RASCUNHO_VAZIOS: DadosRascunho = {
-    projeto: '', descricao: '', formato: '', valor: '', justificativa: '', alcance: '', distribuicao: '',
+    projeto: '', descricao: '', formato: '', valor: '', justificativa: '', alcance: '', distribuicao: '', linksPortfolio: '',
 };
 function rascunhoRecebido(v: unknown): RascunhoProposta {
     const r = objeto(v), dados = objeto(r.dados), versao = Number(r.versao);
@@ -232,6 +235,77 @@ export async function excluirRascunho(slug: string, envioId: string, versao: num
     const r = await requisitar(`/tilt/publico/conta/rascunhos/${encodeURIComponent(slug)}`, { envioId, versao }, token, { method: 'DELETE' });
     if (r.ok !== true)
         throw new ErroEnvio('resposta');
+}
+const CATEGORIAS_ANEXO: CategoriaAnexo[] = ['identificacao', 'portfolio', 'midia-kit', 'proposta-orcamento'];
+function anexoRecebido(valor: unknown): AnexoCandidatura {
+    const a = objeto(valor), id = texto(a.id), tamanho = Number(a.tamanho);
+    if (!/^[a-f0-9]{32}$/i.test(id) || !CATEGORIAS_ANEXO.includes(a.categoria as CategoriaAnexo)
+        || !texto(a.nome) || !texto(a.mime) || !texto(a.criadoEm) || !Number.isSafeInteger(tamanho) || tamanho < 1
+        || typeof a.pendente !== 'boolean' || !(a.propostaId === null || typeof a.propostaId === 'string'))
+        throw new ErroEnvio('resposta');
+    return { id, categoria: a.categoria as CategoriaAnexo, nome: texto(a.nome), mime: texto(a.mime), tamanho,
+        criadoEm: texto(a.criadoEm), pendente: a.pendente, propostaId: a.propostaId as string | null };
+}
+export async function listarAnexos(slug: string, token: string): Promise<ConsultaAnexos> {
+    if (!token) throw new ErroEnvio('perfil');
+    const r = await requisitar(`/tilt/publico/conta/chamadas/${encodeURIComponent(slug)}/anexos`, undefined, token);
+    const requisitos = objeto(r.requisitos), uso = objeto(r.uso);
+    if (!Array.isArray(r.anexos) || !Array.isArray(requisitos.categorias) || !Array.isArray(requisitos.tiposPermitidos)
+        || !requisitos.tiposPermitidos.every(v => typeof v === 'string' && /^\.[a-z0-9]+$/.test(v))
+        || !['maxArquivoBytes', 'maxArquivos', 'maxTotalBytes'].every(k => Number.isSafeInteger(requisitos[k]) && Number(requisitos[k]) > 0)
+        || !['arquivos', 'totalBytes'].every(k => Number.isSafeInteger(uso[k]) && Number(uso[k]) >= 0)
+        || typeof requisitos.linksPortfolioObrigatorios !== 'boolean' || typeof r.aceitaEnvio !== 'boolean')
+        throw new ErroEnvio('resposta');
+    const categorias = requisitos.categorias.map(v => {
+        const c = objeto(v);
+        if (!CATEGORIAS_ANEXO.includes(c.id as CategoriaAnexo) || !texto(c.rotulo) || typeof c.obrigatoria !== 'boolean')
+            throw new ErroEnvio('resposta');
+        if (c.tiposPermitidos !== undefined && (!Array.isArray(c.tiposPermitidos) || !c.tiposPermitidos.every(v => typeof v === 'string' && /^\.[a-z0-9]+$/.test(v))))
+            throw new ErroEnvio('resposta');
+        return { id: c.id as CategoriaAnexo, rotulo: texto(c.rotulo), obrigatoria: c.obrigatoria,
+            ...(c.tiposPermitidos === undefined ? {} : { tiposPermitidos: c.tiposPermitidos as string[] }) };
+    });
+    if (new Set(categorias.map(c => c.id)).size !== categorias.length) throw new ErroEnvio('resposta');
+    const anexos = r.anexos.map(anexoRecebido);
+    if (anexos.some(a => !a.pendente || a.propostaId !== null) || new Set(anexos.map(a => a.id)).size !== anexos.length)
+        throw new ErroEnvio('resposta');
+    return { anexos, requisitos: { categorias,
+        maxArquivoBytes: Number(requisitos.maxArquivoBytes), maxArquivos: Number(requisitos.maxArquivos), maxTotalBytes: Number(requisitos.maxTotalBytes),
+        tiposPermitidos: requisitos.tiposPermitidos as string[], linksPortfolioObrigatorios: requisitos.linksPortfolioObrigatorios },
+        uso: { arquivos: Number(uso.arquivos), totalBytes: Number(uso.totalBytes) }, aceitaEnvio: r.aceitaEnvio };
+}
+export async function enviarAnexo(slug: string, categoria: CategoriaAnexo, arquivo: File, token: string): Promise<AnexoCandidatura> {
+    if (!token) throw new ErroEnvio('perfil');
+    const corpo = new FormData();
+    corpo.append('arquivo', arquivo);
+    corpo.append('categoria', categoria);
+    const r = await requisitar(`/tilt/publico/conta/chamadas/${encodeURIComponent(slug)}/anexos`, corpo, token, { timeoutMs: 120000 });
+    if (r.ok !== true) throw new ErroEnvio('resposta');
+    const anexo = anexoRecebido(r.anexo);
+    if (anexo.categoria !== categoria || !anexo.pendente || anexo.propostaId !== null) throw new ErroEnvio('resposta');
+    return anexo;
+}
+export async function excluirAnexo(id: string, token: string): Promise<void> {
+    if (!token) throw new ErroEnvio('perfil');
+    const r = await requisitar(`/tilt/publico/conta/anexos/${encodeURIComponent(id)}`, undefined, token, { method: 'DELETE' });
+    if (r.ok !== true) throw new ErroEnvio('resposta');
+}
+export async function obterArquivoAnexo(id: string, token: string): Promise<Blob> {
+    if (!token) throw new ErroEnvio('perfil');
+    if (!canalAberto()) throw new ErroEnvio('indisponivel');
+    const controle = new AbortController(), relogio = setTimeout(() => controle.abort(), 120000);
+    try {
+        const resposta = await fetch(`${DESTINO}/tilt/publico/conta/anexos/${encodeURIComponent(id)}/arquivo`, {
+            headers: { Authorization: `Bearer ${token}` }, cache: 'no-store', referrerPolicy: 'no-referrer', signal: controle.signal,
+        });
+        if (!resposta.ok) throw new ErroEnvio('recusado', resposta.status);
+        const arquivo = await resposta.blob();
+        if (!arquivo.size) throw new ErroEnvio('resposta');
+        return arquivo;
+    } catch (erro) {
+        if (erro instanceof ErroEnvio) throw erro;
+        throw new ErroEnvio('rede');
+    } finally { clearTimeout(relogio); }
 }
 function ofertaRecebida(v: unknown): OfertaProposta {
     const o = objeto(v);

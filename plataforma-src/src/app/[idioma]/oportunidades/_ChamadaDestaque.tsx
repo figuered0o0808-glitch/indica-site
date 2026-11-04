@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 
 import { Chip } from '@/components/Chip';
 import { Marcador } from '@/components/Marcador';
+import { MarcaEletrificacao } from '@/components/MarcaEletrificacao';
 import { Selo } from '@/components/Selo';
 import { NumerosChamada } from '@/components/NumerosChamada';
 import { Organizacao } from '@/components/Organizacao';
@@ -78,6 +79,8 @@ export function ChamadaDestaque({
           />
         ) : null}
       </div>
+
+      {edital.slug === 'carros-eletricos-no-brasil' ? <MarcaEletrificacao /> : null}
 
       {/* Sozinha na pagina, a chamada leva o corpo de titulo, nao o de cartao. */}
       <Titulo

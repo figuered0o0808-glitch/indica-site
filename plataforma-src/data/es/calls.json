@@ -1,10 +1,12 @@
 [
   {
     "slug": "carros-eletricos-no-brasil",
+    "simulacao": false,
+    "exigeCnpj": false,
     "titulo": "Autos eléctricos en Brasil: convocatoria pública de comunicación digital",
     "status": "consulta",
     "tipo": "pauta-especifica",
-    "resumo": "Selección de soluciones de comunicación científica, educativa y de concientización social sobre vehículos eléctricos en Brasil. La convocatoria prevé de 3 a 14 propuestas y un presupuesto global de hasta R$ 100 mil.",
+    "resumo": "Selección de soluciones de comunicación científica, educativa y de concientización social sobre vehículos eléctricos en Brasil. Se seleccionarán de 5 a 15 propuestas, con apoyo de hasta R$ 30 mil por proyecto y un presupuesto global de hasta R$ 100 mil.",
     "proponente": "INDICA",
     "apresentacao": [
       "INDICA hace pública la convocatoria para recibir y seleccionar propuestas de soluciones de comunicación digital. Pueden participar creadores de contenido, influenciadores digitales, agencias de comunicación, colectivos creativos o de medios y productores independientes.",
@@ -34,7 +36,7 @@
       },
       {
         "titulo": "Eficiencia presupuestaria y relación costo-beneficio",
-        "descricao": "Coherencia de la propuesta financiera con el alcance, valorando la optimización de recursos y la capacidad de operar con montos eficientes inferiores a R$ 25.000,00."
+        "descricao": "Adecuación del monto solicitado al alcance, las entregas previstas y los costos justificados, respetando el límite de R$ 30.000,00 por proyecto. Se favorecerán las propuestas de menor valor cuando conserven la calidad y la capacidad de ejecución."
       },
       {
         "titulo": "Estrategia de integración y distribución",
@@ -45,52 +47,51 @@
     "distribuicao": [
       {
         "faixa": "Propuestas seleccionadas",
-        "quantidade": "De 3 a 14",
-        "observacao": "La cantidad depende de los perfiles de los proponentes y de los montos presentados."
+        "quantidade": "De 5 a 15",
+        "observacao": "La cantidad depende de los perfiles de los proponentes, de los montos presentados y del presupuesto global. No hay cuotas fijas por rango de valor."
       },
       {
         "faixa": "Propuestas superiores a R$ 25.000,00",
         "quantidade": "Como máximo 2",
-        "observacao": "La convocatoria indica una alta probabilidad de que se financie una sola propuesta en ese rango."
+        "observacao": "Se seleccionarán como máximo dos propuestas superiores a R$ 25.000,00, con preferencia por financiar solo una en ese rango, respetando el límite de R$ 30.000,00 por proyecto."
       }
     ],
     "valorTotal": 100000,
-    "faixaApoio": null,
-    "inscricoesAte": "2026-10-31",
+    "faixaApoio": {
+      "min": 0,
+      "max": 30000
+    },
+    "inscricoesAte": "2026-11-13",
     "cronograma": [
       {
         "etapa": "Inscripciones y envío de propuestas",
-        "data": "2026-10-28",
-        "dataFim": "2026-10-31"
-      },
-      {
-        "etapa": "Revisión inicial y evaluación de propuestas por la comisión",
-        "data": "2026-11-01",
-        "dataFim": "2026-11-11"
-      },
-      {
-        "etapa": "Publicación del resultado preliminar",
-        "data": "2026-11-11"
-      },
-      {
-        "etapa": "Presentación de recursos (48 horas)",
-        "data": "2026-11-12",
+        "data": "2026-11-04",
         "dataFim": "2026-11-13"
       },
       {
-        "etapa": "Contratación, coordinación y briefing técnico",
-        "data": "2026-11-12",
-        "dataFim": "2026-11-27"
+        "etapa": "Plazo final de revisión inicial y evaluación de propuestas por la comisión",
+        "data": "2026-11-18"
       },
       {
-        "etapa": "Producción, validación y publicación de los contenidos",
-        "data": "2026-11-12",
-        "dataFim": "2026-11-18"
+        "etapa": "Publicación del resultado preliminar",
+        "data": "2026-11-18"
       },
       {
-        "etapa": "Consolidación de métricas y entrega del informe",
-        "data": "2026-11-19",
-        "dataFim": "2026-11-30"
+        "etapa": "Presentación de recursos (48 horas después de la publicación)",
+        "data": "2026-11-18",
+        "dataFim": "2026-11-20"
+      },
+      {
+        "etapa": "Plazo final de confirmación de los seleccionados; contratación después de la confirmación",
+        "data": "2026-11-20"
+      },
+      {
+        "etapa": "Plazo final de ejecución, validación y publicación de los contenidos",
+        "data": "2026-12-23"
+      },
+      {
+        "etapa": "Plazo final de entrega del informe consolidado de resultados",
+        "data": "2026-12-28"
       }
     ],
     "resultado": null,
@@ -99,17 +100,17 @@
     "criteriosDescricao": "La comisión evaluadora realizará un análisis cualitativo y técnico, sin asignar puntuaciones numéricas.",
     "bancaDescricao": "La selección estará a cargo de una comisión evaluadora. El documento no identifica nominalmente a sus integrantes.",
     "valorTotalAte": true,
-    "apoioDescricao": "Monto definido por propuesta, sujeto a evaluación y a ajustes de alcance y presupuesto.",
+    "apoioDescricao": "Apoyo de hasta R$ 30.000 por proyecto, definido según el alcance, las entregas y los costos justificados.",
     "modalidade": "Convocatoria pública",
     "publico": "ambos",
     "vagas": {
-      "min": 3,
-      "max": 14
+      "min": 5,
+      "max": 15
     },
     "arquivoEdital": {
       "idioma": "pt",
-      "arquivo": "/editais/carros-eletricos-brasil.pdf",
-      "paginas": 5
+      "arquivo": "/arquivos/e499b24c47c180d60bb3efdd464c49aca46d616ececaa338f4d54dd437c925e1/edital-carros-eletricos-brasil.pdf",
+      "paginas": 7
     },
     "secoesComplementares": [
       {
@@ -117,9 +118,10 @@
         "titulo": "Reglas presupuestarias",
         "itens": [
           "El presupuesto global es de hasta R$ 100.000,00. La organización no está obligada a invertir la totalidad de ese monto; el aporte depende de la cantidad, viabilidad y relevancia de las propuestas aprobadas.",
-          "Los montos podrán variar dentro del presupuesto global, según el alcance y la cobertura de cada proyecto. El documento no fija un rango único de apoyo por propuesta.",
-          "Se seleccionarán como mínimo 3 y como máximo 14 propuestas. Como máximo dos podrán tener un monto individual superior a R$ 25.000,00, con una alta probabilidad, según la convocatoria, de que se financie una sola en ese rango.",
-          "La comisión priorizará propuestas eficientes y capaces de operar con costos inferiores a R$ 25.000,00, permitiendo una mayor diversidad de canales de comunicación.",
+          "Cada proyecto podrá solicitar hasta R$ 30.000,00. El monto solicitado debe ser acorde con el alcance, las entregas previstas y los costos justificados, sin comprometer la calidad ni la capacidad de ejecución.",
+          "Se seleccionarán de 5 a 15 propuestas, según los perfiles de los proponentes, los montos presentados y el presupuesto global. No hay cuotas fijas de selección por rango de valor.",
+          "Se seleccionarán como máximo dos propuestas con un monto individual superior a R$ 25.000,00, respetando el límite de R$ 30.000,00 por proyecto. La previsión es financiar preferentemente una sola propuesta en ese rango.",
+          "Las propuestas de menor valor tendrán mayor probabilidad de selección cuando el presupuesto sea compatible con el alcance, la calidad de las entregas y la capacidad de ejecución. Esta prioridad busca ampliar la diversidad de proyectos y canales de comunicación apoyados.",
           "La organización podrá proponer adecuaciones de alcance y ajustes presupuestarios como condición para celebrar el contrato, sin obligación de aprobar íntegramente el monto solicitado."
         ]
       },

@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { Chip } from '@/components/Chip';
 import { Marcador } from '@/components/Marcador';
+import { MarcaEletrificacao } from '@/components/MarcaEletrificacao';
 import { Selo } from '@/components/Selo';
 import { Vagas } from '@/components/Vagas';
 import { Organizacao } from '@/components/Organizacao';
@@ -65,6 +66,9 @@ export function CartaoEdital({ idioma, edital }: { idioma: Idioma; edital: Call 
       </div>
 
       <div>
+        {edital.slug === 'carros-eletricos-no-brasil' ? (
+          <div style={{ marginBottom: 'var(--esp-12)' }}><MarcaEletrificacao /></div>
+        ) : null}
         <h3 className="cartao__titulo" id={`${id}-titulo`}>
           {edital.titulo}
         </h3>

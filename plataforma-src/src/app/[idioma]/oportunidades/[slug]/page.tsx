@@ -24,6 +24,8 @@ import { Compartilhar } from './_Compartilhar';
 import { FormatosProjeto } from './_FormatosProjeto';
 import { Lateral } from './_Lateral';
 import { Resultado } from './_Resultado';
+import { EletrificacaoAbertura } from './_EletrificacaoJa';
+import eletrificacaoStyles from './_EletrificacaoJa.module.css';
 
 /** Cada idioma gera apenas as chamadas publicadas nele. */
 export const dynamicParams = false;
@@ -98,11 +100,12 @@ export default async function PaginaEdital({
   const prazo = prazoDaChamada(idioma, edital);
   const temObservacao = edital.distribuicao.some((faixa) => Boolean(faixa.observacao));
   const endereco = enderecoDaChamada(idioma, edital.slug);
+  const eletrificacao = edital.slug === 'carros-eletricos-no-brasil';
 
   return (
-    <>
+    <div className={eletrificacao ? eletrificacaoStyles.paper : undefined}>
       {edital.simulacao ? <Simulacao idioma={idioma}/> : null}
-      <CabecalhoPagina
+      {eletrificacao ? <EletrificacaoAbertura idioma={idioma} edital={edital} /> : <CabecalhoPagina
         olho={edital.modalidade ? `${edital.modalidade} · ${t.comum.tiposEdital[edital.tipo]}` : t.comum.tiposEdital[edital.tipo]}
         titulo={edital.titulo}
         descricao={edital.resumo}
@@ -120,7 +123,7 @@ export default async function PaginaEdital({
             <DocumentoEdital idioma={idioma} edital={edital} />
           </div>
         }
-      />
+      />}
 
       {edital.status === 'consulta' ? (
         <div className="container" style={{ marginTop: 'var(--esp-24)' }}>
@@ -128,7 +131,7 @@ export default async function PaginaEdital({
         </div>
       ) : null}
 
-      <section
+      {!eletrificacao ? <section
         className="secao secao--curta secao--branco"
         style={{ marginTop: 'var(--esp-48)', borderTop: '1px solid var(--linha)' }}
       >
@@ -165,7 +168,7 @@ export default async function PaginaEdital({
             </div>
           </dl>
         </div>
-      </section>
+      </section> : null}
 
       {/*
         A lateral vem ANTES do documento no JSX, e nao depois.
@@ -346,6 +349,6 @@ export default async function PaginaEdital({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

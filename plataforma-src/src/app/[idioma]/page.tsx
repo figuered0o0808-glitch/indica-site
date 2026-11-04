@@ -7,6 +7,7 @@ import { Carrossel } from '@/components/Carrossel';
 import { AssinaturaIndica } from '@/components/AssinaturaIndica';
 import { MascoteIndica } from '@/components/MascoteIndica';
 import { Marcador } from '@/components/Marcador';
+import { MarcaEletrificacao } from '@/components/MarcaEletrificacao';
 import { NumerosChamada } from '@/components/NumerosChamada';
 import { Organizacao } from '@/components/Organizacao';
 import { Participar } from '@/components/Participar';
@@ -45,6 +46,7 @@ function SlideChamada({ idioma, chamada }: { idioma: Idioma; chamada: Call }) {
   const tc = textos(idioma).home.coluna;
   return (
     <div className="carrossel__conteudo">
+      {chamada.slug === 'carros-eletricos-no-brasil' ? <MarcaEletrificacao /> : null}
       <h2 className="coluna__titulo">{chamada.titulo}</h2>
       <div><Selo idioma={idioma} status={chamada.status} /></div>
 

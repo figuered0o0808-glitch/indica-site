@@ -1,10 +1,12 @@
 [
   {
     "slug": "carros-eletricos-no-brasil",
+    "simulacao": false,
+    "exigeCnpj": false,
     "titulo": "Carros elétricos no Brasil: chamada pública de comunicação digital",
     "status": "consulta",
     "tipo": "pauta-especifica",
-    "resumo": "Seleção de soluções de comunicação científica, educativa e de conscientização social sobre veículos elétricos no Brasil. O edital prevê de 3 a 14 propostas e orçamento global de até R$ 100 mil.",
+    "resumo": "Seleção de soluções de comunicação científica, educativa e de conscientização social sobre veículos elétricos no Brasil. Serão selecionadas de 5 a 15 propostas, com apoio de até R$ 30 mil por projeto e orçamento global de até R$ 100 mil.",
     "proponente": "INDICA",
     "apresentacao": [
       "A INDICA torna pública a chamada para recebimento e seleção de propostas de soluções de comunicação digital. Podem participar criadores de conteúdo, influenciadores digitais, agências de comunicação, coletivos criativos ou de mídia e produtores independentes.",
@@ -34,7 +36,7 @@
       },
       {
         "titulo": "Eficiência orçamentária e custo-benefício",
-        "descricao": "Coerência da proposta financeira com o escopo, valorizando a otimização de recursos e a capacidade de operar por valores eficientes abaixo de R$ 25.000,00."
+        "descricao": "Adequação do valor solicitado ao escopo, às entregas previstas e aos custos justificados, observado o teto de R$ 30.000,00 por projeto. Propostas de menor valor serão favorecidas quando preservarem a qualidade e a capacidade de execução."
       },
       {
         "titulo": "Estratégia de integração e distribuição",
@@ -45,52 +47,51 @@
     "distribuicao": [
       {
         "faixa": "Propostas selecionadas",
-        "quantidade": "De 3 a 14",
-        "observacao": "A quantidade depende dos perfis dos proponentes e dos valores apresentados."
+        "quantidade": "De 5 a 15",
+        "observacao": "A quantidade depende dos perfis dos proponentes, dos valores apresentados e do orçamento global. Não há cotas fixas por faixa de valor."
       },
       {
         "faixa": "Propostas acima de R$ 25.000,00",
         "quantidade": "No máximo 2",
-        "observacao": "O edital informa alta probabilidade de contemplação de apenas uma proposta nessa faixa."
+        "observacao": "Serão selecionadas no máximo duas propostas acima de R$ 25.000,00, com previsão preferencial de apenas uma nessa faixa, respeitado o teto de R$ 30.000,00 por projeto."
       }
     ],
     "valorTotal": 100000,
-    "faixaApoio": null,
-    "inscricoesAte": "2026-10-31",
+    "faixaApoio": {
+      "min": 0,
+      "max": 30000
+    },
+    "inscricoesAte": "2026-11-13",
     "cronograma": [
       {
         "etapa": "Inscrições e envio de propostas",
-        "data": "2026-10-28",
-        "dataFim": "2026-10-31"
-      },
-      {
-        "etapa": "Triagem e avaliação de propostas pela banca",
-        "data": "2026-11-01",
-        "dataFim": "2026-11-11"
-      },
-      {
-        "etapa": "Divulgação do resultado preliminar",
-        "data": "2026-11-11"
-      },
-      {
-        "etapa": "Interposição de recursos (48 horas)",
-        "data": "2026-11-12",
+        "data": "2026-11-04",
         "dataFim": "2026-11-13"
       },
       {
-        "etapa": "Contratação, alinhamento e briefing técnico",
-        "data": "2026-11-12",
-        "dataFim": "2026-11-27"
+        "etapa": "Prazo final da triagem e avaliação de propostas pela banca",
+        "data": "2026-11-18"
       },
       {
-        "etapa": "Produção, validação e publicação dos conteúdos",
-        "data": "2026-11-12",
-        "dataFim": "2026-11-18"
+        "etapa": "Divulgação do resultado preliminar",
+        "data": "2026-11-18"
       },
       {
-        "etapa": "Consolidação de métricas e entrega de relatório",
-        "data": "2026-11-19",
-        "dataFim": "2026-11-30"
+        "etapa": "Interposição de recursos (48 horas após a divulgação)",
+        "data": "2026-11-18",
+        "dataFim": "2026-11-20"
+      },
+      {
+        "etapa": "Prazo final de confirmação dos selecionados; contratação após a confirmação",
+        "data": "2026-11-20"
+      },
+      {
+        "etapa": "Prazo final de execução, validação e publicação dos conteúdos",
+        "data": "2026-12-23"
+      },
+      {
+        "etapa": "Prazo final de entrega do relatório consolidado de resultados",
+        "data": "2026-12-28"
       }
     ],
     "resultado": null,
@@ -99,17 +100,17 @@
     "criteriosDescricao": "A comissão avaliadora fará análise qualitativa e técnica, sem atribuição de notas numéricas.",
     "bancaDescricao": "A seleção será realizada por uma comissão avaliadora. O documento não identifica nominalmente seus integrantes.",
     "valorTotalAte": true,
-    "apoioDescricao": "Valor definido por proposta, sujeito à avaliação e a ajustes de escopo e orçamento.",
+    "apoioDescricao": "Apoio de até R$ 30.000 por projeto, definido conforme escopo, entregas e custos justificados.",
     "modalidade": "Chamada pública",
     "publico": "ambos",
     "vagas": {
-      "min": 3,
-      "max": 14
+      "min": 5,
+      "max": 15
     },
     "arquivoEdital": {
       "idioma": "pt",
-      "arquivo": "/editais/carros-eletricos-brasil.pdf",
-      "paginas": 5
+      "arquivo": "/arquivos/e499b24c47c180d60bb3efdd464c49aca46d616ececaa338f4d54dd437c925e1/edital-carros-eletricos-brasil.pdf",
+      "paginas": 7
     },
     "secoesComplementares": [
       {
@@ -117,9 +118,10 @@
         "titulo": "Regras orçamentárias",
         "itens": [
           "O orçamento global é de até R$ 100.000,00. A organização não é obrigada a investir a totalidade desse valor; o aporte depende da quantidade, viabilidade e relevância das propostas aprovadas.",
-          "Os valores poderão variar dentro do orçamento global, de acordo com o escopo e o alcance de cada projeto. O documento não fixa uma faixa única de apoio por proposta.",
-          "Serão selecionadas no mínimo 3 e no máximo 14 propostas. No máximo duas poderão ter valor individual superior a R$ 25.000,00, com alta probabilidade, segundo o edital, de contemplação de apenas uma nessa faixa.",
-          "A comissão priorizará propostas eficientes e capazes de operar com custos inferiores a R$ 25.000,00, permitindo maior diversidade de canais de comunicação.",
+          "Cada projeto poderá solicitar até R$ 30.000,00. O valor solicitado deve ser condizente com o escopo, as entregas previstas e os custos justificados, sem prejuízo da qualidade e da capacidade de execução.",
+          "Serão selecionadas de 5 a 15 propostas, a depender dos perfis dos proponentes, dos valores apresentados e do orçamento global. Não há cotas fixas de seleção por faixa de valor.",
+          "Serão selecionadas no máximo duas propostas com valor individual superior a R$ 25.000,00, observado o teto de R$ 30.000,00 por projeto. A previsão é contemplar preferencialmente apenas uma proposta nessa faixa.",
+          "Propostas de menor valor terão maior chance de seleção quando o orçamento for compatível com o escopo, a qualidade das entregas e a capacidade de execução. Essa prioridade busca ampliar a diversidade de projetos e canais de comunicação apoiados.",
           "A organização poderá propor adequações de escopo e ajustes orçamentários como condição para celebrar o contrato, sem obrigação de aprovar integralmente o valor solicitado."
         ]
       },

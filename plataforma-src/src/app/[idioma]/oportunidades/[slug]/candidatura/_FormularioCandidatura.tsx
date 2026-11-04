@@ -9,6 +9,9 @@ import { LoginConta } from '@/components/conta/LoginConta';
 import { CadastroOrganizacao } from '@/components/conta/Organizacao';
 import type { Idioma } from '@/i18n/idiomas';
 import { textos } from '@/i18n/strings';
+import { textosAnexos, linksPortfolioValidos, type ErroAnexos } from '@/i18n/anexos';
+import { AnexosCandidatura } from '@/components/conta/AnexosCandidatura';
+import { useAnexos } from '@/components/conta/useAnexos';
 import { data, moeda } from '@/lib/format';
 import { textoDaFaixa } from '@/lib/apoio';
 import { motivoDoErro, ErroEnvio, type MotivoEnvio } from '@/lib/envio';
@@ -41,11 +44,17 @@ export function FormularioCandidatura({ idioma, edital }: {
     idioma: Idioma;
     edital: EditalResumo;
 }) {
-    const t = textos(idioma), tc = t.fluxos.candidatura, router = useRouter();
+    const t = textos(idioma), tc = t.fluxos.candidatura, ta = textosAnexos(idioma), router = useRouter();
     const { cadastrado, hidratado, carregandoConta, perfil, organizacoes, candidaturas, sessaoId, enviarCandidatura } = useApp();
     const exigeCnpj = edital.exigeCnpj !== false;
     const rascunho = useRascunho(edital.slug, edital.aceitaEnvio !== false, exigeCnpj || perfil?.tipoCadastro === 'pj' ? organizacoes[0]?.id : undefined);
     const dados = rascunho.editor?.dados ?? VAZIO, passo = rascunho.editor?.passo ?? 0, organizacaoId = rascunho.editor?.organizacaoId ?? 0;
+    const comDocumentos = edital.slug === 'carros-eletricos-no-brasil';
+    const anexos = useAnexos(edital.slug, rascunho.editor?.envioId ?? '', comDocumentos && cadastrado && rascunho.pronto && rascunho.editor?.aceitaEnvio === true);
+    const [erroAnexos, setErroAnexos] = useState<ErroAnexos>();
+    const tentativaDocumentos = useRef<{ envioId: string; ids: string[]; linksPortfolio: string } | null>(null);
+    useEffect(() => { tentativaDocumentos.current = null; setErroAnexos(undefined); }, [sessaoId, rascunho.editor?.envioId]);
+    useEffect(() => { setErroAnexos(undefined); }, [anexos.consulta, anexos.selecionados]);
     const [adicionando, setAdicionando] = useState(false), [preparandoOutra, setPreparandoOutra] = useState(false);
     const [erros, setErros] = useState<Partial<Record<keyof Dados | 'organizacao', string>>>({}), [erroEnvio, setErroEnvio] = useState<MotivoEnvio>(), [busy, setBusy] = useState(false), [envioIncerto, setEnvioIncerto] = useState(false), [enviada, setEnviada] = useState<Candidatura | null>(null);
     const [saindo, setSaindo] = useState(false), [querPJ, setQuerPJ] = useState(false);
@@ -75,13 +84,21 @@ export function FormularioCandidatura({ idioma, edital }: {
             }
         }
     }
-    function validar() { const e: typeof erros = {}; if (usaOrg && !org)
-        e.organizacao = t.conta.empresaNecessaria; for (const k of Object.keys(VAZIO) as (keyof Dados)[])
-        if (!dados[k].trim())
-            e[k] = tc.erros.obrigatorio; const valor = Number(dados.valor); if (dados.valor && (!Number.isFinite(valor) || valor <= 0))
-        e.valor = tc.erros.valorNumero;
-    else if (edital.faixaApoio && (valor < edital.faixaApoio.min || valor > edital.faixaApoio.max))
-        e.valor = `${tc.erros.valorFaixa} ${textoDaFaixa(idioma, edital.faixaApoio)}.`; return e; }
+    function validar() {
+        const e: typeof erros = {};
+        if (usaOrg && !org) e.organizacao = t.conta.empresaNecessaria;
+        const obrigatorios: (keyof Dados)[] = ['projeto', 'descricao', 'formato', 'valor', 'justificativa', 'alcance', 'distribuicao'];
+        for (const k of obrigatorios) if (!dados[k].trim()) e[k] = tc.erros.obrigatorio;
+        if (comDocumentos && anexos.consulta?.requisitos.linksPortfolioObrigatorios !== false) {
+            if (!dados.linksPortfolio.trim()) e.linksPortfolio = ta.linksObrigatorios;
+            else if (!linksPortfolioValidos(dados.linksPortfolio)) e.linksPortfolio = ta.linksInvalidos;
+        }
+        const valor = Number(dados.valor);
+        if (dados.valor && (!Number.isFinite(valor) || valor <= 0)) e.valor = tc.erros.valorNumero;
+        else if (edital.faixaApoio && (valor < edital.faixaApoio.min || valor > edital.faixaApoio.max))
+            e.valor = `${tc.erros.valorFaixa} ${textoDaFaixa(idioma, edital.faixaApoio)}.`;
+        return e;
+    }
     async function enviar(e: FormEvent) {
         e.preventDefault();
         if (emVoo.current || !rascunho.editor?.aceitaEnvio || rascunho.status === 'conflito')
@@ -100,6 +117,12 @@ export function FormularioCandidatura({ idioma, edital }: {
             ir(encontrados.organizacao ? 0 : 1);
             return;
         }
+        const repetindoEnvio = envioIncerto && tentativaDocumentos.current?.envioId === rascunho.editor.envioId;
+        if (comDocumentos && !repetindoEnvio) {
+            const erroDocumentos = anexos.validar();
+            setErroAnexos(erroDocumentos);
+            if (erroDocumentos) { ir(1); return; }
+        }
         if (passo === 1) {
             ir(2);
             return;
@@ -112,7 +135,10 @@ export function FormularioCandidatura({ idioma, edital }: {
                 return;
             }
             rascunho.pausar();
-            const nova = await enviarCandidatura({ editalSlug: edital.slug, chamadaId: edital.chamadaId, editalTitulo: edital.titulo, organizacaoId: usaOrg ? organizacaoId : null, projeto: dados.projeto.trim(), formato: dados.formato, valorSolicitado: Number(dados.valor), descricao: dados.descricao.trim(), justificativa: dados.justificativa.trim(), alcance: dados.alcance.trim(), distribuicao: dados.distribuicao.trim(), simulacao: edital.simulacao }, rascunho.editor.envioId);
+            if (!envioIncerto || tentativaDocumentos.current?.envioId !== rascunho.editor.envioId)
+                tentativaDocumentos.current = { envioId: rascunho.editor.envioId, ids: comDocumentos ? [...anexos.ids] : [], linksPortfolio: dados.linksPortfolio.trim() };
+            const documentos = tentativaDocumentos.current!;
+            const nova = await enviarCandidatura({ editalSlug: edital.slug, chamadaId: edital.chamadaId, editalTitulo: edital.titulo, organizacaoId: usaOrg ? organizacaoId : null, projeto: dados.projeto.trim(), formato: dados.formato, valorSolicitado: Number(dados.valor), descricao: dados.descricao.trim(), justificativa: dados.justificativa.trim(), alcance: dados.alcance.trim(), distribuicao: dados.distribuicao.trim(), linksPortfolio: documentos.linksPortfolio, anexos: documentos.ids, simulacao: edital.simulacao }, rascunho.editor.envioId);
             if (donoEnvio.current !== sessaoId)
                 return;
             setEnviada(nova);
@@ -123,7 +149,8 @@ export function FormularioCandidatura({ idioma, edital }: {
             if (donoEnvio.current !== sessaoId)
                 return;
             setErroEnvio(motivoDoErro(e));
-            if (e instanceof ErroEnvio && e.status && e.status >= 400 && e.status < 500) {
+            if (e instanceof ErroEnvio && e.status && e.status >= 400 && e.status < 500 && e.status !== 409) {
+                tentativaDocumentos.current = null;
                 rascunho.retomar();
                 setEnvioIncerto(false);
             }
@@ -158,9 +185,9 @@ export function FormularioCandidatura({ idioma, edital }: {
         return <div className="pilha"><p>{t.conta.empresaNecessaria}</p><CadastroOrganizacao idioma={idioma} aposSalvar={() => setAdicionando(false)} onCancelar={!exigeCnpj ? () => { setAdicionando(false); setQuerPJ(false); rascunho.organizacao(null); } : organizacoes.length ? () => setAdicionando(false) : undefined}/></div>;
     return <div ref={topo}><div className="pilha" style={{ marginBottom: 24 }}><StatusRascunho idioma={idioma} status={rascunho.status} atualizadoEm={rascunho.editor?.atualizadoEm} onTentar={() => void rascunho.salvar(true)} onRecarregar={() => void rascunho.carregar()} dados={dados}/><p className="nota">{t.conta.rascunhoAviso}</p><div><Botao className={styles.wrapButton} variante="secundario" disabled={busy || saindo || envioIncerto || rascunho.status === 'conflito'} onClick={() => void salvarESair('painel/#rascunhos')}>{saindo ? t.conta.salvando : t.conta.salvarEContinuarDepois}</Botao></div></div><div className={styles.proposalSteps}><Passos passos={[t.conta.proponenteTipoTitulo, tc.projeto.titulo, tc.revisao.titulo]} atual={passo}/></div><form onSubmit={enviar} className="pilha--g" aria-busy={busy || saindo}><fieldset disabled={busy || saindo || envioIncerto || rascunho.status === 'carregando'} className="pilha--g" style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
   {passo === 0 ? <section className="pilha"><h2 ref={titulo} tabIndex={-1}>{t.conta.proponenteTipoTitulo}</h2>{exigeCnpj ? <p className="nota">{t.conta.cnpjChamada}</p> : <CampoSelecao idioma={idioma} id="proposta-tipo" rotulo={t.conta.tipoCadastro} value={usaOrg ? 'pj' : 'pf'} opcoes={[{valor:'pf',rotulo:t.conta.pessoaFisica},{valor:'pj',rotulo:t.conta.pessoaJuridica}]} onChange={e=>{const pj=e.target.value==='pj';setQuerPJ(pj);rascunho.organizacao(pj ? organizacoes[0]?.id ?? null : null);}}/>}{usaOrg ? <><CampoSelecao idioma={idioma} id="proposta-organizacao" rotulo={t.conta.selecionarEmpresa} value={String(organizacaoId)} opcoes={organizacoes.map(o => ({ valor: String(o.id), rotulo: `${o.razaoSocial} · ${o.cnpj}` }))} onChange={e => rascunho.organizacao(Number(e.target.value))} erro={erros.organizacao} required/>{org ? <div className="cartao"><Item rotulo={t.conta.razaoSocial} valor={org.razaoSocial}/><Item rotulo={t.conta.cnpj} valor={org.cnpj}/></div> : null}<Botao variante="secundario" onClick={() => setAdicionando(true)}>{t.conta.outraEmpresa}</Botao></> : <p>{t.conta.propostaPfAjuda}</p>}<div className="cartao"><h3>{t.conta.responsavel}</h3><Item rotulo={t.cadastro.campos.nome} valor={perfil?.nome}/><Item rotulo={t.conta.email} valor={perfil?.email}/><Item rotulo={t.conta.telefone} valor={perfil?.telefone}/></div></section> : null}
-  {passo === 1 ? <section className="pilha"><h2 ref={titulo} tabIndex={-1}>{tc.projeto.titulo}</h2><CampoTexto idioma={idioma} id="projeto" rotulo={tc.projeto.nome} value={dados.projeto} maxLength={200} onChange={e => atualizar('projeto', e.target.value)} erro={erros.projeto} required/><CampoArea idioma={idioma} id="descricao" rotulo={tc.projeto.descricao} ajuda={tc.projeto.descricaoAjuda} value={dados.descricao} maxLength={10000} onChange={e => atualizar('descricao', e.target.value)} erro={erros.descricao} rows={5} required/><div className="grade--2"><CampoSelecao idioma={idioma} id="formato" rotulo={tc.projeto.formato} vazio={tc.selecioneFormato} opcoes={tc.formatos.map(f => ({ valor: f, rotulo: f }))} value={dados.formato} onChange={e => atualizar('formato', e.target.value)} erro={erros.formato} required/><CampoTexto idioma={idioma} id="valor" rotulo={tc.projeto.valor} type="number" min={0.01} step="any" value={dados.valor} onChange={e => atualizar('valor', e.target.value)} erro={erros.valor} ajuda={edital.faixaApoio ? textoDaFaixa(idioma, edital.faixaApoio) : undefined} required/></div>{(['justificativa', 'alcance', 'distribuicao'] as const).map(k => <CampoArea key={k} idioma={idioma} id={k} rotulo={tc.projeto[k]} ajuda={tc.projeto[`${k}Ajuda`]} value={dados[k]} maxLength={10000} onChange={e => atualizar(k, e.target.value)} erro={erros[k]} rows={3} required/>)}</section> : null}
-  {passo === 2 ? <section className="pilha"><h2 ref={titulo} tabIndex={-1}>{tc.revisao.titulo}</h2><p>{tc.revisao.descricao}</p><div className="cartao"><Item rotulo={usaOrg ? t.conta.executora : t.conta.pessoaFisica} valor={usaOrg ? org?.razaoSocial : perfil?.nome}/>{usaOrg ? <Item rotulo={t.conta.cnpj} valor={org?.cnpj}/> : null}<Item rotulo={t.conta.responsavel} valor={perfil?.nome}/><Item rotulo={t.conta.email} valor={perfil?.email}/><Botao variante="discreto" onClick={() => ir(0)}>{tc.corrigir}</Botao></div><div className="cartao"><Item rotulo={tc.projeto.nome} valor={dados.projeto}/><Item rotulo={tc.projeto.descricao} valor={dados.descricao}/><Item rotulo={tc.projeto.formato} valor={dados.formato}/><Item rotulo={tc.projeto.valor} valor={moeda(Number(dados.valor), idioma)}/>{(['justificativa', 'alcance', 'distribuicao'] as const).map(k => <Item key={k} rotulo={tc.projeto[k]} valor={dados[k]}/>)}<Botao variante="discreto" onClick={() => ir(1)}>{tc.corrigir}</Botao></div></section> : null}
+  {passo === 1 ? <section className="pilha"><h2 ref={titulo} tabIndex={-1}>{tc.projeto.titulo}</h2><CampoTexto idioma={idioma} id="projeto" rotulo={tc.projeto.nome} value={dados.projeto} maxLength={200} onChange={e => atualizar('projeto', e.target.value)} erro={erros.projeto} required/><CampoArea idioma={idioma} id="descricao" rotulo={tc.projeto.descricao} ajuda={tc.projeto.descricaoAjuda} value={dados.descricao} maxLength={10000} onChange={e => atualizar('descricao', e.target.value)} erro={erros.descricao} rows={5} required/><div className="grade--2"><CampoSelecao idioma={idioma} id="formato" rotulo={tc.projeto.formato} vazio={tc.selecioneFormato} opcoes={tc.formatos.map(f => ({ valor: f, rotulo: f }))} value={dados.formato} onChange={e => atualizar('formato', e.target.value)} erro={erros.formato} required/><CampoTexto idioma={idioma} id="valor" rotulo={tc.projeto.valor} type="number" min={0.01} max={edital.faixaApoio?.max} step="any" value={dados.valor} onChange={e => atualizar('valor', e.target.value)} erro={erros.valor} ajuda={edital.faixaApoio ? textoDaFaixa(idioma, edital.faixaApoio) : undefined} required/></div>{(['justificativa', 'alcance', 'distribuicao'] as const).map(k => <CampoArea key={k} idioma={idioma} id={k} rotulo={tc.projeto[k]} ajuda={tc.projeto[`${k}Ajuda`]} value={dados[k]} maxLength={10000} onChange={e => atualizar(k, e.target.value)} erro={erros[k]} rows={3} required/>)}{comDocumentos ? <><CampoArea idioma={idioma} id="linksPortfolio" rotulo={ta.links} ajuda={ta.linksAjuda} value={dados.linksPortfolio} maxLength={8000} onChange={e => atualizar('linksPortfolio', e.target.value)} erro={erros.linksPortfolio} rows={4} required={anexos.consulta?.requisitos.linksPortfolioObrigatorios !== false}/><AnexosCandidatura idioma={idioma} controle={anexos} pessoaJuridica={usaOrg} disabled={busy || saindo || envioIncerto} erroValidacao={erroAnexos}/></> : null}</section> : null}
+  {passo === 2 ? <section className="pilha"><h2 ref={titulo} tabIndex={-1}>{tc.revisao.titulo}</h2><p>{tc.revisao.descricao}</p><div className="cartao"><Item rotulo={usaOrg ? t.conta.executora : t.conta.pessoaFisica} valor={usaOrg ? org?.razaoSocial : perfil?.nome}/>{usaOrg ? <Item rotulo={t.conta.cnpj} valor={org?.cnpj}/> : null}<Item rotulo={t.conta.responsavel} valor={perfil?.nome}/><Item rotulo={t.conta.email} valor={perfil?.email}/><Botao variante="discreto" onClick={() => ir(0)}>{tc.corrigir}</Botao></div><div className="cartao"><Item rotulo={tc.projeto.nome} valor={dados.projeto}/><Item rotulo={tc.projeto.descricao} valor={dados.descricao}/><Item rotulo={tc.projeto.formato} valor={dados.formato}/><Item rotulo={tc.projeto.valor} valor={moeda(Number(dados.valor), idioma)}/>{(['justificativa', 'alcance', 'distribuicao'] as const).map(k => <Item key={k} rotulo={tc.projeto[k]} valor={dados[k]}/>)}{comDocumentos ? <Item rotulo={ta.links} valor={dados.linksPortfolio}/> : null}<Botao variante="discreto" onClick={() => ir(1)}>{tc.corrigir}</Botao></div>{comDocumentos ? <AnexosCandidatura idioma={idioma} controle={anexos} pessoaJuridica={usaOrg} disabled={busy || saindo || envioIncerto} revisao erroValidacao={erroAnexos}/> : null}</section> : null}
   {erroEnvio ? <p role="alert" className="campo__erro">{t.comum.envio[erroEnvio]}</p> : null}
-  <div className="linha linha--fim">{passo > 0 ? <Botao variante="secundario" onClick={() => ir(passo - 1)}>{t.comum.acoes.voltar}</Botao> : <Botao onClick={() => void salvarESair(`oportunidades/${edital.slug}/`)} variante="secundario" disabled={saindo || rascunho.status === 'conflito'}>{tc.voltarEdital}</Botao>}<Botao type="submit" disabled={busy || saindo || rascunho.status === 'conflito'}>{busy ? t.comum.envio.enviando : passo < 2 ? t.comum.acoes.avancar : erroEnvio && !envioIncerto ? t.comum.envio.tentar : t.comum.acoes.enviar}</Botao></div>
+  <div className="linha linha--fim">{passo > 0 ? <Botao variante="secundario" onClick={() => ir(passo - 1)}>{t.comum.acoes.voltar}</Botao> : <Botao onClick={() => void salvarESair(`oportunidades/${edital.slug}/`)} variante="secundario" disabled={saindo || rascunho.status === 'conflito'}>{tc.voltarEdital}</Botao>}<Botao type="submit" disabled={busy || saindo || rascunho.status === 'conflito' || (comDocumentos && passo > 0 && anexos.ocupado)}>{busy ? t.comum.envio.enviando : passo < 2 ? t.comum.acoes.avancar : erroEnvio && !envioIncerto ? t.comum.envio.tentar : t.comum.acoes.enviar}</Botao></div>
  </fieldset>{envioIncerto ? <div className="pilha"><p role="alert">{t.conta.envioIncerto}</p><CopiarRascunho idioma={idioma} dados={dados}/><Botao type="submit" disabled={busy}>{busy ? t.comum.envio.enviando : t.comum.envio.tentar}</Botao></div> : null}</form></div>;
 }

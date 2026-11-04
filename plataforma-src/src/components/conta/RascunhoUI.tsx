@@ -3,11 +3,12 @@ import { useEffect, useRef, useState } from 'react';
 import { Botao } from '@/components/Botao';
 import type { Idioma } from '@/i18n/idiomas';
 import { textos } from '@/i18n/strings';
+import { textosAnexos } from '@/i18n/anexos';
 import type { DadosRascunho, RascunhoProposta } from '@/lib/types';
 import { useApp } from '@/state/AppState';
 import type { EstadoSalvamento } from './useRascunho';
 import styles from './AppPessoal.module.css';
-export function textoRascunho(dados: DadosRascunho, idioma: Idioma) { const t = textos(idioma).fluxos.candidatura.projeto; return (['projeto', 'descricao', 'formato', 'valor', 'justificativa', 'alcance', 'distribuicao'] as const).map(k => `${k === 'projeto' ? t.nome : t[k]}\n${dados[k]}`).join('\n\n'); }
+export function textoRascunho(dados: DadosRascunho, idioma: Idioma) { const t = textos(idioma).fluxos.candidatura.projeto; const campos = (['projeto', 'descricao', 'formato', 'valor', 'justificativa', 'alcance', 'distribuicao'] as const).map(k => `${k === 'projeto' ? t.nome : t[k]}\n${dados[k]}`); if (dados.linksPortfolio) campos.push(`${textosAnexos(idioma).links}\n${dados.linksPortfolio}`); return campos.join('\n\n'); }
 export function CopiarRascunho({ idioma, dados }: {
     idioma: Idioma;
     dados: DadosRascunho;

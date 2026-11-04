@@ -1,8 +1,8 @@
 'use client';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { STORAGE_KEY, LEGACY_STORAGE_KEY } from '@/config/program';
-import type { Candidatura, PerfilCadastro, ReciboPublico, OrganizacaoExecutora, NovaOrganizacao, DadosPagamento, ResumoRascunho, RascunhoProposta, OfertaProposta } from '@/lib/types';
-import { cadastrarConta, entrarConta, consultarConta, sairConta, enviarOrganizacao, enviarCandidatura as enviarProposta, enviarInscricaoCurso, consultarRecibo, consultarPagamento, enviarPagamento, ErroEnvio, motivoDoErro, type MotivoEnvio, type ContaRecebida, type EnvioRascunho, consultarRascunho, enviarRascunho, excluirRascunho, atualizarPerfil, consultarOferta, responderOferta, alterarParticipacaoBanco } from '@/lib/envio';
+import type { Candidatura, PerfilCadastro, ReciboPublico, OrganizacaoExecutora, NovaOrganizacao, DadosPagamento, ResumoRascunho, RascunhoProposta, OfertaProposta, CategoriaAnexo } from '@/lib/types';
+import { cadastrarConta, entrarConta, consultarConta, sairConta, enviarOrganizacao, enviarCandidatura as enviarProposta, enviarInscricaoCurso, consultarRecibo, consultarPagamento, enviarPagamento, ErroEnvio, motivoDoErro, type MotivoEnvio, type ContaRecebida, type EnvioRascunho, consultarRascunho, enviarRascunho, excluirRascunho, atualizarPerfil, consultarOferta, responderOferta, alterarParticipacaoBanco, listarAnexos, enviarAnexo, excluirAnexo, obterArquivoAnexo } from '@/lib/envio';
 const CHAVE_TOKEN = 'indica:conta-pessoal:token:v1';
 interface Estado {
     participaBanco: boolean;
@@ -19,6 +19,7 @@ interface Estado {
 const inicial = (): Estado => ({ participaBanco: false, cadastrado: false, cadastroConfirmado: false, nome: '', perfil: null, organizacoes: [], candidaturas: [], cursosInscritos: [], recibos: [], rascunhos: [] });
 export type NovaCandidatura = Omit<Candidatura, 'id' | 'enviadaEm' | 'status' | 'protocolo' | 'reciboToken'> & {
     organizacaoId: number | null;
+    anexos?: string[];
 };
 interface ContextoApp extends Estado {
     sessaoId: number;
@@ -34,6 +35,10 @@ interface ContextoApp extends Estado {
     carregarRascunho: (slug: string) => ReturnType<typeof consultarRascunho>;
     salvarRascunho: (slug: string, dados: EnvioRascunho) => Promise<RascunhoProposta>;
     apagarRascunho: (slug: string, envioId: string, versao: number) => Promise<void>;
+    carregarAnexos: (slug: string) => ReturnType<typeof listarAnexos>;
+    adicionarAnexo: (slug: string, categoria: CategoriaAnexo, arquivo: File) => ReturnType<typeof enviarAnexo>;
+    apagarAnexo: (id: string) => Promise<void>;
+    baixarAnexo: (id: string) => Promise<Blob>;
     carregarOferta: (protocolo: string) => Promise<OfertaProposta | null>;
     decidirOferta: (protocolo: string, oferta: OfertaProposta, aceitar: boolean) => ReturnType<typeof responderOferta>;
     salvarOrganizacao: (dados: NovaOrganizacao) => Promise<void>;
@@ -166,10 +171,11 @@ export function AppProvider({ children }: {
         const token = tokenObrigatorio(), org = estadoRef.current.organizacoes.find(o => o.id === dados.organizacaoId);
         if (dados.organizacaoId != null && !org)
             throw new ErroEnvio('perfil');
-        const resposta = await comSessao(enviarProposta({ chamadaSlug: dados.editalSlug, chamadaId: dados.chamadaId, organizacaoId: org?.id ?? null, envioId, projeto: { titulo: dados.projeto, formato: dados.formato, descricao: dados.descricao ?? '', justificativa: dados.justificativa ?? '', alcance: dados.alcance ?? '', distribuicao: dados.distribuicao ?? '' }, valorSolicitado: dados.valorSolicitado }, token));
+        const resposta = await comSessao(enviarProposta({ chamadaSlug: dados.editalSlug, chamadaId: dados.chamadaId, organizacaoId: org?.id ?? null, envioId, projeto: { titulo: dados.projeto, formato: dados.formato, descricao: dados.descricao ?? '', justificativa: dados.justificativa ?? '', alcance: dados.alcance ?? '', distribuicao: dados.distribuicao ?? '', ...(dados.linksPortfolio?.trim() ? { linksPortfolio: dados.linksPortfolio.trim() } : {}) }, valorSolicitado: dados.valorSolicitado, anexos: dados.anexos ?? [] }, token));
         mutacaoRef.current++;
         finalizadosRef.current.add(`${dados.editalSlug}:${envioId}`);
-        const nova: Candidatura = { ...dados, ...resposta, id: resposta.protocolo, enviadaEm: new Date().toISOString(), status: 'recebida', organizacao: org, proponente: estadoRef.current.perfil ?? undefined };
+        const { anexos: _anexos, ...dadosCandidatura } = dados;
+        const nova: Candidatura = { ...dadosCandidatura, ...resposta, id: resposta.protocolo, enviadaEm: new Date().toISOString(), status: 'recebida', organizacao: org, proponente: estadoRef.current.perfil ?? undefined };
         if (tokenRef.current === token)
             setEstado(a => ({ ...a, rascunhos: a.rascunhos.filter(r => !(r.chamadaSlug === dados.editalSlug && r.envioId === envioId)), candidaturas: [nova, ...a.candidaturas.filter(c => c.protocolo !== nova.protocolo)], recibos: juntar(a.recibos, [reciboDaCandidatura(nova)]) }));
         return nova;
@@ -232,6 +238,10 @@ export function AppProvider({ children }: {
         mutacaoRef.current++;
         setEstado(a => ({ ...a, rascunhos: a.rascunhos.filter(r => r.chamadaSlug !== slug || r.envioId !== envioId) }));
     }, [comSessao]);
+    const carregarAnexos = useCallback((slug: string) => comSessao(listarAnexos(slug, tokenObrigatorio())), [comSessao]);
+    const adicionarAnexo = useCallback((slug: string, categoria: CategoriaAnexo, arquivo: File) => comSessao(enviarAnexo(slug, categoria, arquivo, tokenObrigatorio())), [comSessao]);
+    const apagarAnexo = useCallback((id: string) => comSessao(excluirAnexo(id, tokenObrigatorio())), [comSessao]);
+    const baixarAnexo = useCallback((id: string) => comSessao(obterArquivoAnexo(id, tokenObrigatorio())), [comSessao]);
     const carregarOferta = useCallback((protocolo: string) => comSessao(consultarOferta(protocolo, tokenObrigatorio())), [comSessao]);
     const decidirOferta = useCallback(async (protocolo: string, oferta: OfertaProposta, aceitar: boolean) => {
         const r = await comSessao(responderOferta(protocolo, oferta, aceitar, tokenObrigatorio()));
@@ -240,7 +250,7 @@ export function AppProvider({ children }: {
         void atualizarConta().catch(() => { });
         return r;
     }, [comSessao, atualizarConta]);
-    const valor = useMemo<ContextoApp>(() => ({ ...estado, sessaoId: geracaoRef.current, definirParticipacaoBanco, salvarPerfil, carregarRascunho, salvarRascunho, apagarRascunho, carregarOferta, decidirOferta, hidratado, carregandoConta, erroConta, cadastrar, entrar, sair, atualizarConta, salvarOrganizacao, enviarCandidatura, inscreverCurso, atualizarRecibos, carregarPagamento, gravarPagamento, estaInscrito: slug => estado.cursosInscritos.includes(slug), reiniciar: limpar }), [estado, definirParticipacaoBanco, salvarPerfil, carregarRascunho, salvarRascunho, apagarRascunho, carregarOferta, decidirOferta, hidratado, carregandoConta, erroConta, cadastrar, entrar, sair, atualizarConta, salvarOrganizacao, enviarCandidatura, inscreverCurso, atualizarRecibos, carregarPagamento, gravarPagamento, limpar]);
+    const valor = useMemo<ContextoApp>(() => ({ ...estado, sessaoId: geracaoRef.current, definirParticipacaoBanco, salvarPerfil, carregarRascunho, salvarRascunho, apagarRascunho, carregarAnexos, adicionarAnexo, apagarAnexo, baixarAnexo, carregarOferta, decidirOferta, hidratado, carregandoConta, erroConta, cadastrar, entrar, sair, atualizarConta, salvarOrganizacao, enviarCandidatura, inscreverCurso, atualizarRecibos, carregarPagamento, gravarPagamento, estaInscrito: slug => estado.cursosInscritos.includes(slug), reiniciar: limpar }), [estado, definirParticipacaoBanco, salvarPerfil, carregarRascunho, salvarRascunho, apagarRascunho, carregarAnexos, adicionarAnexo, apagarAnexo, baixarAnexo, carregarOferta, decidirOferta, hidratado, carregandoConta, erroConta, cadastrar, entrar, sair, atualizarConta, salvarOrganizacao, enviarCandidatura, inscreverCurso, atualizarRecibos, carregarPagamento, gravarPagamento, limpar]);
     return <Contexto.Provider value={valor}>{children}</Contexto.Provider>;
 }
 export function useApp(): ContextoApp { const c = useContext(Contexto); if (!c)

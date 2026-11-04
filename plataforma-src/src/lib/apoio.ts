@@ -12,6 +12,7 @@ import type { Call } from '@/lib/types';
  */
 /** "R$ 8.000 a R$ 30.000", ou so "R$ 20.000" quando a faixa e um valor so (premio, bolsa). */
 export function textoDaFaixa(idioma: Idioma, faixa: { min: number; max: number }): string {
+  if (faixa.min <= 0 && faixa.max > 0) return `${textos(idioma).editais.valorAte} ${moeda(faixa.max, idioma)}`;
   if (faixa.min === faixa.max) return moeda(faixa.min, idioma);
   return `${moeda(faixa.min, idioma)} ${textos(idioma).editais.faixaSeparador} ${moeda(faixa.max, idioma)}`;
 }

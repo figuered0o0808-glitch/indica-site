@@ -1,10 +1,12 @@
 [
   {
     "slug": "carros-eletricos-no-brasil",
+    "simulacao": false,
+    "exigeCnpj": false,
     "titulo": "Electric cars in Brazil: public call for digital communication",
     "status": "consulta",
     "tipo": "pauta-especifica",
-    "resumo": "Selection of scientific, educational and public awareness communication solutions about electric vehicles in Brazil. The call provides for 3 to 14 proposals and a total budget of up to R$ 100 thousand.",
+    "resumo": "Selection of scientific, educational and public awareness communication solutions about electric vehicles in Brazil. Between 5 and 15 proposals will be selected, with funding of up to R$ 30 thousand per project and a total budget of up to R$ 100 thousand.",
     "proponente": "INDICA",
     "apresentacao": [
       "INDICA announces a public call to receive and select proposals for digital communication solutions. Content creators, digital influencers, communication agencies, creative or media collectives and independent producers may participate.",
@@ -34,7 +36,7 @@
       },
       {
         "titulo": "Budget efficiency and value for money",
-        "descricao": "Consistency of the financial proposal with its scope, valuing resource optimization and the ability to operate efficiently at amounts below R$ 25,000.00."
+        "descricao": "Alignment of the amount requested with the scope, planned deliverables and justified costs, subject to the R$ 30,000.00 cap per project. Lower-budget proposals will be favored when they preserve quality and delivery capacity."
       },
       {
         "titulo": "Integration and distribution strategy",
@@ -45,52 +47,51 @@
     "distribuicao": [
       {
         "faixa": "Selected proposals",
-        "quantidade": "From 3 to 14",
-        "observacao": "The number depends on the applicants’ profiles and the amounts proposed."
+        "quantidade": "From 5 to 15",
+        "observacao": "The number depends on the applicants’ profiles, the amounts proposed and the total budget. There are no fixed quotas by funding range."
       },
       {
         "faixa": "Proposals above R$ 25,000.00",
         "quantidade": "At most 2",
-        "observacao": "The call states that there is a high probability of funding only one proposal in this range."
+        "observacao": "At most two proposals above R$ 25,000.00 will be selected, with a preference for funding only one in this range, subject to the R$ 30,000.00 cap per project."
       }
     ],
     "valorTotal": 100000,
-    "faixaApoio": null,
-    "inscricoesAte": "2026-10-31",
+    "faixaApoio": {
+      "min": 0,
+      "max": 30000
+    },
+    "inscricoesAte": "2026-11-13",
     "cronograma": [
       {
         "etapa": "Applications and submission of proposals",
-        "data": "2026-10-28",
-        "dataFim": "2026-10-31"
-      },
-      {
-        "etapa": "Screening and evaluation of proposals by the committee",
-        "data": "2026-11-01",
-        "dataFim": "2026-11-11"
-      },
-      {
-        "etapa": "Publication of preliminary results",
-        "data": "2026-11-11"
-      },
-      {
-        "etapa": "Submission of appeals (48 hours)",
-        "data": "2026-11-12",
+        "data": "2026-11-04",
         "dataFim": "2026-11-13"
       },
       {
-        "etapa": "Contracting, alignment and technical briefing",
-        "data": "2026-11-12",
-        "dataFim": "2026-11-27"
+        "etapa": "Deadline for screening and evaluation of proposals by the committee",
+        "data": "2026-11-18"
       },
       {
-        "etapa": "Production, validation and publication of content",
-        "data": "2026-11-12",
-        "dataFim": "2026-11-18"
+        "etapa": "Publication of preliminary results",
+        "data": "2026-11-18"
       },
       {
-        "etapa": "Consolidation of metrics and delivery of the report",
-        "data": "2026-11-19",
-        "dataFim": "2026-11-30"
+        "etapa": "Submission of appeals (48 hours after publication)",
+        "data": "2026-11-18",
+        "dataFim": "2026-11-20"
+      },
+      {
+        "etapa": "Deadline for selected applicants to confirm; contracting after confirmation",
+        "data": "2026-11-20"
+      },
+      {
+        "etapa": "Deadline for execution, validation and publication of content",
+        "data": "2026-12-23"
+      },
+      {
+        "etapa": "Deadline for delivery of the consolidated results report",
+        "data": "2026-12-28"
       }
     ],
     "resultado": null,
@@ -99,17 +100,17 @@
     "criteriosDescricao": "The evaluation committee will conduct a qualitative and technical assessment without assigning numerical scores.",
     "bancaDescricao": "Selection will be carried out by an evaluation committee. The document does not identify its members by name.",
     "valorTotalAte": true,
-    "apoioDescricao": "Amount determined per proposal, subject to evaluation and adjustments to scope and budget.",
+    "apoioDescricao": "Funding of up to R$ 30,000 per project, based on scope, deliverables and justified costs.",
     "modalidade": "Public call",
     "publico": "ambos",
     "vagas": {
-      "min": 3,
-      "max": 14
+      "min": 5,
+      "max": 15
     },
     "arquivoEdital": {
       "idioma": "pt",
-      "arquivo": "/editais/carros-eletricos-brasil.pdf",
-      "paginas": 5
+      "arquivo": "/arquivos/e499b24c47c180d60bb3efdd464c49aca46d616ececaa338f4d54dd437c925e1/edital-carros-eletricos-brasil.pdf",
+      "paginas": 7
     },
     "secoesComplementares": [
       {
@@ -117,9 +118,10 @@
         "titulo": "Budget rules",
         "itens": [
           "The total budget is up to R$ 100,000.00. The organization is not required to invest the full amount; funding depends on the number, feasibility and relevance of the approved proposals.",
-          "Amounts may vary within the total budget according to the scope and reach of each project. The document does not establish a single funding range per proposal.",
-          "At least 3 and at most 14 proposals will be selected. No more than two may have an individual amount above R$ 25,000.00, with a high probability, according to the call, of funding only one in this range.",
-          "The committee will prioritize efficient proposals that can operate at costs below R$ 25,000.00, allowing for greater diversity of communication channels.",
+          "Each project may request up to R$ 30,000.00. The amount requested must reflect the scope, planned deliverables and justified costs, without compromising quality or delivery capacity.",
+          "Between 5 and 15 proposals will be selected, depending on the applicants’ profiles, the amounts proposed and the total budget. There are no fixed selection quotas by funding range.",
+          "At most two proposals with an individual amount above R$ 25,000.00 will be selected, subject to the R$ 30,000.00 cap per project. The preference is to fund only one proposal in this range.",
+          "Lower-budget proposals will have a greater chance of selection when the budget is compatible with the scope, quality of deliverables and delivery capacity. This priority seeks to broaden the diversity of projects and communication channels supported.",
           "The organization may propose changes to scope and budget adjustments as a condition for signing the contract, without being required to approve the full amount requested."
         ]
       },

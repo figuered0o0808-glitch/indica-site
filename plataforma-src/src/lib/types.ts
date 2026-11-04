@@ -196,6 +196,7 @@ export interface Candidatura {
   justificativa?: string;
   alcance?: string;
   distribuicao?: string;
+  linksPortfolio?: string;
   /** Quem assinou. O documento vai para a API e nao fica no navegador. */
   proponente?: {
     nome: string;
@@ -247,6 +248,35 @@ export interface DadosRascunho {
   justificativa: string;
   alcance: string;
   distribuicao: string;
+  /** Links públicos de redes e portfólio; documentos pessoais seguem como anexos privados. */
+  linksPortfolio: string;
+}
+
+export type CategoriaAnexo = 'identificacao' | 'portfolio' | 'midia-kit' | 'proposta-orcamento';
+
+export interface AnexoCandidatura {
+  id: string;
+  categoria: CategoriaAnexo;
+  nome: string;
+  mime: string;
+  tamanho: number;
+  criadoEm: string;
+  propostaId: string | null;
+  pendente: boolean;
+}
+
+export interface ConsultaAnexos {
+  anexos: AnexoCandidatura[];
+  requisitos: {
+    categorias: { id: CategoriaAnexo; rotulo: string; obrigatoria: boolean; tiposPermitidos?: string[] }[];
+    maxArquivoBytes: number;
+    maxArquivos: number;
+    maxTotalBytes: number;
+    tiposPermitidos: string[];
+    linksPortfolioObrigatorios: boolean;
+  };
+  uso: { arquivos: number; totalBytes: number };
+  aceitaEnvio: boolean;
 }
 
 export interface RascunhoProposta {

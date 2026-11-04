@@ -1,0 +1,16 @@
+.titulo { margin: 0; font-size: var(--titulo-p); line-height: 1.25; }
+.categorias { display: grid; gap: 16px; }
+.categoria { min-width: 0; padding: 20px; border: 1px solid var(--linha); border-radius: 12px; }
+.categoria p { margin-block: 12px; }
+.cabeca { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px; }
+.cabeca h4 { margin: 0; font-size: var(--texto-g); }
+.arquivos { display: grid; gap: 12px; padding: 0; margin: 16px 0; list-style: none; }
+.arquivo { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px; padding-block: 12px; border-block-start: 1px solid var(--linha); }
+.nome { display: grid; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
+.nome strong { font-size: var(--texto-m); font-weight: 500; }
+.acoes { display: flex; flex-wrap: wrap; gap: 4px; }
+.envio { display: grid; gap: 12px; margin-top: 16px; }
+.entrada { display: block; max-width: 100%; width: 100%; min-width: 0; padding: 10px; font: inherit; }
+.entrada::file-selector-button { margin-right: 12px; padding: 8px 12px; border: 1px solid var(--linha); border-radius: 6px; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.nomePendente { overflow-wrap: anywhere; }
+@media (max-width: 480px) { .categoria { padding: 16px; } .acoes { width: 100%; } }
