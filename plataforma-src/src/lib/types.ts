@@ -48,6 +48,11 @@ export interface ResultadoEdital {
   publicadoEm: string;
   inscricoesRecebidas: number;
   apoiados: Apoiado[];
+  exibirNotas?: boolean;
+  exibirClassificacao?: boolean;
+  somenteSelecionados?: boolean;
+  notaMaxima?: number;
+  classificacao?: { protocolo: string; situacao: string; nome: string; projeto: string; posicao?: number; nota?: number; formato?: string; uf?: string }[];
 }
 
 export interface Call {
@@ -197,6 +202,9 @@ export interface Candidatura {
   alcance?: string;
   distribuicao?: string;
   linksPortfolio?: string;
+  formatos?: string[];
+  formatoOutro?: string;
+  divulgacaoSite?: string;
   /** Quem assinou. O documento vai para a API e nao fica no navegador. */
   proponente?: {
     nome: string;
@@ -244,6 +252,9 @@ export interface DadosRascunho {
   projeto: string;
   descricao: string;
   formato: string;
+  formatos: string[];
+  formatoOutro: string;
+  divulgacaoSite: string;
   valor: string;
   justificativa: string;
   alcance: string;

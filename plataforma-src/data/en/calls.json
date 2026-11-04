@@ -11,36 +11,22 @@
     "apresentacao": [
       "INDICA announces a public call to receive and select proposals for digital communication solutions. Content creators, digital influencers, communication agencies, creative or media collectives and independent producers may participate.",
       "The aim is to increase public awareness of the transition to sustainable mobility in Brazil by broadening access to information on the purchase and maintenance costs of clean vehicles, the environmental and social benefits of electrification and public policies such as the Mover Program.",
-      "The focus is the digital ecosystem: social networks, video and audio platforms and online media. In-person activities or street interventions are also permitted and encouraged, provided they are integrated into the digital distribution and amplification strategy."
+      "The focus is the digital ecosystem: social networks, video and audio platforms and online media. In-person activities or street interventions are also permitted and encouraged, provided they are integrated into the digital distribution and amplification strategy.",
+      "Every proposal must include at least one action to promote the Eletrificação Já website (eletrificacaoja.com.br) during delivery. The website does not need to be the central element of the proposal. Applicants must explain in the form how this promotion will take place."
     ],
     "escopo": [
       "Individuals, including content creators and digital influencers, and legal entities, including agencies, production companies and media collectives, that are Brazilian or resident in Brazil.",
       "The document includes MEI, EIRELI and limited liability companies among the eligible legal entities.",
       "Technical and financial proposals for scientific, educational and public awareness communication about electric vehicles in Brazil.",
       "Digital solutions in video, audio, text, educational carousels and other formats; in-person activities are permitted when integrated into digital channels.",
-      "The themes in the guiding brief are suggestions, not mandatory requirements: costs and accessibility; public policies and the Mover Program; sustainability and energy transition; myths and facts about electrification. Other approaches related to electric mobility in Brazil and the objectives of the call are also welcome."
+      "The themes in the guiding brief are suggestions, not mandatory requirements: costs and accessibility; public policies and the Mover Program; sustainability and energy transition; myths and facts about electrification. Other approaches related to electric mobility in Brazil and the objectives of the call are also welcome.",
+      "Every proposal must include at least one action to promote the Eletrificação Já website (eletrificacaoja.com.br) during delivery. The website does not need to be the central element of the proposal. Applicants must explain in the form how this promotion will take place."
     ],
     "naoApoiado": [],
     "criterios": [
       {
-        "titulo": "Thematic alignment and quality of the solution",
-        "descricao": "Alignment with the guiding brief, creativity of the approach and relevance of the digital communication solution to raising awareness about electric vehicles in Brazil."
-      },
-      {
-        "titulo": "Language and scientific and educational communication",
-        "descricao": "Conceptual clarity, technical rigor and the ability to translate complex economic and environmental topics into engaging, inclusive and high-impact language."
-      },
-      {
-        "titulo": "Operational capacity and track record",
-        "descricao": "Technical quality of the team or creator, track record of successful projects and proven ability to deliver within the schedule deadlines."
-      },
-      {
-        "titulo": "Budget efficiency and value for money",
-        "descricao": "Alignment of the amount requested with the scope, planned deliverables and justified costs, subject to the R$ 30,000.00 cap per project. Lower-budget proposals will be favored when they preserve quality and delivery capacity."
-      },
-      {
-        "titulo": "Integration and distribution strategy",
-        "descricao": "Consistency of the digital publication plan and, where in-person or street activities are included, the effectiveness of their integration and amplification among online audiences."
+        "titulo": "Overall proposal score",
+        "descricao": "An overall assessment of the proposed communication solution, with a single score from 0 to 10 and no separate component scores."
       }
     ],
     "banca": [],
@@ -97,7 +83,7 @@
     "resultado": null,
     "organizacao": "INDICA",
     "logoOrganizacao": "/organizacoes/indica.png",
-    "criteriosDescricao": "The evaluation committee will conduct a qualitative and technical assessment without assigning numerical scores.",
+    "criteriosDescricao": "Each proposal will receive an overall score from 0 to 10. Selection does not necessarily follow score order: it also considers the available budget, requested amounts, feasibility and the combination of projects supported. The organization may publish only the selected proposals, without scores or ranking, or include scores and/or ranking in the public results.",
     "bancaDescricao": "Selection will be carried out by an evaluation committee. The document does not identify its members by name.",
     "valorTotalAte": true,
     "apoioDescricao": "Funding of up to R$ 30,000 per project, based on scope, deliverables and justified costs.",
@@ -109,7 +95,7 @@
     },
     "arquivoEdital": {
       "idioma": "pt",
-      "arquivo": "/arquivos/8da823a3a0eae50350275b6cea7d5838ff3693d85e34c5744c0b01fc36a68d99/edital-carros-eletricos-brasil.pdf",
+      "arquivo": "/arquivos/c6eb01266851965e54b70abd25c666bdd14e696951819d85b0e80c7e4fa98cc4/edital-carros-eletricos-brasil.pdf",
       "paginas": 8
     },
     "secoesComplementares": [
@@ -127,13 +113,14 @@
       },
       {
         "id": "documentacao",
-        "titulo": "Required documentation and information",
+        "titulo": "Supporting documentation (optional)",
         "itens": [
+          "Files and links are optional. Applicants may submit a proposal without attachments or portfolio links; the materials below can supplement the information provided in the form.",
           "Official identification: RG or CNH for individuals; proof of CNPJ registration and current articles of association or bylaws for legal entities.",
           "Presentation of the applicant, agency or collective, with a brief history, institutional portfolio or professional profiles of those involved.",
           "Up-to-date links to profiles, active channels and/or a portfolio of previously produced digital content.",
           "An updated media kit or official platform analytics reports, with reach, engagement and demographic profiles fully open to verification by the committee.",
-          "Technical and financial proposal: digital formats, distribution plan, editorial approach, schedule and itemized budget spreadsheet. Street or in-person activities must explain their integration into the digital ecosystem."
+          "Technical and financial proposal: an optional file covering formats, distribution plan, editorial approach, schedule and, where applicable, an itemized budget spreadsheet. In-person activities must explain their integration into the digital ecosystem."
         ]
       },
       {
@@ -145,7 +132,8 @@
           "Keep metrics for reach, impressions, full views, engagement, saves and retention open to real-time monitoring and auditing by INDICA.",
           "Keep digital publications active and publicly accessible for at least one year after publication.",
           "Deliver the consolidated results report by the deadline set in the schedule.",
-          "Clearly identify sponsored educational content or the partnership, in accordance with social networks’ regulatory guidelines."
+          "Clearly identify sponsored educational content or the partnership, in accordance with social networks’ regulatory guidelines.",
+          "Deliver the action to promote the Eletrificação Já website described in the approved proposal. The website does not need to be the central element of the project, but it must be promoted at some point during delivery."
         ]
       },
       {
@@ -155,6 +143,7 @@
           "Communication must consider the economic and structural challenges of electric mobility in Brazil, including purchase costs and the infrastructure required for consumer adoption.",
           "The themes below are suggestions to help develop proposals. Applicants are not required to follow any of them; other approaches are welcome, provided they relate to electric mobility in Brazil and the objectives of the call.",
           "Proposals may combine short videos, Reels or TikTok, long-form YouTube videos, podcasts, educational carousels, articles and threads. In-person activities are optional and must generate content and engagement for digital platforms.",
+          "Every proposal must include at least one action to promote the Eletrificação Já website (eletrificacaoja.com.br) during delivery. The website does not need to be the central element of the proposal. Applicants must explain in the form how this promotion will take place.",
           "The Eletrificação Já website and campaign guide provide data and references to support proposal development and content production."
         ],
         "itens": [

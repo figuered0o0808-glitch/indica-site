@@ -171,7 +171,11 @@ export function AppProvider({ children }: {
         const token = tokenObrigatorio(), org = estadoRef.current.organizacoes.find(o => o.id === dados.organizacaoId);
         if (dados.organizacaoId != null && !org)
             throw new ErroEnvio('perfil');
-        const resposta = await comSessao(enviarProposta({ chamadaSlug: dados.editalSlug, chamadaId: dados.chamadaId, organizacaoId: org?.id ?? null, envioId, projeto: { titulo: dados.projeto, formato: dados.formato, descricao: dados.descricao ?? '', justificativa: dados.justificativa ?? '', alcance: dados.alcance ?? '', distribuicao: dados.distribuicao ?? '', ...(dados.linksPortfolio?.trim() ? { linksPortfolio: dados.linksPortfolio.trim() } : {}) }, valorSolicitado: dados.valorSolicitado, anexos: dados.anexos ?? [] }, token));
+        const resposta = await comSessao(enviarProposta({ chamadaSlug: dados.editalSlug, chamadaId: dados.chamadaId, organizacaoId: org?.id ?? null, envioId, projeto: { titulo: dados.projeto, formato: dados.formato, descricao: dados.descricao ?? '', justificativa: dados.justificativa ?? '', alcance: dados.alcance ?? '', distribuicao: dados.distribuicao ?? '',
+            ...(dados.formatos === undefined ? {} : { formatos: [...dados.formatos] }),
+            ...(dados.formatoOutro === undefined ? {} : { formatoOutro: dados.formatoOutro }),
+            ...(dados.divulgacaoSite?.trim() ? { divulgacaoSite: dados.divulgacaoSite.trim() } : {}),
+            ...(dados.linksPortfolio?.trim() ? { linksPortfolio: dados.linksPortfolio.trim() } : {}) }, valorSolicitado: dados.valorSolicitado, anexos: dados.anexos ?? [] }, token));
         mutacaoRef.current++;
         finalizadosRef.current.add(`${dados.editalSlug}:${envioId}`);
         const { anexos: _anexos, ...dadosCandidatura } = dados;

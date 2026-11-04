@@ -165,7 +165,8 @@ export function useRascunho(slug: string, aberta: boolean, orgPadrao?: number) {
     const pausar = useCallback(() => { pausa.current = true; setPausado(true); cancelarTimer(); }, [cancelarTimer]);
     const retomar = useCallback(() => { pausa.current = false; setPausado(false); }, []);
     return { editor, pronto: Boolean(editor && editor.dono === sessaoId), status, carregar, salvar, pausar, retomar,
-        campo: (nome: keyof DadosRascunho, valor: string) => alterar(e => ({ ...e, dados: { ...e.dados, [nome]: valor } })),
+        campo: <K extends keyof DadosRascunho>(nome: K, valor: DadosRascunho[K]) => alterar(e => ({ ...e, dados: { ...e.dados, [nome]: valor } })),
+        campos: (dados: Partial<DadosRascunho>) => alterar(e => ({ ...e, dados: { ...e.dados, ...dados } })),
         organizacao: (id: number | null) => alterar(e => ({ ...e, organizacaoId: id || null })),
         passo: (passo: number) => alterar(e => ({ ...e, passo: Math.max(0, Math.min(2, passo)) })),
     };

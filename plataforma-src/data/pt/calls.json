@@ -11,36 +11,22 @@
     "apresentacao": [
       "A INDICA torna pública a chamada para recebimento e seleção de propostas de soluções de comunicação digital. Podem participar criadores de conteúdo, influenciadores digitais, agências de comunicação, coletivos criativos ou de mídia e produtores independentes.",
       "O objetivo é ampliar a conscientização pública sobre a transição para a mobilidade sustentável no Brasil, democratizando informações sobre custos de aquisição e manutenção de veículos limpos, benefícios ambientais e sociais da eletrificação e políticas públicas como o Programa Mover.",
-      "O foco é o ecossistema digital: redes sociais, plataformas de vídeo, áudio e mídias online. Também são admitidas e incentivadas ações presenciais ou intervenções de rua, desde que integradas à estratégia de distribuição e amplificação digital."
+      "O foco é o ecossistema digital: redes sociais, plataformas de vídeo, áudio e mídias online. Também são admitidas e incentivadas ações presenciais ou intervenções de rua, desde que integradas à estratégia de distribuição e amplificação digital.",
+      "Todas as propostas deverão prever pelo menos uma ação de divulgação do site Eletrificação Já (eletrificacaoja.com.br) em algum momento da execução. O site não precisa ser o elemento central da proposta. O formulário deverá informar como essa divulgação será feita."
     ],
     "escopo": [
       "Pessoas físicas, incluindo criadores de conteúdo e influenciadores digitais, e pessoas jurídicas, incluindo agências, produtoras e coletivos de mídia, brasileiras ou residentes no Brasil.",
       "O documento inclui MEI, EIRELI e sociedades limitadas entre as pessoas jurídicas elegíveis.",
       "Propostas técnicas e financeiras de comunicação científica, educativa e de conscientização social sobre os veículos elétricos no Brasil.",
       "Soluções digitais em vídeo, áudio, texto, carrosséis educativos e outros formatos; ações presenciais são admitidas quando integradas aos canais digitais.",
-      "Os eixos do briefing são sugestões, não requisitos obrigatórios: custos e acessibilidade; políticas públicas e Programa Mover; sustentabilidade e transição energética; mitos e fatos da eletrificação. Outras abordagens relacionadas à mobilidade elétrica no Brasil e aos objetivos da chamada também são aceitas."
+      "Os eixos do briefing são sugestões, não requisitos obrigatórios: custos e acessibilidade; políticas públicas e Programa Mover; sustentabilidade e transição energética; mitos e fatos da eletrificação. Outras abordagens relacionadas à mobilidade elétrica no Brasil e aos objetivos da chamada também são aceitas.",
+      "Todas as propostas deverão prever pelo menos uma ação de divulgação do site Eletrificação Já (eletrificacaoja.com.br) em algum momento da execução. O site não precisa ser o elemento central da proposta. O formulário deverá informar como essa divulgação será feita."
     ],
     "naoApoiado": [],
     "criterios": [
       {
-        "titulo": "Aderência temática e qualidade da solução",
-        "descricao": "Alinhamento com o briefing orientador, criatividade da abordagem e relevância da solução de comunicação digital para a conscientização sobre veículos elétricos no Brasil."
-      },
-      {
-        "titulo": "Linguagem e comunicação científico-educativa",
-        "descricao": "Clareza conceitual, rigor técnico e capacidade de traduzir temas econômicos e ambientais complexos em linguagem atraente, inclusiva e de alto impacto."
-      },
-      {
-        "titulo": "Capacidade operacional e histórico",
-        "descricao": "Qualidade técnica da equipe ou do criador, histórico de projetos bem-sucedidos e capacidade comprovada de execução dentro dos prazos do cronograma."
-      },
-      {
-        "titulo": "Eficiência orçamentária e custo-benefício",
-        "descricao": "Adequação do valor solicitado ao escopo, às entregas previstas e aos custos justificados, observado o teto de R$ 30.000,00 por projeto. Propostas de menor valor serão favorecidas quando preservarem a qualidade e a capacidade de execução."
-      },
-      {
-        "titulo": "Estratégia de integração e distribuição",
-        "descricao": "Consistência do plano de veiculação digital e, quando houver ações presenciais ou de rua, efetividade de sua integração e amplificação junto ao público online."
+        "titulo": "Nota da proposta",
+        "descricao": "Avaliação geral da solução de comunicação apresentada, em uma única nota de 0 a 10, sem divisão em notas parciais."
       }
     ],
     "banca": [],
@@ -97,7 +83,7 @@
     "resultado": null,
     "organizacao": "INDICA",
     "logoOrganizacao": "/organizacoes/indica.png",
-    "criteriosDescricao": "A comissão avaliadora fará análise qualitativa e técnica, sem atribuição de notas numéricas.",
+    "criteriosDescricao": "Cada proposta receberá uma nota geral de 0 a 10. A seleção não segue necessariamente a ordem das notas: também considera o orçamento disponível, os valores solicitados, a viabilidade e a composição do conjunto de projetos apoiados. A organização poderá divulgar somente a lista de selecionados, sem notas e sem classificação, ou incluir notas e/ou classificação no resultado público.",
     "bancaDescricao": "A seleção será realizada por uma comissão avaliadora. O documento não identifica nominalmente seus integrantes.",
     "valorTotalAte": true,
     "apoioDescricao": "Apoio de até R$ 30.000 por projeto, definido conforme escopo, entregas e custos justificados.",
@@ -109,7 +95,7 @@
     },
     "arquivoEdital": {
       "idioma": "pt",
-      "arquivo": "/arquivos/8da823a3a0eae50350275b6cea7d5838ff3693d85e34c5744c0b01fc36a68d99/edital-carros-eletricos-brasil.pdf",
+      "arquivo": "/arquivos/c6eb01266851965e54b70abd25c666bdd14e696951819d85b0e80c7e4fa98cc4/edital-carros-eletricos-brasil.pdf",
       "paginas": 8
     },
     "secoesComplementares": [
@@ -127,13 +113,14 @@
       },
       {
         "id": "documentacao",
-        "titulo": "Documentação e informações exigidas",
+        "titulo": "Documentação complementar (opcional)",
         "itens": [
+          "Arquivos e links são opcionais. É possível enviar a proposta sem anexos e sem links de portfólio; os materiais abaixo podem complementar as informações preenchidas no formulário.",
           "Identificação oficial: RG ou CNH para pessoas físicas; comprovante de CNPJ e contrato social ou estatuto vigente para pessoas jurídicas.",
           "Apresentação do proponente, agência ou coletivo, com breve histórico, portfólio institucional ou perfil profissional dos envolvidos.",
           "Links atualizados dos perfis, canais ativos e/ou portfólio de conteúdos digitais produzidos anteriormente.",
           "Mídia kit atualizado ou relatórios analíticos oficiais das plataformas, com alcance, engajamento e perfil demográfico totalmente abertos para verificação da comissão.",
-          "Proposta técnica e financeira: formatos digitais, plano de distribuição, linha editorial, cronograma e planilha orçamentária discriminada. Ações de rua ou presenciais devem explicar sua integração ao ecossistema digital."
+          "Proposta técnica e financeira: arquivo complementar com formatos, plano de distribuição, linha editorial, cronograma e, quando houver, planilha orçamentária. Ações presenciais devem explicar sua integração ao ecossistema digital."
         ]
       },
       {
@@ -145,7 +132,8 @@
           "Manter as métricas de alcance, impressões, visualizações completas, engajamento, salvamentos e retenção abertas para acompanhamento e auditoria em tempo real pela INDICA.",
           "Manter as publicações digitais ativas e publicamente acessíveis por pelo menos um ano após a publicação.",
           "Entregar o relatório consolidado de resultados no prazo previsto no cronograma.",
-          "Identificar claramente o conteúdo educativo patrocinado ou a parceria, conforme as diretrizes regulatórias das redes sociais."
+          "Identificar claramente o conteúdo educativo patrocinado ou a parceria, conforme as diretrizes regulatórias das redes sociais.",
+          "Executar a ação de divulgação do site Eletrificação Já prevista na proposta aprovada. O site não precisa ser o elemento central do projeto, mas deverá ser divulgado em algum momento da execução."
         ]
       },
       {
@@ -155,6 +143,7 @@
           "A comunicação deve considerar os desafios econômicos e estruturais da mobilidade elétrica no Brasil, incluindo o custo de aquisição e a infraestrutura necessária à adoção pelo consumidor.",
           "Os eixos abaixo são sugestões para orientar a elaboração das propostas. Não é obrigatório seguir algum deles; outras abordagens são aceitas, desde que relacionadas à mobilidade elétrica no Brasil e aos objetivos da chamada.",
           "As propostas podem combinar vídeos curtos, Reels ou TikTok, vídeos longos para YouTube, podcasts, carrosséis educativos, artigos e threads. Ações presenciais são opcionais e devem gerar conteúdo e engajamento para as plataformas digitais.",
+          "Todas as propostas deverão prever pelo menos uma ação de divulgação do site Eletrificação Já (eletrificacaoja.com.br) em algum momento da execução. O site não precisa ser o elemento central da proposta. O formulário deverá informar como essa divulgação será feita.",
           "O site Eletrificação Já e a cartilha da campanha reúnem dados e referências para apoiar a elaboração da proposta e a produção dos conteúdos."
         ],
         "itens": [

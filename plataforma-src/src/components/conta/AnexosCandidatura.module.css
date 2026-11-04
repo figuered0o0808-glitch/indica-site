@@ -14,3 +14,8 @@
 .entrada::file-selector-button { margin-right: 12px; padding: 8px 12px; border: 1px solid var(--linha); border-radius: 6px; background: transparent; color: inherit; font: inherit; cursor: pointer; }
 .nomePendente { overflow-wrap: anywhere; }
 @media (max-width: 480px) { .categoria { padding: 16px; } .acoes { width: 100%; } }
+
+.pendente { border-block-start-style: dashed; }
+.formatos { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px 20px; }
+.formato { display: flex; align-items: flex-start; gap: 10px; font-size: var(--texto-m); line-height: 1.5; cursor: pointer; }
+.formato input { width: 18px; height: 18px; margin: 2px 0 0; flex: none; }

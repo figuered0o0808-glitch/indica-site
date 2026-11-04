@@ -25,9 +25,22 @@ export function Resultado({
   resultado,
 }: {
   idioma: Idioma;
-  resultado: ResultadoEdital & { classificacao?: LinhaClassificacao[] | null };
+  resultado: ResultadoEdital;
 }) {
   const t = textos(idioma);
+  const exibirNotas = resultado.exibirNotas === true;
+  const exibirClassificacao = resultado.exibirClassificacao === true;
+  const somenteSelecionados = resultado.somenteSelecionados !== false;
+  const selecionada = (i: LinhaClassificacao) => ['selecionada', 'aguardando-aceite'].includes(i.situacao);
+  // Envia ao componente interativo somente os campos escolhidos para publicação.
+  const linhas: LinhaClassificacao[] | null = Array.isArray(resultado.classificacao) ? resultado.classificacao
+    .filter(i => !somenteSelecionados || selecionada(i))
+    .map(i => ({ protocolo: i.protocolo, situacao: i.situacao, nome: i.nome, projeto: i.projeto,
+      ...(exibirClassificacao && Number.isFinite(i.posicao) ? { posicao: i.posicao } : {}),
+      ...(exibirNotas && Number.isFinite(i.nota) ? { nota: i.nota } : {}),
+    })) : null;
+  const totalSelecionadas = linhas ? linhas.filter(selecionada).length : resultado.apoiados.length;
+  const selecionadasRotulo = { pt: 'Propostas selecionadas', en: 'Selected proposals', es: 'Propuestas seleccionadas' }[idioma];
 
   return (
     <section id="resultado" className="secao secao--preto">
@@ -35,16 +48,16 @@ export function Resultado({
         <div className="linha linha--fim" style={{ alignItems: 'flex-end', gap: 'var(--esp-24)' }}>
           <h2 style={{ margin: 0 }}>{t.editais.secoes.resultado}</h2>
           <p className="texto-pequeno" style={{ margin: 0 }}>
-            {`${t.editais.publicadoEm} ${data(resultado.publicadoEm, idioma)}`}
+            {`${t.editais.publicadoEm} ${data(resultado.publicadoEm.slice(0, 10), idioma)}`}
           </p>
         </div>
 
-        <div style={{ marginTop: 28 }}>
+        {resultado.fundamentacao.trim() ? <div style={{ marginTop: 28 }}>
           <div className="registro">
             <p className="registro__rotulo">{t.editais.resultadoFundamentacao}</p>
             <p style={{ margin: 0, maxWidth: '66ch', whiteSpace: 'pre-line' }}>{resultado.fundamentacao}</p>
           </div>
-        </div>
+        </div> : null}
 
         <dl
           className="definicoes"
@@ -59,12 +72,12 @@ export function Resultado({
             valor={numero(resultado.inscricoesRecebidas, idioma)}
           />
           <Numero
-            rotulo={t.editais.projetosApoiados}
-            valor={numero(resultado.apoiados.length, idioma)}
+            rotulo={selecionadasRotulo}
+            valor={numero(totalSelecionadas, idioma)}
           />
         </dl>
 
-        {resultado.classificacao?.length ? <ClassificacaoPublica idioma={idioma} itens={resultado.classificacao.map(i=>({posicao:i.posicao,protocolo:i.protocolo,situacao:i.situacao,...(['selecionada','suplente'].includes(i.situacao)?{nome:i.nome,projeto:i.projeto,formato:i.formato,uf:i.uf}:{})}))}/> : <>
+        {linhas !== null ? <ClassificacaoPublica idioma={idioma} itens={linhas} exibirNotas={exibirNotas} exibirClassificacao={exibirClassificacao} somenteSelecionados={somenteSelecionados} notaMaxima={exibirNotas ? resultado.notaMaxima : undefined} /> : <>
         <h3 style={{ marginBottom: 14 }}>{t.editais.resultadoTabelaTitulo}</h3>
 
         <div className="tabela-rolagem">
@@ -74,8 +87,6 @@ export function Resultado({
               <tr>
                 <th scope="col">{t.editais.resultadoColunas.apoiado}</th>
                 <th scope="col">{t.editais.resultadoColunas.projeto}</th>
-                <th scope="col">{t.editais.resultadoColunas.formato}</th>
-                <th scope="col">{t.editais.resultadoColunas.uf}</th>
               </tr>
             </thead>
             <tbody>
@@ -83,8 +94,6 @@ export function Resultado({
                 <tr key={`${apoiado.nome}-${apoiado.projeto}`}>
                   <td>{apoiado.nome}</td>
                   <td>{apoiado.projeto}</td>
-                  <td>{apoiado.formato}</td>
-                  <td>{apoiado.uf}</td>
                 </tr>
               ))}
             </tbody>

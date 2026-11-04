@@ -6,18 +6,29 @@ import { ErroEnvio } from '@/lib/envio';
 import type { AnexoCandidatura, CategoriaAnexo, ConsultaAnexos } from '@/lib/types';
 import { useApp } from '@/state/AppState';
 
+export interface ArquivoNaFila {
+  chave: string;
+  categoria: CategoriaAnexo;
+  arquivo: File;
+  estado: 'aguardando' | 'enviando' | 'erro';
+  erro?: ErroAnexos;
+}
 interface Estado {
   chave: string;
   consulta: ConsultaAnexos | null;
-  selecionados: Partial<Record<CategoriaAnexo, File>>;
+  fila: ArquivoNaFila[];
   carregando: boolean;
   operacao: string | null;
   erro?: ErroAnexos;
+  erroNome?: string;
   precisaConferir: boolean;
+  progresso?: { total: number; processados: number; nome: string };
 }
-const vazio = (chave: string): Estado => ({ chave, consulta: null, selecionados: {}, carregando: false, operacao: null, precisaConferir: false });
+export interface ResultadoEnvioAnexos { ok: boolean; ids: string[]; erro?: ErroAnexos }
+const vazio = (chave: string): Estado => ({ chave, consulta: null, fila: [], carregando: false, operacao: null, precisaConferir: false });
+let proximaSelecao = 0;
 
-/** Arquivos ficam no servidor privado; somente a seleção ainda não enviada fica em memória. */
+/** A fila fica só em memória; anexos confirmados são recuperados do servidor privado. */
 export function useAnexos(slug: string, envioId: string, habilitado: boolean) {
   const { sessaoId, carregarAnexos, adicionarAnexo, apagarAnexo, baixarAnexo } = useApp();
   const chave = `${sessaoId}:${slug}:${envioId}`;
@@ -35,15 +46,10 @@ export function useAnexos(slug: string, envioId: string, habilitado: boolean) {
   const recarregar = useCallback(async (): Promise<boolean> => {
     if (!habilitado) return false;
     const pedido = ++leitura.current, geracao = ciclo.current;
-    mudar(a => ({ ...a, carregando: true, erro: undefined }));
+    mudar(a => ({ ...a, carregando: true, erro: undefined, erroNome: undefined }));
     try {
       const consulta = await carregarAnexos(slug);
       if (!montado.current || dono.current !== chave || ciclo.current !== geracao || leitura.current !== pedido) return false;
-      // A chamada EV não pode liberar a revisão com uma resposta incompleta.
-      const obrigatorias: CategoriaAnexo[] = ['identificacao', 'portfolio', 'midia-kit', 'proposta-orcamento'];
-      if (slug === 'carros-eletricos-no-brasil' && (!consulta.requisitos.linksPortfolioObrigatorios
-        || obrigatorias.some(id => !consulta.requisitos.categorias.some(c => c.id === id && c.obrigatoria))))
-        throw new ErroEnvio('resposta');
       mudar(a => ({ ...a, consulta, carregando: false, precisaConferir: false, erro: undefined }));
       return true;
     } catch {
@@ -68,55 +74,81 @@ export function useAnexos(slug: string, envioId: string, habilitado: boolean) {
     };
   }, [chave, habilitado, mudar, recarregar]);
 
-  function selecionar(categoria: CategoriaAnexo, arquivo: File | null): boolean {
+  function selecionar(categoria: CategoriaAnexo, arquivos: File[]): boolean {
     const e = atual.current, requisitos = e.consulta?.requisitos;
-    if (e.operacao || e.carregando || !requisitos) return false;
-    const selecionados = { ...e.selecionados };
-    delete selecionados[categoria];
-    if (!arquivo) { mudar(a => ({ ...a, selecionados, erro: undefined })); return true; }
-    const extensao = `.${arquivo.name.split('.').pop()?.toLowerCase() ?? ''}`;
-    let erro: ErroAnexos | undefined;
-    const pendentes = Object.values(selecionados);
+    if (e.operacao || e.carregando || !requisitos || !e.consulta?.aceitaEnvio) return false;
+    if (!arquivos.length) return true;
     const permitidos = requisitos.categorias.find(c => c.id === categoria)?.tiposPermitidos ?? requisitos.tiposPermitidos;
-    if (!permitidos.includes(extensao)) erro = categoria === 'identificacao' ? 'tipoIdentificacao' : 'tipo';
-    else if (!arquivo.size || arquivo.size > requisitos.maxArquivoBytes) erro = 'tamanho';
-    else if ((e.consulta?.uso.arquivos ?? 0) + pendentes.length + 1 > requisitos.maxArquivos) erro = 'quantidade';
-    else if ((e.consulta?.uso.totalBytes ?? 0) + pendentes.reduce((n, f) => n + f.size, 0) + arquivo.size > requisitos.maxTotalBytes) erro = 'total';
-    if (!erro) selecionados[categoria] = arquivo;
-    mudar(a => ({ ...a, selecionados, erro }));
-    return !erro;
+    let erro: ErroAnexos | undefined, erroNome: string | undefined;
+    for (const arquivo of arquivos) {
+      const extensao = `.${arquivo.name.split('.').pop()?.toLowerCase() ?? ''}`;
+      if (!permitidos.includes(extensao)) erro = categoria === 'identificacao' ? 'tipoIdentificacao' : 'tipo';
+      else if (!arquivo.size || arquivo.size > requisitos.maxArquivoBytes) erro = 'tamanho';
+      if (erro) { erroNome = arquivo.name; break; }
+    }
+    if (!erro && e.consulta.uso.arquivos + e.fila.length + arquivos.length > requisitos.maxArquivos) erro = 'quantidade';
+    if (!erro && e.consulta.uso.totalBytes + [...e.fila.map(a => a.arquivo), ...arquivos].reduce((n, f) => n + f.size, 0) > requisitos.maxTotalBytes) erro = 'total';
+    if (erro) { mudar(a => ({ ...a, erro, erroNome })); return false; }
+    const novos: ArquivoNaFila[] = arquivos.map(arquivo => ({ chave: `selecao-${++proximaSelecao}`, categoria, arquivo, estado: 'aguardando' }));
+    mudar(a => ({ ...a, fila: [...a.fila, ...novos], erro: undefined, erroNome: undefined, progresso: undefined }));
+    return true;
   }
 
-  async function enviar(categoria: CategoriaAnexo): Promise<boolean> {
-    const e = atual.current, arquivo = e.selecionados[categoria];
-    if (!arquivo || !e.consulta?.aceitaEnvio || e.operacao || e.carregando || e.precisaConferir) return false;
-    const anteriores = new Set(e.consulta.anexos.map(a => a.id)), geracao = ciclo.current;
-    const vigente = () => montado.current && dono.current === chave && ciclo.current === geracao;
-    mudar(a => ({ ...a, operacao: `upload:${categoria}`, erro: undefined }));
+  function removerSelecionado(id: string) {
+    if (atual.current.operacao) return;
+    mudar(a => ({ ...a, fila: a.fila.filter(f => f.chave !== id), erro: undefined, erroNome: undefined, progresso: undefined }));
+  }
+
+  async function enviarTodos(): Promise<ResultadoEnvioAnexos> {
+    const geracao = ciclo.current, vigente = () => montado.current && dono.current === chave && ciclo.current === geracao;
+    const ids = () => atual.current.consulta?.anexos.map(a => a.id) ?? [];
+    if (atual.current.operacao) return { ok: false, ids: ids(), erro: 'ocupado' };
+    // A ausência de anexos é válida e não depende de um upload ou de uma leitura bem-sucedida.
+    if (!atual.current.fila.length) return { ok: true, ids: ids() };
+    mudar(a => ({ ...a, operacao: 'fila', erro: undefined, erroNome: undefined }));
+    const confirmados: { selecao: ArquivoNaFila; anexo: AnexoCandidatura }[] = [];
     try {
-      const anexo = await adicionarAnexo(slug, categoria, arquivo);
-      if (!vigente()) return false;
-      mudar(a => {
-        const selecionados = { ...a.selecionados }; delete selecionados[categoria];
-        const anexos = [...(a.consulta?.anexos ?? []).filter(x => x.id !== anexo.id), anexo];
-        return { ...a, selecionados, consulta: a.consulta ? { ...a.consulta, anexos,
-          uso: { arquivos: anexos.length, totalBytes: anexos.reduce((n, x) => n + x.tamanho, 0) } } : null };
-      });
-      return await recarregar();
-    } catch (erro) {
-      if (!vigente()) return false;
-      const conferido = await recarregar();
-      if (!vigente()) return false;
-      // Um timeout pode ocorrer depois da gravação. Só a listagem autenticada confirma o arquivo.
-      const confirmado = conferido && atual.current.consulta?.anexos.some(a => !anteriores.has(a.id)
-        && a.categoria === categoria && a.nome === arquivo.name && a.tamanho === arquivo.size);
-      if (confirmado) {
-        mudar(a => { const selecionados = { ...a.selecionados }; delete selecionados[categoria]; return { ...a, selecionados, erro: undefined }; });
-        return true;
+      if (!atual.current.consulta || atual.current.precisaConferir) {
+        if (!await recarregar() || !vigente()) return { ok: false, ids: [], erro: 'leitura' };
       }
-      if (conferido) mudar(a => ({ ...a, erro: erro instanceof ErroEnvio && erro.status === 413 ? 'tamanho'
-        : erro instanceof ErroEnvio && erro.status === 415 ? (categoria === 'identificacao' ? 'tipoIdentificacao' : 'tipo') : 'upload' }));
-      return false;
+      if (!atual.current.consulta?.aceitaEnvio) {
+        mudar(a => ({ ...a, erro: 'fechado' }));
+        return { ok: false, ids: ids(), erro: 'fechado' };
+      }
+      const lote = [...atual.current.fila];
+      for (let i = 0; i < lote.length; i++) {
+        if (!vigente()) return { ok: false, ids: [] };
+        const selecao = lote[i];
+        mudar(a => ({ ...a, fila: a.fila.map(f => f.chave === selecao.chave ? { ...f, estado: 'enviando', erro: undefined } : f),
+          progresso: { total: lote.length, processados: i, nome: selecao.arquivo.name } }));
+        try {
+          const anexo = await adicionarAnexo(slug, selecao.categoria, selecao.arquivo);
+          if (!vigente()) return { ok: false, ids: [] };
+          confirmados.push({ selecao, anexo });
+          mudar(a => {
+            const anexos = [...(a.consulta?.anexos ?? []).filter(x => x.id !== anexo.id), anexo];
+            return { ...a, fila: a.fila.filter(f => f.chave !== selecao.chave), consulta: a.consulta ? { ...a.consulta, anexos,
+              uso: { arquivos: anexos.length, totalBytes: anexos.reduce((n, x) => n + x.tamanho, 0) } } : null };
+          });
+        } catch (erro) {
+          if (!vigente()) return { ok: false, ids: [] };
+          const motivo: ErroAnexos = erro instanceof ErroEnvio && erro.status === 413 ? 'tamanho'
+            : erro instanceof ErroEnvio && erro.status === 415 ? (selecao.categoria === 'identificacao' ? 'tipoIdentificacao' : 'tipo') : 'upload';
+          mudar(a => ({ ...a, fila: a.fila.map(f => f.chave === selecao.chave ? { ...f, estado: 'erro', erro: motivo } : f) }));
+        }
+        if (vigente()) mudar(a => ({ ...a, progresso: { total: lote.length, processados: i + 1, nome: '' } }));
+      }
+      const conferido = await recarregar();
+      if (!vigente()) return { ok: false, ids: [] };
+      if (conferido) {
+        // Uma alteração em outro aparelho não pode retirar silenciosamente arquivos deste lote.
+        const presentes = new Set(ids());
+        const ausentes = confirmados.filter(c => !presentes.has(c.anexo.id));
+        if (ausentes.length) mudar(a => ({ ...a, fila: [...a.fila, ...ausentes.map(c => ({ ...c.selecao, estado: 'erro' as const, erro: 'upload' as const }))] }));
+      }
+      const ok = atual.current.fila.length === 0;
+      mudar(a => ({ ...a, erro: ok ? undefined : 'upload', erroNome: undefined }));
+      return { ok, ids: ids(), ...(ok ? {} : { erro: 'upload' as const }) };
     } finally {
       if (vigente()) mudar(a => ({ ...a, operacao: null }));
     }
@@ -130,10 +162,7 @@ export function useAnexos(slug: string, envioId: string, habilitado: boolean) {
       await apagarAnexo(anexo.id);
       if (vigente()) await recarregar();
     } catch {
-      if (vigente()) {
-        const conferido = await recarregar();
-        if (conferido) mudar(a => ({ ...a, erro: 'remover' }));
-      }
+      if (vigente()) { const conferido = await recarregar(); if (conferido) mudar(a => ({ ...a, erro: 'remover' })); }
     } finally { if (vigente()) mudar(a => ({ ...a, operacao: null })); }
   }
 
@@ -154,21 +183,14 @@ export function useAnexos(slug: string, envioId: string, habilitado: boolean) {
   }
 
   function validar(): ErroAnexos | undefined {
-    const e = atual.current;
-    if (e.carregando || e.operacao) return 'ocupado';
-    if (!e.consulta || e.precisaConferir) return 'leitura';
-    if (e.erro) return e.erro;
-    if (!e.consulta.aceitaEnvio) return 'fechado';
-    if (Object.values(e.selecionados).some(Boolean)) return 'pendentes';
-    if (e.consulta.requisitos.categorias.some(c => c.obrigatoria && !e.consulta!.anexos.some(a => a.categoria === c.id))) return 'obrigatorios';
+    if (atual.current.operacao) return 'ocupado';
+    if (atual.current.fila.length) return 'pendentes';
     return undefined;
   }
 
   const exposto = estado.chave === chave ? estado : vazio(chave);
-  return { ...exposto, selecionar, enviar, remover, baixar, recarregar, validar,
-    ids: exposto.consulta?.anexos.map(a => a.id) ?? [],
-    ocupado: exposto.carregando || Boolean(exposto.operacao),
-  };
+  return { ...exposto, selecionar, removerSelecionado, enviarTodos, remover, baixar, recarregar, validar,
+    ids: exposto.consulta?.anexos.map(a => a.id) ?? [], ocupado: exposto.carregando || Boolean(exposto.operacao) };
 }
 
 export type ControleAnexos = ReturnType<typeof useAnexos>;

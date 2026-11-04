@@ -1,5 +1,6 @@
 /** Canal público da INDICA. Só a confirmação do servidor autoriza um sucesso. */
 import { normalizarTelefone } from '@/lib/telefone';
+import { migrarFormatoLegado } from '@/lib/formatos';
 import type { PerfilCadastro, ReciboPublico, Candidatura, OrganizacaoExecutora, NovaOrganizacao, DadosPagamento, RascunhoProposta, ResumoRascunho, DadosRascunho, OfertaProposta, AnexoCandidatura, CategoriaAnexo, ConsultaAnexos } from '@/lib/types';
 const DESTINO = (process.env.NEXT_PUBLIC_INDICA_API || process.env.NEXT_PUBLIC_TILT_API || '').replace(/\/+$/, '');
 const LIMITE_MS = 30000;
@@ -82,7 +83,7 @@ export async function enviarCandidatura(dados: {
     chamadaId?: string;
     envioId: string;
     organizacaoId: number | null;
-    projeto: Record<string, string | number>;
+    projeto: Record<string, string | number | string[]>;
     valorSolicitado: number;
     anexos?: string[];
 }, token: string): Promise<{
@@ -148,7 +149,8 @@ function contaRecebida(r: Record<string, unknown>): ContaRecebida {
             throw new ErroEnvio('resposta');
         return { id: protocolo, protocolo, chamadaId: identificador(c.chamadaId), reciboToken: texto(c.reciboToken) || undefined,
             editalSlug: texto(c.editalSlug) || texto(c.referencia), editalTitulo: texto(c.editalTitulo) || texto(c.titulo),
-            projeto: texto(p.titulo), formato: texto(p.formato), descricao: texto(p.descricao), justificativa: texto(p.justificativa), alcance: texto(p.alcance), distribuicao: texto(p.distribuicao), linksPortfolio: texto(p.linksPortfolio),
+            projeto: texto(p.titulo), formato: texto(p.formato), formatos: Array.isArray(p.formatos) ? p.formatos.filter((v): v is string => typeof v === 'string') : undefined,
+            formatoOutro: texto(p.formatoOutro), divulgacaoSite: texto(p.divulgacaoSite), descricao: texto(p.descricao), justificativa: texto(p.justificativa), alcance: texto(p.alcance), distribuicao: texto(p.distribuicao), linksPortfolio: texto(p.linksPortfolio),
             valorSolicitado: Number(c.valorSolicitado) || 0, status: texto(c.estado) as Candidatura['status'], enviadaEm: texto(c.enviadaEm),
             organizacaoId: c.organizacaoId == null ? null : Number(c.organizacaoId), organizacao: texto(objeto(c.organizacao).cnpj) ? organizacaoRecebida({ ...objeto(c.organizacao), id: objeto(c.organizacao).id ?? c.organizacaoId }) : c.organizacaoId == null ? undefined : organizacoes.find((o) => o.id === Number(c.organizacaoId)),
             proponente: { nome: texto(responsavel.nome) || perfil.nome, email: texto(responsavel.email) || perfil.email, telefone: texto(responsavel.telefone) || perfil.telefone, pais: texto(responsavel.pais) || perfil.pais, cidade: texto(responsavel.cidade) || perfil.cidade, uf: texto(responsavel.uf) || perfil.uf },
@@ -206,14 +208,23 @@ export async function atualizarPerfil(perfil: PerfilCadastro, token: string): Pr
     return perfilRecebido(r.perfil);
 }
 export const DADOS_RASCUNHO_VAZIOS: DadosRascunho = {
-    projeto: '', descricao: '', formato: '', valor: '', justificativa: '', alcance: '', distribuicao: '', linksPortfolio: '',
+    projeto: '', descricao: '', formato: '', formatos: [], formatoOutro: '', divulgacaoSite: '', valor: '', justificativa: '', alcance: '', distribuicao: '', linksPortfolio: '',
 };
 function rascunhoRecebido(v: unknown): RascunhoProposta {
     const r = objeto(v), dados = objeto(r.dados), versao = Number(r.versao);
     if (!texto(r.chamadaSlug) || !texto(r.envioId) || !Number.isSafeInteger(versao) || versao < 1)
         throw new ErroEnvio('resposta');
+    if (dados.formatos !== undefined && (!Array.isArray(dados.formatos) || dados.formatos.length > 20 || !dados.formatos.every(v => typeof v === 'string' && v.length <= 120)))
+        throw new ErroEnvio('resposta');
+    const campos = Object.fromEntries(Object.keys(DADOS_RASCUNHO_VAZIOS).filter(k => k !== 'formatos')
+        .map(k => [k, typeof dados[k] === 'number' ? String(dados[k]) : typeof dados[k] === 'string' ? dados[k] : ''])) as Omit<DadosRascunho, 'formatos'>;
+    let formatos = Array.isArray(dados.formatos) ? [...new Set(dados.formatos.map(v => (v as string).trim()).filter(Boolean))] : [];
+    if (!formatos.length && !campos.formatoOutro.trim() && campos.formato.trim()) {
+        const legado = migrarFormatoLegado(campos.formato);
+        formatos = legado.formatos; campos.formatoOutro = legado.formatoOutro;
+    }
     return { chamadaSlug: texto(r.chamadaSlug), envioId: texto(r.envioId), organizacaoId: r.organizacaoId == null ? null : Number(r.organizacaoId),
-        dados: Object.fromEntries(Object.keys(DADOS_RASCUNHO_VAZIOS).map(k => [k, typeof dados[k] === 'number' ? String(dados[k]) : typeof dados[k] === 'string' ? dados[k] : ''])) as unknown as DadosRascunho,
+        dados: { ...campos, formatos },
         passo: Math.max(0, Math.min(2, Number(r.passo) || 0)), versao, atualizadoEm: texto(r.atualizadoEm) };
 }
 export async function consultarRascunho(slug: string, token: string) {
