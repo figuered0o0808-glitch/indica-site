@@ -17,25 +17,33 @@ export const textosPublicacaoEV = {
     materiais: 'Os materiais de referência e os canais de divulgação serão informados pela INDICA durante o alinhamento com os selecionados.',
     obrigacao: 'Executar a ação de divulgação da campanha Eletrificação Já prevista na proposta aprovada, com os materiais e canais indicados pela INDICA durante o alinhamento com os selecionados.',
     banca: 'A avaliação será realizada por uma banca interna da INDICA. Os nomes dos avaliadores não serão divulgados.',
+    resultado: 'Divulgação do resultado',
+    disposicoesGerais: 'Disposições gerais',
   },
   en: {
     divulgacao: 'Proposals must include an action to promote the Eletrificação Já campaign. INDICA will provide the materials and specify the channels to be promoted during alignment with the selected applicants.',
     materiais: 'INDICA will provide reference materials and information about the channels to be promoted during alignment with the selected applicants.',
     obrigacao: 'Deliver the action to promote the Eletrificação Já campaign described in the approved proposal, using the materials and channels specified by INDICA during alignment with the selected applicants.',
     banca: 'Proposals will be assessed by an internal INDICA panel. The names of the evaluators will not be disclosed.',
+    resultado: 'Publication of results',
+    disposicoesGerais: 'General provisions',
   },
   es: {
     divulgacao: 'Las propuestas deberán prever una acción de difusión de la campaña Eletrificação Já. INDICA proporcionará los materiales e indicará los canales que deberán difundirse durante la coordinación con los seleccionados.',
     materiais: 'INDICA proporcionará los materiales de referencia y la información sobre los canales de difusión durante la coordinación con los seleccionados.',
     obrigacao: 'Ejecutar la acción de difusión de la campaña Eletrificação Já prevista en la propuesta aprobada, con los materiales y canales indicados por INDICA durante la coordinación con los seleccionados.',
     banca: 'La evaluación estará a cargo de un jurado interno de INDICA. Los nombres de los evaluadores no se divulgarán.',
+    resultado: 'Publicación del resultado',
+    disposicoesGerais: 'Disposiciones generales',
   },
 };
 
 function validarPolitica(politica) {
-  if (!politica || politica.versao !== 1 || politica.slug !== 'carros-eletricos-no-brasil'
+  if (!politica || politica.versao !== 2 || politica.slug !== 'carros-eletricos-no-brasil'
       || politica.chamadaId !== 'C01' || typeof politica.preLancamento !== 'boolean'
-      || politica.arquivoPdf !== 'editais/carros-eletricos-brasil.pdf' || politica.paginasPdf !== 8) {
+      || politica.arquivoPdf !== 'editais/carros-eletricos-brasil.pdf' || politica.paginasPdf !== 8
+      || !politica.calendario || !['inscricoesAte', 'avaliacaoAte', 'resultadoEm'].every(campo => /^\d{4}-\d{2}-\d{2}$/.test(politica.calendario[campo]))
+      || politica.calendario.removerRecursos !== true) {
     throw new Error('Política de publicação EV inválida');
   }
   return politica;
@@ -65,6 +73,38 @@ function orientarTexto(texto, idioma, obrigacao = false) {
   return texto;
 }
 
+function normalizar(texto) {
+  return String(texto ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+function atualizarCalendario(chamada, idioma, calendario) {
+  chamada.inscricoesAte = calendario.inscricoesAte;
+  if (Array.isArray(chamada.cronograma)) {
+    chamada.cronograma = chamada.cronograma.filter(etapa => !/\b(?:recursos?|appeals?)\b/.test(normalizar(etapa.etapa))).map(etapa => {
+      const nome = normalizar(etapa.etapa);
+      if (/^(?:inscricoes|inscripciones|applications)\b/.test(nome)) return { ...etapa, dataFim: calendario.inscricoesAte };
+      if (/(?:avaliacao|evaluation|evaluacion)/.test(nome)) {
+        return { ...etapa, data: calendario.avaliacaoAte, ...('dataFim' in etapa ? { dataFim: calendario.avaliacaoAte } : {}) };
+      }
+      if (/(?:divulgacao|publicacao|publication|publicacion).*(?:resultad|results?)/.test(nome)) {
+        const { dataFim: _fim, ...unica } = etapa;
+        return { ...unica, etapa: textosPublicacaoEV[idioma].resultado, data: calendario.resultadoEm };
+      }
+      return etapa;
+    });
+  }
+  for (const secao of chamada.secoesComplementares ?? []) {
+    if (!['recursos', 'disposicoes-gerais'].includes(secao.id)) continue;
+    secao.id = 'disposicoes-gerais';
+    secao.titulo = textosPublicacaoEV[idioma].disposicoesGerais;
+    for (const campo of ['paragrafos', 'itens']) {
+      if (Array.isArray(secao[campo])) {
+        secao[campo] = secao[campo].filter(texto => !/\b(?:recursos?|appeals?)\b|48\s*(?:horas|hours|h)\b|preliminar|preliminary/.test(normalizar(texto)));
+      }
+    }
+  }
+}
+
 /** Projeção pura. Reaplicar o mesmo catálogo, política e PDF produz a mesma revisão. */
 export function projetarCatalogoEV(catalogo, politica, pdf) {
   validarPolitica(politica);
@@ -76,6 +116,7 @@ export function projetarCatalogoEV(catalogo, politica, pdf) {
     for (const chamada of saida.idiomas[idioma]?.calls ?? []) {
       if (!ehChamadaEV(chamada, politica)) continue;
       encontradas++;
+      atualizarCalendario(chamada, idioma, politica.calendario);
       chamada.banca = [];
       chamada.bancaDescricao = textosPublicacaoEV[idioma].banca;
       chamada.arquivoEdital = {
