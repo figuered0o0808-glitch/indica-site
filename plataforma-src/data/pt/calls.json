@@ -10,7 +10,7 @@
     "proponente": "INDICA",
     "apresentacao": [
       "A INDICA torna pública a chamada para recebimento e seleção de propostas de soluções de comunicação digital. Podem participar criadores de conteúdo, influenciadores digitais, agências de comunicação, coletivos criativos ou de mídia e produtores independentes.",
-      "O objetivo é ampliar a conscientização pública sobre a transição para a mobilidade sustentável no Brasil, democratizando informações sobre custos de aquisição e manutenção de veículos limpos, benefícios ambientais e sociais da eletrificação e políticas públicas como o Programa Mover.",
+      "O objetivo é ampliar a conscientização pública sobre a mobilidade sustentável no Brasil, com atenção aos benefícios e desafios dos veículos 100% elétricos, democratizando informações sobre custos, impactos ambientais e sociais e políticas públicas do setor, incluindo incentivos, tributação e o Programa Mover.",
       "O foco é o ecossistema digital: redes sociais, plataformas de vídeo, áudio e mídias online. Também são admitidas e incentivadas ações presenciais ou intervenções de rua, desde que integradas à estratégia de distribuição e amplificação digital.",
       "Todas as propostas deverão prever pelo menos uma ação de divulgação do site Eletrificação Já (eletrificacaoja.com.br) em algum momento da execução. O site não precisa ser o elemento central da proposta. O formulário deverá informar como essa divulgação será feita."
     ],
@@ -95,7 +95,7 @@
     },
     "arquivoEdital": {
       "idioma": "pt",
-      "arquivo": "/arquivos/c6eb01266851965e54b70abd25c666bdd14e696951819d85b0e80c7e4fa98cc4/edital-carros-eletricos-brasil.pdf",
+      "arquivo": "/arquivos/315d49b1d56adddaf984f4cc9d304c1151b1f41ec5d4fd003845ab6dc8217eb3/edital-carros-eletricos-brasil.pdf",
       "paginas": 8
     },
     "secoesComplementares": [
@@ -140,7 +140,7 @@
         "id": "briefing",
         "titulo": "Anexo I — briefing orientador",
         "paragrafos": [
-          "A comunicação deve considerar os desafios econômicos e estruturais da mobilidade elétrica no Brasil, incluindo o custo de aquisição e a infraestrutura necessária à adoção pelo consumidor.",
+          "A transição para a mobilidade elétrica no Brasil envolve desafios de custo, infraestrutura e acesso à informação. A campanha também permite abordar a redução da dependência de combustíveis fósseis e o uso da energia produzida no país.",
           "Os eixos abaixo são sugestões para orientar a elaboração das propostas. Não é obrigatório seguir algum deles; outras abordagens são aceitas, desde que relacionadas à mobilidade elétrica no Brasil e aos objetivos da chamada.",
           "As propostas podem combinar vídeos curtos, Reels ou TikTok, vídeos longos para YouTube, podcasts, carrosséis educativos, artigos e threads. Ações presenciais são opcionais e devem gerar conteúdo e engajamento para as plataformas digitais.",
           "Todas as propostas deverão prever pelo menos uma ação de divulgação do site Eletrificação Já (eletrificacaoja.com.br) em algum momento da execução. O site não precisa ser o elemento central da proposta. O formulário deverá informar como essa divulgação será feita.",
@@ -148,10 +148,10 @@
         ],
         "itens": [
           "Eixo A — Custos e acessibilidade: compra, manutenção, abastecimento ou recarga e depreciação em comparação com veículos a combustão.",
-          "Eixo B — Políticas públicas e Programa Mover: diretrizes, incentivos, produção nacional e descarbonização.",
-          "Eixo C — Sustentabilidade e transição energética: redução das emissões de gases de efeito estufa e melhoria da qualidade do ar nas metrópoles.",
+          "Eixo B — Políticas públicas e Programa Mover: Análise das políticas públicas, dos incentivos, da tributação e do Programa Mover (Mobilidade Verde e Inovação), considerando seus efeitos sobre a produção nacional, o acesso aos veículos elétricos e a descarbonização.",
+          "Eixo C — Sustentabilidade e transição energética: Impactos da eletrificação na redução de emissões e na qualidade do ar, considerando também o papel do transporte coletivo e de outras formas de deslocamento.",
           "Eixo D — Mitos e fatos da eletrificação: autonomia das baterias, tempo de recarga e descarte de componentes.",
-          "Tom informativo e fundamentado, com dados oficiais e linguagem acessível; abordagem construtiva, capaz de estimular reflexão crítica e debate consciente.",
+          "Tom informativo e fundamentado: Uso de fontes atualizadas e linguagem acessível, distinguindo veículos 100% elétricos de híbridos e contextualizando afirmações sobre emissões e economia, sem promessas absolutas. Abordagem construtiva, capaz de estimular reflexão crítica e debate consciente.",
           "Acessibilidade e inclusão: legendas, áudio límpido e recursos visuais didáticos."
         ]
       },
