@@ -3,6 +3,7 @@ import { appendFile, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/pro
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
+import { aplicarPoliticaPublicacaoEV } from './politica-publicacao-ev.mjs';
 
 const raiz = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const fonte = join(raiz, 'plataforma-src');
@@ -19,12 +20,25 @@ async function baixar(url, limite) {
   return bytes;
 }
 
-const catalogo = JSON.parse((await baixar(`${api}/tilt/publico/catalogo`, 10 * 1024 * 1024)).toString('utf8'));
+let catalogo = JSON.parse((await baixar(`${api}/tilt/publico/catalogo`, 10 * 1024 * 1024)).toString('utf8'));
 if (!/^[a-f0-9]{64}$/.test(catalogo.revisao) || !catalogo.idiomas) throw new Error('Catálogo público inválido');
+for (const idioma of ['pt', 'en', 'es']) {
+  const dados = catalogo.idiomas[idioma];
+  if (!dados || !['calls', 'courses', 'articles'].every((tipo) => Array.isArray(dados[tipo]))) throw new Error(`Catálogo inválido: ${idioma}`);
+  for (const tipo of ['calls', 'courses', 'articles']) {
+    const slugs = new Set();
+    for (const item of dados[tipo]) {
+      if (!item || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.slug) || slugs.has(item.slug)) throw new Error(`Identificador inválido ou repetido: ${idioma}/${tipo}`);
+      slugs.add(item.slug);
+    }
+  }
+}
+// A política controla o lançamento da campanha; os dados de origem ficam preservados.
+catalogo = await aplicarPoliticaPublicacaoEV(catalogo, { fonte });
 const marcador = join(fonte, 'public', 'catalogo-revisao.json');
 let anterior;
 try { anterior = JSON.parse(await readFile(marcador, 'utf8')); } catch {}
-const mudou = anterior?.revisao !== catalogo.revisao;
+const mudou = (anterior?.revisaoPublicacao ?? anterior?.revisao) !== catalogo.revisao;
 if (process.env.GITHUB_OUTPUT) await appendFile(process.env.GITHUB_OUTPUT, `mudou=${mudou}\n`);
 if (!mudou && !process.argv.includes('--forcar')) {
   console.log('O catálogo público já está atualizado.');
@@ -40,18 +54,7 @@ function visitar(valor) {
     arquivos.add(valor);
   }
 }
-for (const idioma of ['pt', 'en', 'es']) {
-  const dados = catalogo.idiomas[idioma];
-  if (!dados || !['calls', 'courses', 'articles'].every((tipo) => Array.isArray(dados[tipo]))) throw new Error(`Catálogo inválido: ${idioma}`);
-  for (const tipo of ['calls', 'courses', 'articles']) {
-    const slugs = new Set();
-    for (const item of dados[tipo]) {
-      if (!item || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.slug) || slugs.has(item.slug)) throw new Error(`Identificador inválido ou repetido: ${idioma}/${tipo}`);
-      slugs.add(item.slug);
-    }
-  }
-  visitar(dados);
-}
+for (const idioma of ['pt', 'en', 'es']) visitar(catalogo.idiomas[idioma]);
 const downloads = [];
 for (const caminho of arquivos) {
   const arquivo = join(fonte, 'public', caminho);
@@ -85,5 +88,5 @@ for (const idioma of ['pt', 'en', 'es']) {
     await writeFile(join(fonte, 'data', idioma, `${tipo}.json`), JSON.stringify(catalogo.idiomas[idioma][tipo], null, 2) + '\n');
   }
 }
-await writeFile(marcador, JSON.stringify({ revisao: catalogo.revisao, atualizadoEm: new Date().toISOString() }, null, 2) + '\n');
+await writeFile(marcador, JSON.stringify({ revisao: catalogo.revisaoOrigem ?? catalogo.revisao, revisaoPublicacao: catalogo.revisao, atualizadoEm: new Date().toISOString() }, null, 2) + '\n');
 console.log(`Catálogo público recebido: ${Object.values(catalogo.idiomas).reduce((n, d) => n + d.calls.length + d.courses.length + d.articles.length, 0)} documentos em três idiomas.`);

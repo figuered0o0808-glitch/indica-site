@@ -36,9 +36,7 @@
 .brandline > p > span { margin-inline: 9px; color: #73826b; }
 .grid { display: grid; grid-template-columns: minmax(0, 1.38fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
 .intro { min-width: 0; }
-.logo { display: block; width: 100%; max-width: 620px; height: auto; margin: 0 0 12px; }
-.campaignLink { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 30px; font-size: 13px; line-height: 1.5; text-underline-offset: 5px; text-decoration-thickness: 1px; }
-.campaignLink:hover { color: #376442; }
+.logo { display: block; width: 100%; max-width: 620px; height: auto; margin: 0 0 30px; }
 .intro h1 { font-size: clamp(2rem, 3.2vw, 3.25rem); line-height: 1.06; max-width: 21ch; margin: 0 0 24px; letter-spacing: -.025em; }
 .description { font-size: 17px; line-height: 1.65; color: #42544a; max-width: 55ch; margin: 0; }
 .actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; margin-top: 28px; }
@@ -72,13 +70,8 @@
 .period > strong { display: block; font-family: 'Jost', sans-serif; font-size: 23px; line-height: 1.35; font-weight: 500; }
 .until { color: #c5d0b7; font-size: 18px; }
 .references { margin-top: 28px; padding-top: 24px; border-top: 1px solid #d4d7c7; }
-.references > h3 { margin: 0 0 16px; font-size: 18px; }
-.referenceGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-.referenceCard { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; gap: 8px; padding: 22px; border: 1px solid #c9d2b6; border-radius: 6px; background: #fcfaf3; color: #172d27; text-decoration: none; transition: border-color 160ms ease, background-color 160ms ease; }
-.referenceCard:hover { border-color: #6c815b; background: #e8edce; }
-.referenceCard > strong { font-size: 16px; line-height: 1.35; }
-.referenceCard > span { color: #42544a; font-size: 13px; line-height: 1.55; }
-.referenceCard .referenceAction { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; margin-top: auto; padding-top: 16px; font-weight: 600; color: #172d27; }
+.references > h3 { margin: 0 0 12px; font-size: 18px; }
+.references > p { margin: 0; max-width: 65ch; line-height: 1.65; color: #42544a; }
 @media (max-width: 850px) { .grid { grid-template-columns: 1fr; gap: 32px; } .intro h1 { max-width: 24ch; } .funding { margin-right: 9px; } .funding :global(dl) { flex-wrap: nowrap; justify-content: space-between; } }
-@media (max-width: 480px) { .campaignLink { margin-bottom: 26px; } .referenceGrid { grid-template-columns: 1fr; } .brandline { padding-bottom: 28px; } .brandline > p { font-size: 9px; letter-spacing: .09em; } .funding { padding: 25px 22px 22px; } .funding :global(dl) { flex-wrap: wrap; } .actions { gap: 20px; } .description { font-size: 16px; } }
+@media (max-width: 480px) { .brandline { padding-bottom: 28px; } .brandline > p { font-size: 9px; letter-spacing: .09em; } .funding { padding: 25px 22px 22px; } .funding :global(dl) { flex-wrap: wrap; } .actions { gap: 20px; } .description { font-size: 16px; } }
 @media print { .paper, .funding { background: white; color: black; box-shadow: none; } .funding { --preto: #172d27; --tinta-suave: #42544a; border: 1px solid #9ba994; } .funding :global(dd), .period > span, .period > strong, .until { color: #172d27; } .actions, .scheduleLink { display: none; } }
