@@ -47,25 +47,20 @@
       "min": 0,
       "max": 30000
     },
-    "inscricoesAte": "2026-11-13",
+    "inscricoesAte": "2026-11-15",
     "cronograma": [
       {
         "etapa": "Applications and submission of proposals",
         "data": "2026-11-04",
-        "dataFim": "2026-11-13"
+        "dataFim": "2026-11-15"
       },
       {
         "etapa": "Deadline for screening and evaluation of proposals by the committee",
-        "data": "2026-11-18"
+        "data": "2026-11-19"
       },
       {
-        "etapa": "Publication of preliminary results",
-        "data": "2026-11-18"
-      },
-      {
-        "etapa": "Submission of appeals (48 hours after publication)",
-        "data": "2026-11-18",
-        "dataFim": "2026-11-20"
+        "etapa": "Publication of results",
+        "data": "2026-11-19"
       },
       {
         "etapa": "Deadline for selected applicants to confirm; contracting after confirmation",
@@ -95,7 +90,7 @@
     },
     "arquivoEdital": {
       "idioma": "pt",
-      "arquivo": "/arquivos/9e50ce63f2c723a2256cf25c004267d5233ff24875eaa615fb8b26d1cf339f15/edital-carros-eletricos-brasil.pdf",
+      "arquivo": "/arquivos/4516e59ddb4152635c4768c986d1fe2bb5e66b674dd17f3d94f46513f473f8f5/edital-carros-eletricos-brasil.pdf",
       "paginas": 8
     },
     "secoesComplementares": [
@@ -156,10 +151,9 @@
         ]
       },
       {
-        "id": "recursos",
-        "titulo": "Appeals and general provisions",
+        "id": "disposicoes-gerais",
+        "titulo": "General provisions",
         "paragrafos": [
-          "Preliminary results may be appealed within 48 hours of publication. Appeals must be submitted through the official channel indicated in the results announcement.",
           "Matters not covered and questions about the call will be resolved by INDICA’s organizing committee."
         ]
       }

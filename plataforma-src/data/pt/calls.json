@@ -47,25 +47,20 @@
       "min": 0,
       "max": 30000
     },
-    "inscricoesAte": "2026-11-13",
+    "inscricoesAte": "2026-11-15",
     "cronograma": [
       {
         "etapa": "Inscrições e envio de propostas",
         "data": "2026-11-04",
-        "dataFim": "2026-11-13"
+        "dataFim": "2026-11-15"
       },
       {
         "etapa": "Prazo final da triagem e avaliação de propostas pela banca",
-        "data": "2026-11-18"
+        "data": "2026-11-19"
       },
       {
-        "etapa": "Divulgação do resultado preliminar",
-        "data": "2026-11-18"
-      },
-      {
-        "etapa": "Interposição de recursos (48 horas após a divulgação)",
-        "data": "2026-11-18",
-        "dataFim": "2026-11-20"
+        "etapa": "Divulgação do resultado",
+        "data": "2026-11-19"
       },
       {
         "etapa": "Prazo final de confirmação dos selecionados; contratação após a confirmação",
@@ -95,7 +90,7 @@
     },
     "arquivoEdital": {
       "idioma": "pt",
-      "arquivo": "/arquivos/9e50ce63f2c723a2256cf25c004267d5233ff24875eaa615fb8b26d1cf339f15/edital-carros-eletricos-brasil.pdf",
+      "arquivo": "/arquivos/4516e59ddb4152635c4768c986d1fe2bb5e66b674dd17f3d94f46513f473f8f5/edital-carros-eletricos-brasil.pdf",
       "paginas": 8
     },
     "secoesComplementares": [
@@ -156,10 +151,9 @@
         ]
       },
       {
-        "id": "recursos",
-        "titulo": "Recursos e disposições gerais",
+        "id": "disposicoes-gerais",
+        "titulo": "Disposições gerais",
         "paragrafos": [
-          "O resultado preliminar admite recurso em até 48 horas após sua divulgação. O envio deverá ocorrer pelo canal oficial indicado na publicação do resultado.",
           "Casos omissos e dúvidas sobre o edital serão resolvidos pela comissão organizadora da INDICA."
         ]
       }
