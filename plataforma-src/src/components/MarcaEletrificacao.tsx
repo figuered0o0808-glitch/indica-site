@@ -11,7 +11,7 @@ export function MarcaEletrificacao({ className }: { className?: string }) {
       <img
         className={styles.marca}
         src={arquivoPublico(eletrificacaoJa.marca.arquivo)}
-        alt="Eletrificação Já"
+        alt="Eletrifica Já"
         width={eletrificacaoJa.marca.largura}
         height={eletrificacaoJa.marca.altura}
       />

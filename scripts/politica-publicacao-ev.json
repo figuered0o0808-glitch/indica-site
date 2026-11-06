@@ -1,5 +1,5 @@
 {
-  "versao": 2,
+  "versao": 3,
   "slug": "carros-eletricos-no-brasil",
   "chamadaId": "C01",
   "preLancamento": true,
@@ -10,5 +10,11 @@
     "avaliacaoAte": "2026-11-19",
     "resultadoEm": "2026-11-19",
     "removerRecursos": true
+  },
+  "marca": "Eletrifica Já",
+  "titulos": {
+    "pt": "Eletrifica Já: chamada pública de comunicação digital",
+    "en": "Eletrifica Já: public call for digital communication",
+    "es": "Eletrifica Já: convocatoria pública de comunicación digital"
   }
 }

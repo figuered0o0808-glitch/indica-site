@@ -31,7 +31,7 @@ export function EletrificacaoAbertura({ idioma, edital }: { idioma: Idioma; edit
       <div className={styles.grid}>
         <div className={styles.intro}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className={styles.logo} src={arquivoPublico(eletrificacaoJa.marca.arquivo)} width={eletrificacaoJa.marca.largura} height={eletrificacaoJa.marca.altura} alt="Eletrificação Já" />
+          <img className={styles.logo} src={arquivoPublico(eletrificacaoJa.marca.arquivo)} width={eletrificacaoJa.marca.largura} height={eletrificacaoJa.marca.altura} alt="Eletrifica Já" />
           <h1>{edital.titulo}</h1>
           <p className={styles.description}>{edital.resumo}</p>
           <div className={styles.actions}>

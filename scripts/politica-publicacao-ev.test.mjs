@@ -60,6 +60,7 @@ test('pré-lançamento nos três idiomas remove referências e mantém condiçõ
   for (const idioma of ['pt', 'en', 'es']) {
     const antes = entrada.idiomas[idioma], depois = saida.idiomas[idioma], a = antes.calls[0], b = depois.calls[0], t = textosPublicacaoEV[idioma];
     assert.doesNotMatch(JSON.stringify(b), /eletrificacaoja\.com\.br|cartilha|\bguide\b|\bguía\b/i);
+    assert.equal(b.titulo, politica.titulos[idioma]);
     assert.deepEqual(b.banca, []);
     assert.equal(b.bancaDescricao, t.banca);
     assert.deepEqual(b.arquivoEdital, { idioma: 'pt', arquivo: `/arquivos/${sha}/edital-carros-eletricos-brasil.pdf`, paginas: 8 });
@@ -69,25 +70,83 @@ test('pré-lançamento nos três idiomas remove referências e mantém condiçõ
     assert.deepEqual(b.secoesComplementares[0].itens, a.secoesComplementares[0].itens);
     assert.deepEqual(b.secoesComplementares[1].itens, ['Validar conteúdo previamente', t.obrigacao]);
     assert.deepEqual(b.secoesComplementares[2], a.secoesComplementares[2]);
-    for (const campo of Object.keys(a).filter(k => !['apresentacao', 'escopo', 'banca', 'bancaDescricao', 'arquivoEdital', 'secoesComplementares', 'inscricoesAte', 'cronograma'].includes(k))) assert.deepEqual(b[campo], a[campo], `${idioma}/${campo}`);
+    for (const campo of Object.keys(a).filter(k => !['apresentacao', 'escopo', 'banca', 'bancaDescricao', 'arquivoEdital', 'secoesComplementares', 'inscricoesAte', 'cronograma', 'titulo'].includes(k))) assert.deepEqual(b[campo], a[campo], `${idioma}/${campo}`);
     assert.deepEqual(depois.calls[1], antes.calls[1]);
     assert.deepEqual(depois.courses, antes.courses);
     assert.deepEqual(depois.articles, antes.articles);
   }
 });
 
-test('desativar pré-lançamento sobre a origem fresca restaura textos e mantém banca reservada/PDF aprovado', () => {
+test('desativar pré-lançamento restaura referências com a nova marca e mantém banca reservada/PDF aprovado', () => {
   const entrada = fixture();
   const saida = projetarCatalogoEV(entrada, { ...politica, preLancamento: false }, { sha256: sha });
   for (const idioma of ['pt', 'en', 'es']) {
     const a = entrada.idiomas[idioma].calls[0], b = saida.idiomas[idioma].calls[0];
-    assert.deepEqual(b.apresentacao, a.apresentacao);
-    assert.deepEqual(b.escopo, a.escopo);
-    assert.deepEqual(b.secoesComplementares.slice(0, 3), a.secoesComplementares.slice(0, 3));
+    assert.deepEqual(b.apresentacao, a.apresentacao.map(texto => texto.replaceAll('Eletrificação Já', 'Eletrifica Já')));
+    assert.deepEqual(b.escopo, a.escopo.map(texto => texto.replaceAll('Eletrificação Já', 'Eletrifica Já')));
+    assert.deepEqual(b.secoesComplementares.slice(0, 3), JSON.parse(JSON.stringify(a.secoesComplementares.slice(0, 3)).replaceAll('Eletrificação Já', 'Eletrifica Já')));
     assert.match(JSON.stringify(b), /eletrificacaoja\.com\.br/);
     assert.deepEqual(b.banca, []);
     assert.equal(b.arquivoEdital.arquivo, `/arquivos/${sha}/edital-carros-eletricos-brasil.pdf`);
   }
+});
+
+test('nova marca e títulos são duráveis sem alterar dados técnicos, resultados ou outras publicações', () => {
+  const entrada = fixture();
+  for (const idioma of ['pt', 'en', 'es']) {
+    const ev = entrada.idiomas[idioma].calls[0];
+    ev.titulo = 'Carros elétricos no Brasil: chamada pública de comunicação digital';
+    ev.resumo = 'Edital da campanha Eletrificação Já, com apoio de até R$ 30 mil.';
+    ev.apresentacao[0] = 'A campanha ELETRIFICAÇÃO JÁ promove informação sobre veículos elétricos.';
+    ev.escopo[0] = 'Projetos para a campanha Eletrificação Já.';
+    ev.criterios[0].descricao = 'Nota geral de 0 a 10 para a proposta da campanha Eletrificação Já.';
+    ev.distribuicao[0].observacao = 'A campanha Eletrificação Já prevê de 5 a 15 projetos.';
+    ev.secoesComplementares[2].titulo = 'Orientações da Eletrificação Já';
+    ev.secoesComplementares[2].itens = ['Diretriz da Eletrificação Já preservada.'];
+    ev.resultado = { tituloOriginal: 'Resultado antigo — Eletrificação Já', inscricoes: [{ projeto: 'Eletrificação Já no território', nota: 8 }] };
+    ev.urlTecnica = 'https://eletrificacaoja.com.br/arquivo/original';
+    ev.logoOrganizacao = '/campanhas/eletrificacao-ja/marca-v4.svg';
+  }
+  const original = structuredClone(entrada);
+  const saida = projetarCatalogoEV(entrada, { ...politica, preLancamento: false }, { sha256: sha });
+  for (const idioma of ['pt', 'en', 'es']) {
+    const a = entrada.idiomas[idioma].calls[0], b = saida.idiomas[idioma].calls[0];
+    assert.equal(b.titulo, politica.titulos[idioma]);
+    assert.equal(b.resumo, 'Edital da campanha Eletrifica Já, com apoio de até R$ 30 mil.');
+    assert.equal(b.apresentacao[0], 'A campanha Eletrifica Já promove informação sobre veículos elétricos.');
+    assert.equal(b.escopo[0], 'Projetos para a campanha Eletrifica Já.');
+    assert.equal(b.criterios[0].descricao, 'Nota geral de 0 a 10 para a proposta da campanha Eletrifica Já.');
+    assert.equal(b.distribuicao[0].observacao, 'A campanha Eletrifica Já prevê de 5 a 15 projetos.');
+    assert.equal(b.secoesComplementares[2].titulo, 'Orientações da Eletrifica Já');
+    assert.deepEqual(b.secoesComplementares[2].itens, ['Diretriz da Eletrifica Já preservada.']);
+    assert.equal(b.slug, a.slug); assert.equal(b.chamadaId, a.chamadaId);
+    assert.equal(b.urlTecnica, a.urlTecnica); assert.equal(b.logoOrganizacao, a.logoOrganizacao);
+    assert.deepEqual(b.resultado, a.resultado, 'não renomear projetos, notas ou o histórico');
+    assert.deepEqual(b.faixaApoio, a.faixaApoio); assert.equal(b.valorTotal, a.valorTotal);
+    assert.deepEqual(b.vagas, a.vagas); assert.equal(b.status, 'aberta'); assert.equal(b.simulacao, false);
+    assert.deepEqual(saida.idiomas[idioma].calls[1], entrada.idiomas[idioma].calls[1]);
+  }
+  assert.deepEqual(entrada, original);
+  assert.deepEqual(saida, projetarCatalogoEV(saida, { ...politica, preLancamento: false }, { sha256: sha }));
+});
+
+test('origem já renomeada continua protegida durante o pré-lançamento nos três idiomas', () => {
+  const entrada = fixture();
+  for (const idioma of ['pt', 'en', 'es']) {
+    const ev = entrada.idiomas[idioma].calls[0];
+    ev.titulo = politica.titulos[idioma];
+    ev.apresentacao[1] = idioma === 'en' ? 'Promote the Eletrifica Já website.' : idioma === 'es' ? 'Difundir el sitio Eletrifica Já.' : 'Divulgar o site Eletrifica Já.';
+    ev.escopo[1] = ev.escopo[1].replaceAll('Eletrificação Já', 'Eletrifica Já');
+  }
+  const saida = projetarCatalogoEV(entrada, politica, { sha256: sha });
+  for (const idioma of ['pt', 'en', 'es']) {
+    const ev = saida.idiomas[idioma].calls[0];
+    assert.equal(ev.apresentacao[1], textosPublicacaoEV[idioma].divulgacao);
+    assert.equal(ev.escopo[1], textosPublicacaoEV[idioma].divulgacao);
+    assert.doesNotMatch(JSON.stringify(ev), /Eletrificação Já|eletrificacaoja\.com\.br|cartilha|\bguide\b|\bguía\b/i);
+    assert.equal(ev.titulo, politica.titulos[idioma]);
+  }
+  assert.deepEqual(saida, projetarCatalogoEV(saida, politica, { sha256: sha }));
 });
 
 test('inscrições até15/11, avaliação/resultado19/11 e ausência de recursos em todos os idiomas', () => {
